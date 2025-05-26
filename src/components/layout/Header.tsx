@@ -4,25 +4,36 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Logo } from '@/components/Logo';
-import { SidebarTrigger } from '@/components/ui/sidebar';
+import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { cn } from '@/lib/utils';
+import { Menu } from 'lucide-react';
+import { useSidebar } from '@/components/ui/sidebar'; // Added import
 
 export function Header() {
   const pathname = usePathname();
+  const { toggleSidebarPanel } = useSidebar();
 
   const navLinks = [
     { href: '/', label: 'Home' },
+    { href: '/about', label: 'About Us' },
     { href: '/contact', label: 'Contact' },
-    { href: '/privacy-policy', label: 'Privacy Policy' },
-    { href: '/feedback', label: 'Feedback' },
+    { href: '/pro', label: 'Upgrade to Pro' },
   ];
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/50 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between px-4 md:px-6">
-        <div className="flex items-center gap-4">
-          <SidebarTrigger className="md:hidden text-foreground hover:text-primary" />
+        <div className="flex items-center gap-2">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={toggleSidebarPanel}
+            className="text-foreground hover:text-primary h-9 w-9"
+            aria-label="Toggle Sidebar Panel"
+          >
+            <Menu className="h-5 w-5" />
+          </Button>
           <Logo />
         </div>
 
@@ -42,7 +53,6 @@ export function Header() {
             ))}
           </nav>
           <ThemeToggle />
-          {/* Placeholder for User Profile Dropdown if needed later */}
         </div>
       </div>
     </header>
