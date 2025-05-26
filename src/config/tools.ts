@@ -39,7 +39,6 @@ export interface Tool {
   href: string;
   icon: LucideIcon;
   categoryKey: ToolCategoryKey;
-  dataAiHint?: string;
 }
 
 export type ToolCategoryKey = 'text' | 'utility' | 'digital';
@@ -77,7 +76,6 @@ export const TOOLS: Tool[] = [
     href: '/tools/word-counter',
     icon: ScanText,
     categoryKey: 'text',
-    dataAiHint: 'text analysis',
   },
   {
     id: 'case-converter',
@@ -86,7 +84,6 @@ export const TOOLS: Tool[] = [
     href: '/tools/case-converter',
     icon: ALargeSmall,
     categoryKey: 'text',
-    dataAiHint: 'text formatting',
   },
   {
     id: 'text-duplicate-remover',
@@ -95,7 +92,6 @@ export const TOOLS: Tool[] = [
     href: '/tools/text-duplicate-remover',
     icon: CopyMinus,
     categoryKey: 'text',
-    dataAiHint: 'text cleaning',
   },
   {
     id: 'character-frequency-analyzer',
@@ -104,7 +100,6 @@ export const TOOLS: Tool[] = [
     href: '/tools/character-frequency-analyzer',
     icon: BarChartHorizontalBig,
     categoryKey: 'text',
-    dataAiHint: 'data chart',
   },
   {
     id: 'text-reverser',
@@ -113,7 +108,6 @@ export const TOOLS: Tool[] = [
     href: '/tools/text-reverser',
     icon: Shuffle,
     categoryKey: 'text',
-    dataAiHint: 'text manipulation',
   },
   {
     id: 'remove-extra-spaces',
@@ -122,7 +116,6 @@ export const TOOLS: Tool[] = [
     href: '/tools/remove-extra-spaces',
     icon: Eraser,
     categoryKey: 'text',
-    dataAiHint: 'text formatting',
   },
   {
     id: 'line-counter',
@@ -131,7 +124,6 @@ export const TOOLS: Tool[] = [
     href: '/tools/line-counter',
     icon: Rows3,
     categoryKey: 'text',
-    dataAiHint: 'text analysis',
   },
   {
     id: 'find-replace',
@@ -140,7 +132,6 @@ export const TOOLS: Tool[] = [
     href: '/tools/find-replace',
     icon: Replace,
     categoryKey: 'text',
-    dataAiHint: 'text editing',
   },
   {
     id: 'reading-time-estimator',
@@ -149,7 +140,6 @@ export const TOOLS: Tool[] = [
     href: '/tools/reading-time-estimator',
     icon: Timer,
     categoryKey: 'text',
-    dataAiHint: 'text analysis',
   },
   // Utility Tools
   {
@@ -159,7 +149,6 @@ export const TOOLS: Tool[] = [
     href: '/tools/todo-list',
     icon: ListChecks,
     categoryKey: 'utility',
-    dataAiHint: 'checklist tasks',
   },
   {
     id: 'password-generator',
@@ -168,7 +157,6 @@ export const TOOLS: Tool[] = [
     href: '/tools/password-generator',
     icon: LockKeyhole,
     categoryKey: 'utility',
-    dataAiHint: 'security lock',
   },
   {
     id: 'email-validator',
@@ -177,7 +165,6 @@ export const TOOLS: Tool[] = [
     href: '/tools/email-validator',
     icon: MailCheck,
     categoryKey: 'utility',
-    dataAiHint: 'email communication',
   },
   {
     id: 'digital-clock',
@@ -186,7 +173,6 @@ export const TOOLS: Tool[] = [
     href: '/tools/digital-clock',
     icon: Clock,
     categoryKey: 'utility',
-    dataAiHint: 'time interface',
   },
   {
     id: 'countdown-timer',
@@ -195,7 +181,6 @@ export const TOOLS: Tool[] = [
     href: '/tools/countdown-timer',
     icon: Hourglass,
     categoryKey: 'utility',
-    dataAiHint: 'timer alarm',
   },
   {
     id: 'stopwatch',
@@ -204,7 +189,6 @@ export const TOOLS: Tool[] = [
     href: '/tools/stopwatch',
     icon: Watch,
     categoryKey: 'utility',
-    dataAiHint: 'time measurement',
   },
   {
     id: 'quick-scratchpad',
@@ -213,7 +197,6 @@ export const TOOLS: Tool[] = [
     href: '/tools/quick-scratchpad',
     icon: StickyNote,
     categoryKey: 'utility',
-    dataAiHint: 'notes writing',
   },
   {
     id: 'text-snippets',
@@ -222,7 +205,6 @@ export const TOOLS: Tool[] = [
     href: '/tools/text-snippets',
     icon: ClipboardCopy,
     categoryKey: 'utility',
-    dataAiHint: 'clipboard copy',
   },
   {
     id: 'keyboard-shortcut-cheatsheet',
@@ -231,7 +213,6 @@ export const TOOLS: Tool[] = [
     href: '/tools/keyboard-shortcut-cheatsheet',
     icon: Keyboard,
     categoryKey: 'utility',
-    dataAiHint: 'keyboard shortcuts',
   },
   // Digital Toolkit
   {
@@ -241,7 +222,6 @@ export const TOOLS: Tool[] = [
     href: '/tools/image-to-base64',
     icon: ImageUp,
     categoryKey: 'digital',
-    dataAiHint: 'image encoding',
   },
   {
     id: 'file-size-checker',
@@ -250,7 +230,6 @@ export const TOOLS: Tool[] = [
     href: '/tools/file-size-checker',
     icon: FilePieChart,
     categoryKey: 'digital',
-    dataAiHint: 'file details',
   },
   {
     id: 'csv-to-table',
@@ -259,7 +238,6 @@ export const TOOLS: Tool[] = [
     href: '/tools/csv-to-table',
     icon: TableProperties,
     categoryKey: 'digital',
-    dataAiHint: 'data table',
   },
   {
     id: 'color-picker',
@@ -268,7 +246,6 @@ export const TOOLS: Tool[] = [
     href: '/tools/color-picker',
     icon: Palette,
     categoryKey: 'digital',
-    dataAiHint: 'color selection',
   },
   {
     id: 'typing-speed-test',
@@ -277,7 +254,6 @@ export const TOOLS: Tool[] = [
     href: '/tools/typing-speed-test',
     icon: Gauge,
     categoryKey: 'digital',
-    dataAiHint: 'keyboard test',
   },
   {
     id: 'unit-converter',
@@ -286,7 +262,6 @@ export const TOOLS: Tool[] = [
     href: '/tools/unit-converter',
     icon: Scale,
     categoryKey: 'digital',
-    dataAiHint: 'measurement conversion',
   },
   {
     id: 'countdown-calendar',
@@ -295,7 +270,6 @@ export const TOOLS: Tool[] = [
     href: '/tools/countdown-calendar',
     icon: CalendarClock,
     categoryKey: 'digital',
-    dataAiHint: 'date event',
   },
 ];
 export { XCircle };

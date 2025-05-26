@@ -6,7 +6,7 @@ import { Separator } from '@/components/ui/separator';
 export default function HomePage() {
   return (
     <div className="container mx-auto px-4 py-12 md:px-6 md:py-20">
-      <header 
+      <header
         className="mb-12 text-center opacity-0 animate-fade-in-up"
         style={{ animationDelay: '0.1s' }}
       >
@@ -19,7 +19,7 @@ export default function HomePage() {
         </p>
       </header>
 
-      <p 
+      <p
         className="mb-16 text-center text-base text-muted-foreground sm:text-lg max-w-3xl mx-auto opacity-0 animate-fade-in-up"
         style={{ animationDelay: '0.3s' }}
       >
@@ -27,8 +27,8 @@ export default function HomePage() {
       </p>
 
       {TOOL_CATEGORIES.map((category, index) => (
-        <section 
-          key={category.id} 
+        <section
+          key={category.id}
           className="mb-20 opacity-0 animate-fade-in-up"
           style={{ animationDelay: `${0.5 + index * 0.3}s` }} // Adjusted base delay and stagger
         >
@@ -38,7 +38,7 @@ export default function HomePage() {
           </div>
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {TOOLS.filter(tool => tool.categoryKey === category.id).map((tool, toolIndex) => (
-              <div 
+              <div
                 key={tool.id}
                 className="opacity-0 animate-fade-in-up"
                 // Stagger cards within each category section
@@ -49,7 +49,6 @@ export default function HomePage() {
                   description={tool.description}
                   href={tool.href}
                   icon={tool.icon}
-                  dataAiHint={tool.dataAiHint}
                 />
               </div>
             ))}
