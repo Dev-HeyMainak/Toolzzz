@@ -15,33 +15,37 @@ interface ToolCardProps {
 
 export function ToolCard({ name, description, href, icon: Icon, dataAiHint }: ToolCardProps) {
   return (
-    <Card className="flex flex-col h-full hover:shadow-lg transition-shadow duration-200 rounded-xl overflow-hidden">
-      <CardHeader className="flex flex-row items-center gap-4 p-4 bg-muted/30">
-        <div className="p-3 rounded-lg bg-primary/10 text-primary">
-          <Icon className="h-6 w-6" />
+    <Card className="group flex flex-col h-full bg-card hover:shadow-xl hover:shadow-primary/20 transition-all duration-300 ease-in-out hover:border-primary/50 rounded-xl overflow-hidden transform hover:-translate-y-1">
+      <CardHeader className="flex flex-row items-center gap-4 p-5">
+        <div className="p-3.5 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors duration-300">
+          <Icon className="h-7 w-7" />
         </div>
         <div>
-          <CardTitle className="text-lg">{name}</CardTitle>
+          <CardTitle className="text-xl font-semibold">{name}</CardTitle>
         </div>
       </CardHeader>
-      <CardContent className="p-4 flex-grow">
-        <CardDescription className="text-sm mb-4 min-h-[40px]">{description}</CardDescription>
+      <CardContent className="p-5 flex-grow">
+        <CardDescription className="text-sm text-muted-foreground mb-4 min-h-[40px] leading-relaxed">{description}</CardDescription>
          {dataAiHint && (
-          <div className="aspect-[3/2] w-full relative rounded-md overflow-hidden mb-4">
+          <div className="aspect-[3/2] w-full relative rounded-lg overflow-hidden mb-4 border border-border group-hover:border-primary/30 transition-colors duration-300">
             <Image
               src={`https://placehold.co/600x400.png`}
               alt={name}
               fill
-              className="object-cover"
+              className="object-cover transition-transform duration-300 group-hover:scale-105"
               data-ai-hint={dataAiHint}
             />
           </div>
         )}
       </CardContent>
-      <div className="p-4 pt-0 mt-auto">
-        <Button asChild variant="outline" className="w-full group">
+      <div className="p-5 pt-0 mt-auto">
+        <Button 
+          asChild 
+          variant="outline" 
+          className="w-full group/button bg-transparent border-primary/30 text-primary hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all duration-200 ease-in-out hover:shadow-md hover:shadow-primary/20 active:scale-95"
+        >
           <Link href={href}>
-            Open Tool <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+            Open Tool <ArrowRight className="ml-2 h-4 w-4 group-hover/button:translate-x-1 transition-transform" />
           </Link>
         </Button>
       </div>
