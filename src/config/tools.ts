@@ -4,7 +4,7 @@ import {
   ScanText,
   ALargeSmall,
   LockKeyhole,
-  MailCheck,
+  // MailCheck, // Removed
   TextIcon,
   Wrench,
   ListChecks,
@@ -160,14 +160,14 @@ export const TOOLS: Tool[] = [
     icon: LockKeyhole,
     categoryKey: 'utility',
   },
-  {
-    id: 'email-validator',
-    name: 'Email Validator',
-    description: 'Validate email addresses with AI assistance.',
-    href: '/tools/email-validator',
-    icon: MailCheck,
-    categoryKey: 'utility',
-  },
+  // { // Removed Email Validator
+  //   id: 'email-validator',
+  //   name: 'Email Validator',
+  //   description: 'Validate email addresses with AI assistance.',
+  //   href: '/tools/email-validator',
+  //   icon: MailCheck,
+  //   categoryKey: 'utility',
+  // },
   {
     id: 'digital-clock',
     name: 'Digital Clock',
