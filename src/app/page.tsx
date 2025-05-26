@@ -1,3 +1,4 @@
+
 import { ToolCard } from '@/components/ToolCard';
 import { TOOLS, TOOL_CATEGORIES } from '@/config/tools';
 import { Separator } from '@/components/ui/separator';
@@ -5,7 +6,10 @@ import { Separator } from '@/components/ui/separator';
 export default function HomePage() {
   return (
     <div className="container mx-auto px-4 py-12 md:px-6 md:py-20">
-      <header className="mb-16 text-center opacity-0 animate-fade-in-up">
+      <header 
+        className="mb-12 text-center opacity-0 animate-fade-in-up"
+        style={{ animationDelay: '0.1s' }}
+      >
         <h1 className="text-5xl font-extrabold tracking-tighter text-foreground sm:text-6xl lg:text-7xl xl:text-8xl">
           <span className="block">Office</span>
           <span className="block text-primary">Toolkit</span>
@@ -15,11 +19,18 @@ export default function HomePage() {
         </p>
       </header>
 
+      <p 
+        className="mb-16 text-center text-base text-muted-foreground sm:text-lg max-w-3xl mx-auto opacity-0 animate-fade-in-up"
+        style={{ animationDelay: '0.3s' }}
+      >
+        Welcome! Dive into our curated collection of robust and easy-to-use tools, thoughtfully organized by category. Whether you're looking to manipulate text, manage tasks, or utilize digital utilities, Office Toolkit is here to streamline your workflow.
+      </p>
+
       {TOOL_CATEGORIES.map((category, index) => (
         <section 
           key={category.id} 
           className="mb-20 opacity-0 animate-fade-in-up"
-          style={{ animationDelay: `${(index + 1) * 0.2}s` }}
+          style={{ animationDelay: `${0.5 + index * 0.3}s` }} // Adjusted base delay and stagger
         >
           <div className="flex items-center mb-10">
             <category.icon className="h-10 w-10 text-primary mr-4" />
@@ -30,7 +41,8 @@ export default function HomePage() {
               <div 
                 key={tool.id}
                 className="opacity-0 animate-fade-in-up"
-                style={{ animationDelay: `${(index + 1) * 0.2 + (toolIndex + 1) * 0.1}s` }}
+                // Stagger cards within each category section
+                style={{ animationDelay: `${0.5 + index * 0.3 + (toolIndex + 1) * 0.1}s` }}
               >
                 <ToolCard
                   name={tool.name}
