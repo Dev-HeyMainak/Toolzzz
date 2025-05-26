@@ -18,10 +18,18 @@ import {
   XCircle,
   Clock,
   Hourglass,
-  Watch, // Changed from 'Stopwatch as StopwatchIcon'
+  Watch,
   StickyNote,
   ClipboardCopy,
-  Keyboard
+  Keyboard,
+  Cpu, // Icon for Digital Toolkit
+  ImageUp, // Icon for Image to Base64
+  FilePieChart, // Icon for File Size Checker
+  TableProperties, // Icon for CSV to Table
+  Palette, // Icon for Color Picker
+  Gauge, // Icon for Typing Speed Test
+  Scale, // Icon for Unit Converter
+  CalendarClock, // Icon for Countdown Calendar
 } from 'lucide-react';
 
 export interface Tool {
@@ -34,7 +42,7 @@ export interface Tool {
   dataAiHint?: string;
 }
 
-export type ToolCategoryKey = 'text' | 'utility';
+export type ToolCategoryKey = 'text' | 'utility' | 'digital';
 
 export interface ToolCategory {
   id: ToolCategoryKey;
@@ -53,6 +61,11 @@ export const TOOL_CATEGORIES: ToolCategory[] = [
     name: 'Utility Tools',
     icon: Wrench,
   },
+  {
+    id: 'digital',
+    name: 'Digital Toolkit',
+    icon: Cpu,
+  }
 ];
 
 export const TOOLS: Tool[] = [
@@ -189,7 +202,7 @@ export const TOOLS: Tool[] = [
     name: 'Stopwatch',
     description: 'Measure elapsed time with start, stop, and reset.',
     href: '/tools/stopwatch',
-    icon: Watch, // Changed from StopwatchIcon
+    icon: Watch,
     categoryKey: 'utility',
     dataAiHint: 'time measurement',
   },
@@ -220,5 +233,69 @@ export const TOOLS: Tool[] = [
     categoryKey: 'utility',
     dataAiHint: 'keyboard shortcuts',
   },
+  // Digital Toolkit
+  {
+    id: 'image-to-base64',
+    name: 'Image to Base64 Converter',
+    description: 'Convert your images to Base64 encoded strings.',
+    href: '/tools/image-to-base64',
+    icon: ImageUp,
+    categoryKey: 'digital',
+    dataAiHint: 'image encoding',
+  },
+  {
+    id: 'file-size-checker',
+    name: 'File Size Checker',
+    description: 'Quickly check the size of your local files.',
+    href: '/tools/file-size-checker',
+    icon: FilePieChart,
+    categoryKey: 'digital',
+    dataAiHint: 'file details',
+  },
+  {
+    id: 'csv-to-table',
+    name: 'CSV to Table Viewer',
+    description: 'Upload a CSV file and view its contents as a table.',
+    href: '/tools/csv-to-table',
+    icon: TableProperties,
+    categoryKey: 'digital',
+    dataAiHint: 'data table',
+  },
+  {
+    id: 'color-picker',
+    name: 'Color Picker Tool',
+    description: 'Select colors and get their HEX, RGB, and HSL values.',
+    href: '/tools/color-picker',
+    icon: Palette,
+    categoryKey: 'digital',
+    dataAiHint: 'color selection',
+  },
+  {
+    id: 'typing-speed-test',
+    name: 'Typing Speed Test',
+    description: 'Test your typing speed and accuracy (WPM).',
+    href: '/tools/typing-speed-test',
+    icon: Gauge,
+    categoryKey: 'digital',
+    dataAiHint: 'keyboard test',
+  },
+  {
+    id: 'unit-converter',
+    name: 'Unit Converter',
+    description: 'Convert between various units of measurement.',
+    href: '/tools/unit-converter',
+    icon: Scale,
+    categoryKey: 'digital',
+    dataAiHint: 'measurement conversion',
+  },
+  {
+    id: 'countdown-calendar',
+    name: 'Countdown Calendar',
+    description: 'Set a date and see the countdown in days, hours, etc.',
+    href: '/tools/countdown-calendar',
+    icon: CalendarClock,
+    categoryKey: 'digital',
+    dataAiHint: 'date event',
+  },
 ];
-export { XCircle }; // Export XCircle for use in other components
+export { XCircle };
