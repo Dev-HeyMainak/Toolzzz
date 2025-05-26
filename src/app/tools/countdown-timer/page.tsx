@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect, useRef } from 'react';
@@ -7,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Hourglass, Play, Pause, RotateCcw } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 export default function CountdownTimerPage() {
   const [hours, setHours] = useState(0);
@@ -32,7 +32,6 @@ export default function CountdownTimerPage() {
     } else if (timeLeft === 0 && isRunning) {
       setIsRunning(false);
       toast({ title: "Countdown Finished!", description: "The timer has reached zero." });
-      // Optionally play a sound here
     }
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
@@ -44,7 +43,7 @@ export default function CountdownTimerPage() {
         toast({ title: "Error", description: "Please set a duration.", variant: "destructive"});
         return;
     }
-    if(timeLeft === 0){ // If starting from inputs
+    if(timeLeft === 0){ 
         const totalSecondsValue = (hours * 3600) + (minutes * 60) + seconds;
         if (totalSecondsValue <=0) {
             toast({ title: "Error", description: "Duration must be positive.", variant: "destructive"});
@@ -63,7 +62,7 @@ export default function CountdownTimerPage() {
     setIsRunning(false);
     setTimeLeft(0);
     setHours(0);
-    setMinutes(5); // Default back to 5 mins
+    setMinutes(5); 
     setSeconds(0);
   };
 
@@ -75,11 +74,11 @@ export default function CountdownTimerPage() {
   };
 
   const handleInputChange = (setter: React.Dispatch<React.SetStateAction<number>>, max: number) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (isRunning) return; // Don't allow changes while running
+    if (isRunning && timeLeft > 0) return; 
     let value = parseInt(e.target.value, 10);
     if (isNaN(value)) value = 0;
     setter(Math.max(0, Math.min(value, max)));
-    setTimeLeft(0); // Reset internal timer if inputs change
+    setTimeLeft(0); 
   };
   
   if (!isClient) {
@@ -107,43 +106,61 @@ export default function CountdownTimerPage() {
             {formatTime(timeLeft)}
           </CardTitle>
           <CardDescription>
-            {isRunning ? "Counting down..." : "Set your timer"}
+            {isRunning ? "Counting down..." : timeLeft > 0 ? "Paused" : "Set your timer"}
           </CardDescription>
         </CardHeader>
         <CardContent className="p-6 space-y-6">
-          {!isRunning && timeLeft === 0 && (
+          {(!isRunning && timeLeft === 0) && (
             <div className="grid grid-cols-3 gap-4">
               <div>
                 <label htmlFor="hours" className="block text-sm font-medium text-muted-foreground mb-1">Hours</label>
-                <Input id="hours" type="number" value={hours} onChange={handleInputChange(setHours, 99)} min="0" max="99" className="text-center text-lg" disabled={isRunning} />
+                <Input id="hours" type="number" value={hours} onChange={handleInputChange(setHours, 99)} min="0" max="99" className="text-center text-lg" disabled={isRunning && timeLeft > 0} />
               </div>
               <div>
                 <label htmlFor="minutes" className="block text-sm font-medium text-muted-foreground mb-1">Minutes</label>
-                <Input id="minutes" type="number" value={minutes} onChange={handleInputChange(setMinutes, 59)} min="0" max="59" className="text-center text-lg" disabled={isRunning} />
+                <Input id="minutes" type="number" value={minutes} onChange={handleInputChange(setMinutes, 59)} min="0" max="59" className="text-center text-lg" disabled={isRunning && timeLeft > 0} />
               </div>
               <div>
                 <label htmlFor="seconds" className="block text-sm font-medium text-muted-foreground mb-1">Seconds</label>
-                <Input id="seconds" type="number" value={seconds} onChange={handleInputChange(setSeconds, 59)} min="0" max="59" className="text-center text-lg" disabled={isRunning} />
+                <Input id="seconds" type="number" value={seconds} onChange={handleInputChange(setSeconds, 59)} min="0" max="59" className="text-center text-lg" disabled={isRunning && timeLeft > 0} />
               </div>
             </div>
           )}
 
           <div className="flex justify-center gap-4">
             {!isRunning ? (
-              <Button onClick={handleStart} className="px-8 py-3 text-lg" size="lg">
-                <Play className="mr-2 h-5 w-5" /> Start
-              </Button>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                    <Button onClick={handleStart} className="px-8 py-3 text-lg" size="lg">
+                        <Play className="mr-2 h-5 w-5" /> Start
+                    </Button>
+                </TooltipTrigger>
+                <TooltipContent><p>{timeLeft > 0 ? "Resume the timer" : "Start the timer with the set duration"}</p></TooltipContent>
+              </Tooltip>
             ) : (
-              <Button onClick={handlePause} variant="outline" className="px-8 py-3 text-lg" size="lg">
-                <Pause className="mr-2 h-5 w-5" /> Pause
-              </Button>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                    <Button onClick={handlePause} variant="outline" className="px-8 py-3 text-lg" size="lg">
+                        <Pause className="mr-2 h-5 w-5" /> Pause
+                    </Button>
+                </TooltipTrigger>
+                <TooltipContent><p>Pause the currently running timer.</p></TooltipContent>
+              </Tooltip>
             )}
-            <Button onClick={handleReset} variant="ghost" className="px-8 py-3 text-lg" size="lg">
-              <RotateCcw className="mr-2 h-5 w-5" /> Reset
-            </Button>
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <Button onClick={handleReset} variant="ghost" className="px-8 py-3 text-lg" size="lg">
+                    <RotateCcw className="mr-2 h-5 w-5" /> Reset
+                    </Button>
+                </TooltipTrigger>
+                <TooltipContent><p>Reset the timer to its initial state (00:05:00 or last input if not run).</p></TooltipContent>
+            </Tooltip>
           </div>
         </CardContent>
       </Card>
+       {(!isRunning && timeLeft === 0 && hours === 0 && minutes === 0 && seconds === 0) && (
+        <p className="text-muted-foreground text-center mt-6">Enter a duration above and click 'Start'.</p>
+      )}
     </div>
   );
 }

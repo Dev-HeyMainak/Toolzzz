@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from 'react';
@@ -9,11 +8,10 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { TableProperties, UploadCloud, XCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Label } from '@/components/ui/label';
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 // Basic CSV parser
 function parseCSV(csvText: string): string[][] {
-  // This is a very basic parser. For robust CSV parsing, a library is recommended.
-  // It handles basic comma separation and quoted fields.
   const rows: string[][] = [];
   let currentRow: string[] = [];
   let inQuotes = false;
@@ -24,9 +22,8 @@ function parseCSV(csvText: string): string[][] {
 
     if (char === '"') {
       if (inQuotes && i + 1 < csvText.length && csvText[i + 1] === '"') {
-        // Escaped quote
         currentField += '"';
-        i++; // Skip next quote
+        i++; 
       } else {
         inQuotes = !inQuotes;
       }
@@ -39,7 +36,6 @@ function parseCSV(csvText: string): string[][] {
       currentRow = [];
       currentField = '';
     } else if (char === '\r' && !inQuotes) {
-      // Ignore carriage return if not part of \r\n
       if (i + 1 < csvText.length && csvText[i+1] === '\n') {
         // Handled by \n
       } else {
@@ -53,11 +49,9 @@ function parseCSV(csvText: string): string[][] {
       currentField += char;
     }
   }
-  // Add last field and row
   currentRow.push(currentField);
   rows.push(currentRow);
   
-  // Filter out completely empty rows that might result from trailing newlines
   return rows.filter(row => row.some(cell => cell.trim() !== ''));
 }
 
@@ -144,7 +138,7 @@ export default function CsvToTablePage() {
       </p>
 
       <div className="mb-6 p-6 border rounded-lg bg-muted/20">
-        <Label htmlFor="csvFile" className="mb-2 block text-lg font-medium text-center">
+        <Label htmlFor="csvFile" className="mb-2 block text-lg font-medium text-center cursor-pointer">
           <UploadCloud className="h-12 w-12 mx-auto text-primary mb-2" />
           Click to Upload CSV File
         </Label>
@@ -153,14 +147,19 @@ export default function CsvToTablePage() {
           type="file"
           accept=".csv,text/csv"
           onChange={handleFileChange}
-          className="hidden" // Hide default input, trigger with label
+          className="hidden" 
         />
         {fileName && (
             <div className="text-center mt-2">
                 <p className="text-sm text-muted-foreground">Selected: <strong>{fileName}</strong></p>
-                 <Button variant="link" size="sm" onClick={clearData} className="text-xs text-destructive p-0 h-auto">
-                    Clear selection
-                </Button>
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <Button variant="link" size="sm" onClick={clearData} className="text-xs text-destructive p-0 h-auto">
+                            Clear selection
+                        </Button>
+                    </TooltipTrigger>
+                    <TooltipContent><p>Deselect the current file.</p></TooltipContent>
+                </Tooltip>
             </div>
         )}
       </div>
@@ -187,7 +186,7 @@ export default function CsvToTablePage() {
                {bodyRows.length === 0 && (
                 <TableRow>
                     <TableCell colSpan={headers.length} className="text-center text-muted-foreground h-24">
-                        No data rows found after headers.
+                        No data rows found after headers. The file might contain only a header row or be empty.
                     </TableCell>
                 </TableRow>
                )}
@@ -196,7 +195,7 @@ export default function CsvToTablePage() {
         </ScrollArea>
       )}
       {!csvData && !fileName && (
-         <p className="text-muted-foreground text-center py-8">Upload a CSV file to display its data as a table.</p>
+         <p className="text-muted-foreground text-center py-8">Upload a CSV file by clicking the area above to display its data as a table.</p>
        )}
     </div>
   );

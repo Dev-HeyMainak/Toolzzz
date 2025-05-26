@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from 'react';
@@ -8,6 +7,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { CopyMinus, ArrowRightLeft, Copy, Eraser, XCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 export default function TextDuplicateRemoverPage() {
   const [inputText, setInputText] = useState('');
@@ -114,22 +114,44 @@ export default function TextDuplicateRemoverPage() {
         />
       </div>
       <div className="mt-6 flex flex-wrap gap-3 items-center justify-between">
-        <Button onClick={handleRemoveDuplicates} disabled={!inputText.trim()}>
-          <Eraser className="mr-2 h-4 w-4" /> Remove Duplicates
-        </Button>
+        <Tooltip>
+            <TooltipTrigger asChild>
+                <Button onClick={handleRemoveDuplicates} disabled={!inputText.trim()}>
+                <Eraser className="mr-2 h-4 w-4" /> Remove Duplicates
+                </Button>
+            </TooltipTrigger>
+            <TooltipContent><p>Process the input text to remove duplicate lines based on selected options.</p></TooltipContent>
+        </Tooltip>
         <div className="flex flex-wrap gap-3">
-            <Button variant="outline" onClick={handleSwap} disabled={!inputText && !outputText} aria-label="Swap input and output text">
-                <ArrowRightLeft className="h-4 w-4" />
-            </Button>
-            <Button variant="outline" onClick={handleCopy} disabled={!outputText} aria-label="Copy output text">
-                <Copy className="mr-2 h-4 w-4" /> Copy
-            </Button>
-             <Button variant="outline" onClick={handleClear} disabled={!inputText && !outputText} aria-label="Clear input and output text">
-                <XCircle className="mr-2 h-4 w-4" /> Clear
-            </Button>
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <Button variant="outline" onClick={handleSwap} disabled={!inputText && !outputText} aria-label="Swap input and output text">
+                        <ArrowRightLeft className="h-4 w-4" />
+                    </Button>
+                </TooltipTrigger>
+                <TooltipContent><p>Swap input and output text.</p></TooltipContent>
+            </Tooltip>
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <Button variant="outline" onClick={handleCopy} disabled={!outputText} aria-label="Copy output text">
+                        <Copy className="mr-2 h-4 w-4" /> Copy
+                    </Button>
+                </TooltipTrigger>
+                <TooltipContent><p>Copy processed text to clipboard.</p></TooltipContent>
+            </Tooltip>
+             <Tooltip>
+                 <TooltipTrigger asChild>
+                    <Button variant="outline" onClick={handleClear} disabled={!inputText && !outputText} aria-label="Clear input and output text">
+                        <XCircle className="mr-2 h-4 w-4" /> Clear
+                    </Button>
+                </TooltipTrigger>
+                <TooltipContent><p>Clear both input and output text fields.</p></TooltipContent>
+            </Tooltip>
         </div>
       </div>
+       {!inputText.trim() && !outputText.trim() && (
+         <p className="text-muted-foreground text-center mt-8">Enter some text in the input field to get started.</p>
+       )}
     </div>
   );
 }
-

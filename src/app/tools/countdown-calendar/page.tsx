@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect, useMemo } from 'react';
@@ -11,6 +10,7 @@ import { format, differenceInSeconds, differenceInDays, differenceInHours, diffe
 import { useToast } from '@/hooks/use-toast';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 const LOCALSTORAGE_KEY_CALENDAR = 'countdown-calendar-target';
 
@@ -79,7 +79,7 @@ export default function CountdownCalendarPage() {
       setCountdown({ days, hours, minutes, seconds, totalSeconds });
     };
 
-    calculateCountdown(); // Initial calculation
+    calculateCountdown(); 
     const intervalId = setInterval(calculateCountdown, 1000);
 
     return () => clearInterval(intervalId);
@@ -94,15 +94,14 @@ export default function CountdownCalendarPage() {
 
   const handleDateSelect = (date: Date | undefined) => {
     if (date) {
-        // Preserve time part if targetDate already exists, otherwise set to start of selected day
         const newTarget = new Date(date);
         if (targetDate) {
             newTarget.setHours(targetDate.getHours(), targetDate.getMinutes(), targetDate.getSeconds());
         } else {
-            newTarget.setHours(0,0,0,0); // Default to start of day
+            newTarget.setHours(0,0,0,0); 
         }
         
-        if (newTarget < new Date() && differenceInSeconds(newTarget, new Date()) < -60 ) { // Allow slight past for instant feedback
+        if (newTarget < new Date() && differenceInSeconds(newTarget, new Date()) < -60 ) { 
             toast({ title: "Invalid Date", description: "Please select a future date and time.", variant: "destructive"});
             return;
         }
@@ -114,7 +113,7 @@ export default function CountdownCalendarPage() {
     if (targetDate) {
         const [hours, minutes] = e.target.value.split(':').map(Number);
         const newTargetDate = new Date(targetDate);
-        newTargetDate.setHours(hours, minutes, 0, 0); // seconds and ms to 0
+        newTargetDate.setHours(hours, minutes, 0, 0); 
         
         if (newTargetDate < new Date() && differenceInSeconds(newTargetDate, new Date()) < -60) {
              toast({ title: "Invalid Time", description: "Please select a future time.", variant: "destructive"});
@@ -167,45 +166,55 @@ export default function CountdownCalendarPage() {
           <div className="flex gap-4 items-end">
             <div className="flex-grow">
               <Label htmlFor="targetDatePicker">Target Date</Label>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    id="targetDatePicker"
-                    variant={"outline"}
-                    className="w-full justify-start text-left font-normal mt-1 h-10"
-                  >
-                    <CalendarIconLucide className="mr-2 h-4 w-4" />
-                    {targetDate ? format(targetDate, "PPP") : <span>Pick a date</span>}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0">
-                  <Calendar
-                    mode="single"
-                    selected={targetDate}
-                    onSelect={handleDateSelect}
-                    initialFocus
-                    disabled={(date) => date < new Date(new Date().setDate(new Date().getDate() -1)) } // Disable past dates
-                  />
-                </PopoverContent>
-              </Popover>
+                <Popover>
+                    <PopoverTrigger asChild>
+                        <Button
+                        id="targetDatePicker"
+                        variant={"outline"}
+                        className="w-full justify-start text-left font-normal mt-1 h-10"
+                        >
+                        <CalendarIconLucide className="mr-2 h-4 w-4" />
+                        {targetDate ? format(targetDate, "PPP") : <span>Pick a date</span>}
+                        </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0">
+                    <Calendar
+                        mode="single"
+                        selected={targetDate}
+                        onSelect={handleDateSelect}
+                        initialFocus
+                        disabled={(date) => date < new Date(new Date().setDate(new Date().getDate() -1)) } 
+                    />
+                    </PopoverContent>
+                </Popover>
             </div>
              <div className="w-1/3">
                 <Label htmlFor="targetTimePicker">Time</Label>
-                 <Input 
-                    id="targetTimePicker"
-                    type="time"
-                    value={currentTimeValue}
-                    onChange={handleTimeChange}
-                    className="mt-1 h-10"
-                    disabled={!targetDate}
-                />
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <Input 
+                            id="targetTimePicker"
+                            type="time"
+                            value={currentTimeValue}
+                            onChange={handleTimeChange}
+                            className="mt-1 h-10"
+                            disabled={!targetDate}
+                        />
+                    </TooltipTrigger>
+                    <TooltipContent><p>Set the time for the target date. Requires a date to be selected first.</p></TooltipContent>
+                </Tooltip>
             </div>
           </div>
 
           {targetDate && (
-            <Button variant="outline" onClick={handleClearTarget} className="w-full">
-              <Trash2 className="mr-2 h-4 w-4" /> Clear Target
-            </Button>
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <Button variant="outline" onClick={handleClearTarget} className="w-full">
+                    <Trash2 className="mr-2 h-4 w-4" /> Clear Target
+                    </Button>
+                </TooltipTrigger>
+                <TooltipContent><p>Remove the current countdown target.</p></TooltipContent>
+            </Tooltip>
           )}
         </CardContent>
       </Card>
@@ -242,7 +251,7 @@ export default function CountdownCalendarPage() {
         )
       ) : (
         <p className="text-muted-foreground text-center py-8">
-          Select a target date and time to start the countdown.
+          Select a target date and time (and optionally an event name) above to start the countdown.
         </p>
       )}
     </div>

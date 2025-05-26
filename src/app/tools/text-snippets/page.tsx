@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect, FormEvent } from 'react';
@@ -9,6 +8,8 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { ClipboardCopy, PlusCircle, Trash2, Copy } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+
 
 interface Snippet {
   id: string;
@@ -103,9 +104,14 @@ export default function TextSnippetsPage() {
               className="text-base flex-grow"
               aria-label="New snippet input"
             />
-            <Button type="submit" aria-label="Add snippet">
-              <PlusCircle className="mr-2 h-4 w-4" /> Add Snippet
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button type="submit" aria-label="Add snippet">
+                  <PlusCircle className="mr-2 h-4 w-4" /> Add Snippet
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent><p>Save this snippet to your list.</p></TooltipContent>
+            </Tooltip>
           </form>
         </CardContent>
       </Card>
@@ -114,14 +120,14 @@ export default function TextSnippetsPage() {
         <CardHeader>
           <CardTitle>Your Snippets</CardTitle>
           <CardDescription>
-            {snippets.length > 0 ? `${snippets.length} snippet(s) saved.` : "No snippets yet."}
+            {snippets.length > 0 ? `${snippets.length} snippet(s) saved.` : "No snippets yet. Add some above!"}
           </CardDescription>
         </CardHeader>
         <CardContent>
           {!isClient ? (
             <p className="text-muted-foreground text-center py-8">Loading snippets...</p>
           ) : snippets.length === 0 ? (
-            <p className="text-muted-foreground text-center py-8">Add some snippets to see them here.</p>
+            <p className="text-muted-foreground text-center py-8">Add some snippets using the form above to see them listed here.</p>
           ) : (
             <ScrollArea className="h-[400px] pr-3">
               <ul className="space-y-3">
@@ -134,24 +140,34 @@ export default function TextSnippetsPage() {
                       {snippet.text}
                     </p>
                     <div className="flex-shrink-0 flex gap-2">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => handleCopySnippet(snippet.text)}
-                        className="h-8 w-8 text-muted-foreground hover:text-primary"
-                        aria-label={`Copy snippet: ${snippet.text.substring(0,20)}...`}
-                      >
-                        <Copy className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => handleDeleteSnippet(snippet.id)}
-                        className="h-8 w-8 text-muted-foreground hover:text-destructive"
-                        aria-label={`Delete snippet: ${snippet.text.substring(0,20)}...`}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleCopySnippet(snippet.text)}
+                            className="h-8 w-8 text-muted-foreground hover:text-primary"
+                            aria-label={`Copy snippet: ${snippet.text.substring(0,20)}...`}
+                          >
+                            <Copy className="h-4 w-4" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent><p>Copy to clipboard</p></TooltipContent>
+                      </Tooltip>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleDeleteSnippet(snippet.id)}
+                            className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                            aria-label={`Delete snippet: ${snippet.text.substring(0,20)}...`}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent><p>Delete snippet</p></TooltipContent>
+                      </Tooltip>
                     </div>
                   </li>
                 ))}

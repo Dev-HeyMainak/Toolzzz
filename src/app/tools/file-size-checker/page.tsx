@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from 'react';
@@ -8,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { FilePieChart, XCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Label } from '@/components/ui/label';
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface FileInfo {
   name: string;
@@ -82,14 +82,19 @@ export default function FileSizeCheckerPage() {
             <InfoRow label="Size (bytes)" value={`${fileInfo.size.toLocaleString()} bytes`} />
             <InfoRow label="Type" value={fileInfo.type} />
             <InfoRow label="Last Modified" value={fileInfo.lastModified} />
-            <Button variant="outline" onClick={handleClear} className="mt-4">
-              <XCircle className="mr-2 h-4 w-4" /> Clear Selection
-            </Button>
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <Button variant="outline" onClick={handleClear} className="mt-4">
+                    <XCircle className="mr-2 h-4 w-4" /> Clear Selection
+                    </Button>
+                </TooltipTrigger>
+                <TooltipContent><p>Clear the selected file and its details.</p></TooltipContent>
+            </Tooltip>
           </CardContent>
         </Card>
       )}
       {!fileInfo && (
-        <p className="text-muted-foreground text-center py-8">Select a file to see its details.</p>
+        <p className="text-muted-foreground text-center py-8">Select a file using the input above to see its details.</p>
       )}
     </div>
   );

@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useMemo } from 'react';
@@ -7,6 +6,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Rows3 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { XCircle } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+
 
 export default function LineCounterPage() {
   const [text, setText] = useState('');
@@ -41,13 +42,21 @@ export default function LineCounterPage() {
         className="min-h-[300px] text-base rounded-lg shadow-sm mb-6"
         aria-label="Text input for line counting"
       />
+       {text.trim() === '' && (
+         <p className="text-muted-foreground text-center mb-6">Enter some text above to see line counts.</p>
+       )}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
         <CounterCard title="Total Lines" count={counts.totalLines} />
         <CounterCard title="Non-Empty Lines" count={counts.nonEmptyLines} />
       </div>
-       <Button variant="outline" onClick={handleClear} disabled={!text}>
-          <XCircle className="mr-2 h-4 w-4" /> Clear Text
-      </Button>
+      <Tooltip>
+        <TooltipTrigger asChild>
+            <Button variant="outline" onClick={handleClear} disabled={!text}>
+                <XCircle className="mr-2 h-4 w-4" /> Clear Text
+            </Button>
+        </TooltipTrigger>
+        <TooltipContent><p>Clear the input text area.</p></TooltipContent>
+      </Tooltip>
     </div>
   );
 }

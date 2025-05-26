@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -6,6 +5,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { StickyNote, Save, Trash2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 const LOCALSTORAGE_KEY = 'quick-scratchpad-content';
 
@@ -72,12 +72,22 @@ export default function QuickScratchpadPage() {
             aria-label="Scratchpad input area"
           />
           <div className="flex gap-3">
-            <Button onClick={handleSave}>
-              <Save className="mr-2 h-4 w-4" /> Force Save
-            </Button>
-            <Button onClick={handleClear} variant="outline" disabled={!noteContent}>
-              <Trash2 className="mr-2 h-4 w-4" /> Clear Scratchpad
-            </Button>
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <Button onClick={handleSave}>
+                    <Save className="mr-2 h-4 w-4" /> Force Save
+                    </Button>
+                </TooltipTrigger>
+                <TooltipContent><p>Manually save the current content (it also auto-saves).</p></TooltipContent>
+            </Tooltip>
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <Button onClick={handleClear} variant="outline" disabled={!noteContent}>
+                    <Trash2 className="mr-2 h-4 w-4" /> Clear Scratchpad
+                    </Button>
+                </TooltipTrigger>
+                <TooltipContent><p>Delete all content from the scratchpad.</p></TooltipContent>
+            </Tooltip>
           </div>
         </>
       ) : (

@@ -1,7 +1,6 @@
-
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react'; // Changed from useState to useEffect for initial generation
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { FileText, Copy, RefreshCw } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 const LOREM_IPSUM_PARAGRAPH = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
 
@@ -46,9 +46,10 @@ export default function LoremIpsumGeneratorPage() {
   };
 
   // Generate initial text on load
-  useState(() => {
+  useEffect(() => {
     handleGenerate();
-  });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Run once on mount
 
 
   return (
@@ -78,9 +79,14 @@ export default function LoremIpsumGeneratorPage() {
                 className="w-full sm:w-48 text-base"
                 />
             </div>
-            <Button onClick={handleGenerate}>
-                <RefreshCw className="mr-2 h-4 w-4" /> Generate Text
-            </Button>
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <Button onClick={handleGenerate}>
+                        <RefreshCw className="mr-2 h-4 w-4" /> Generate Text
+                    </Button>
+                </TooltipTrigger>
+                <TooltipContent><p>Generate new Lorem Ipsum text based on the number of paragraphs.</p></TooltipContent>
+            </Tooltip>
         </CardContent>
       </Card>
 
@@ -98,11 +104,19 @@ export default function LoremIpsumGeneratorPage() {
                 className="min-h-[250px] text-base bg-muted/50 rounded-lg shadow-sm font-serif"
                 aria-label="Generated Lorem Ipsum text"
                 />
-                <Button onClick={handleCopy} className="mt-4">
-                <Copy className="mr-2 h-4 w-4" /> Copy Text
-                </Button>
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <Button onClick={handleCopy} className="mt-4">
+                        <Copy className="mr-2 h-4 w-4" /> Copy Text
+                        </Button>
+                    </TooltipTrigger>
+                    <TooltipContent><p>Copy the generated Lorem Ipsum text to your clipboard.</p></TooltipContent>
+                </Tooltip>
             </CardContent>
         </Card>
+      )}
+      {!generatedText && (
+         <p className="text-muted-foreground text-center py-8">Click "Generate Text" to create Lorem Ipsum content.</p>
       )}
     </div>
   );

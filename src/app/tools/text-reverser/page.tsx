@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from 'react';
@@ -6,6 +5,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Shuffle, ArrowRightLeft, Copy, XCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 export default function TextReverserPage() {
   const [inputText, setInputText] = useState('');
@@ -70,19 +70,39 @@ export default function TextReverserPage() {
         />
       </div>
       <div className="mt-6 flex flex-wrap gap-3 items-center justify-between">
-        <Button onClick={handleReverse} disabled={!inputText.trim()}>
-          <Shuffle className="mr-2 h-4 w-4" /> Reverse Text
-        </Button>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button onClick={handleReverse} disabled={!inputText.trim()}>
+              <Shuffle className="mr-2 h-4 w-4" /> Reverse Text
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent><p>Reverse the input text.</p></TooltipContent>
+        </Tooltip>
         <div className="flex flex-wrap gap-3">
-            <Button variant="outline" onClick={handleSwap} disabled={!inputText && !outputText} aria-label="Swap input and output text">
-                <ArrowRightLeft className="h-4 w-4" />
-            </Button>
-            <Button variant="outline" onClick={handleCopy} disabled={!outputText} aria-label="Copy output text">
-                <Copy className="mr-2 h-4 w-4" /> Copy
-            </Button>
-            <Button variant="outline" onClick={handleClear} disabled={!inputText && !outputText} aria-label="Clear input and output text">
-                <XCircle className="mr-2 h-4 w-4" /> Clear
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="outline" onClick={handleSwap} disabled={!inputText && !outputText} aria-label="Swap input and output text">
+                    <ArrowRightLeft className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent><p>Swap input and output text.</p></TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="outline" onClick={handleCopy} disabled={!outputText} aria-label="Copy output text">
+                    <Copy className="mr-2 h-4 w-4" /> Copy
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent><p>Copy reversed text to clipboard.</p></TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="outline" onClick={handleClear} disabled={!inputText && !outputText} aria-label="Clear input and output text">
+                    <XCircle className="mr-2 h-4 w-4" /> Clear
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent><p>Clear both text fields.</p></TooltipContent>
+            </Tooltip>
         </div>
       </div>
     </div>

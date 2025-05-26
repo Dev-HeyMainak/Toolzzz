@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useMemo } from 'react';
@@ -50,10 +49,15 @@ export default function CharacterFrequencyAnalyzerPage() {
       processedText = processedText.replace(/[0-9]/g, '');
     }
     if (ignoreSymbols) {
-      processedText = processedText.replace(/[^a-zA-Z0-9\s]/g, ''); 
-      if(ignoreSpaces && ignoreNumbers) processedText = processedText.replace(/[^a-zA-Z]/g, ''); 
-      else if(ignoreSpaces) processedText = processedText.replace(/[^a-zA-Z0-9]/g, ''); 
-      else if(ignoreNumbers) processedText = processedText.replace(/[^a-zA-Z\s]/g, ''); 
+      // This logic needs to be careful about order of operations with other flags
+      if (ignoreCase) { // If ignoring case, convert to one case before symbol removal based on letters
+         processedText = processedText.replace(/[^a-z0-9\s]/g, ''); // Assuming ignoreCase means we only care about a-z
+      } else {
+         processedText = processedText.replace(/[^a-zA-Z0-9\s]/g, '');
+      }
+      // Apply other ignores again if symbols are removed
+      if(ignoreSpaces) processedText = processedText.replace(/\s+/g, '');
+      if(ignoreNumbers) processedText = processedText.replace(/[0-9]/g, '');
     }
     
     if (!processedText) return [];
@@ -74,10 +78,10 @@ export default function CharacterFrequencyAnalyzerPage() {
   }, [inputText, ignoreCase, ignoreSpaces, ignoreNumbers, ignoreSymbols]);
 
   const analysisOptions = [
-    { id: "ignoreCase", checked: ignoreCase, setter: setIgnoreCase, label: "Ignore Case", tooltip: "Treat 'a' and 'A' as the same character." },
-    { id: "ignoreSpaces", checked: ignoreSpaces, setter: setIgnoreSpaces, label: "Ignore Spaces", tooltip: "Exclude spaces from the analysis." },
+    { id: "ignoreCase", checked: ignoreCase, setter: setIgnoreCase, label: "Ignore Case", tooltip: "Treat 'a' and 'A' as the same character for counting." },
+    { id: "ignoreSpaces", checked: ignoreSpaces, setter: setIgnoreSpaces, label: "Ignore Spaces", tooltip: "Exclude all whitespace characters (spaces, tabs, newlines) from the analysis." },
     { id: "ignoreNumbers", checked: ignoreNumbers, setter: setIgnoreNumbers, label: "Ignore Numbers", tooltip: "Exclude numerical digits (0-9) from the analysis." },
-    { id: "ignoreSymbols", checked: ignoreSymbols, setter: setIgnoreSymbols, label: "Ignore Symbols", tooltip: "Exclude symbols (e.g., !, @, #) from the analysis." },
+    { id: "ignoreSymbols", checked: ignoreSymbols, setter: setIgnoreSymbols, label: "Ignore Symbols", tooltip: "Exclude characters that are not letters or numbers (e.g., !, @, #, punctuation) from the analysis. Behavior might interact with other ignore flags." },
   ];
 
   return (
@@ -101,7 +105,7 @@ export default function CharacterFrequencyAnalyzerPage() {
                         </TooltipTrigger>
                         <TooltipContent><p>{opt.tooltip}</p></TooltipContent>
                     </Tooltip>
-                    <Label htmlFor={opt.id} className="cursor-pointer">{opt.label}</Label>
+                    <Label htmlFor={opt.id} className="cursor-pointer text-sm">{opt.label}</Label>
                 </div>
             ))}
         </div>
@@ -118,7 +122,7 @@ export default function CharacterFrequencyAnalyzerPage() {
       {inputText.trim() && frequencyData.length > 0 && (
         <ScrollArea className="h-[400px] border rounded-lg">
           <Table>
-            <TableCaption>Frequency of characters in the provided text.</TableCaption>
+            <TableCaption>Frequency of characters in the provided text based on selected options.</TableCaption>
             <TableHeader className="sticky top-0 bg-muted/80 backdrop-blur-sm">
               <TableRow>
                 <TableHead className="w-[100px]">Character</TableHead>
@@ -129,7 +133,7 @@ export default function CharacterFrequencyAnalyzerPage() {
             <TableBody>
               {frequencyData.map((data) => (
                 <TableRow key={data.char}>
-                  <TableCell className="font-medium">'{data.char}'</TableCell>
+                  <TableCell className="font-medium">{data.char === ' ' ? "' ' (Space)" : `'${data.char}'`}</TableCell>
                   <TableCell className="text-right">{data.count}</TableCell>
                   <TableCell className="text-right">{data.percentage.toFixed(2)}%</TableCell>
                 </TableRow>
@@ -139,10 +143,10 @@ export default function CharacterFrequencyAnalyzerPage() {
         </ScrollArea>
       )}
        {inputText.trim() && frequencyData.length === 0 && (
-         <p className="text-muted-foreground text-center py-8">No characters to analyze based on current filters, or input is empty after filtering.</p>
+         <p className="text-muted-foreground text-center py-8">No characters to analyze. This could be due to the input text being filtered out completely by the selected options (e.g., ignoring all character types present).</p>
        )}
        {!inputText.trim() && (
-         <p className="text-muted-foreground text-center py-8">Enter some text to see the character frequency analysis.</p>
+         <p className="text-muted-foreground text-center py-8">Enter some text in the area above to see the character frequency analysis.</p>
        )}
     </div>
   );

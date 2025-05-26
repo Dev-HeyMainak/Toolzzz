@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect, FormEvent } from 'react';
@@ -6,16 +5,17 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { ListChecks, PlusCircle, Trash2, XCircle, CalendarIcon } from 'lucide-react';
+import { ListChecks, PlusCircle, Trash2, XCircle, CalendarIcon as CalendarIconLucide, Edit, Save, X } from 'lucide-react'; // Added Edit, Save, X icons
 import { useToast } from '@/hooks/use-toast';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
-import { format, parseISO } from "date-fns";
+import { format, parseISO, isValid as isValidDate } from "date-fns";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 
 type TaskPriority = "low" | "medium" | "high";
@@ -28,13 +28,19 @@ interface Task {
   priority?: TaskPriority;
 }
 
-const LOCALSTORAGE_KEY_TODOS = 'todo-tasks-v2'; // Updated key for new structure
+const LOCALSTORAGE_KEY_TODOS = 'todo-tasks-v3'; // Updated key for edit structure
 
 export default function TodoListPage() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [newTaskText, setNewTaskText] = useState('');
   const [newTaskDueDate, setNewTaskDueDate] = useState<Date | undefined>(undefined);
   const [newTaskPriority, setNewTaskPriority] = useState<TaskPriority>('medium');
+  
+  const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
+  const [editText, setEditText] = useState('');
+  const [editDueDate, setEditDueDate] = useState<Date | undefined>(undefined);
+  const [editPriority, setEditPriority] = useState<TaskPriority>('medium');
+
   const [isClient, setIsClient] = useState(false);
   const { toast } = useToast();
 
@@ -44,7 +50,7 @@ export default function TodoListPage() {
       try {
         const storedTasks = localStorage.getItem(LOCALSTORAGE_KEY_TODOS);
         if (storedTasks) {
-          setTasks(JSON.parse(storedTasks));
+          setTasks(JSON.parse(storedTasks).sort((a:Task, b:Task) => (a.completed ? 1 : -1) - (b.completed ? 1 : -1) || (a.dueDate && b.dueDate ? new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime() : !a.dueDate ? 1 : -1)));
         }
       } catch (error) {
         console.error("Failed to load tasks from localStorage", error);
@@ -80,7 +86,7 @@ export default function TodoListPage() {
       dueDate: newTaskDueDate ? newTaskDueDate.toISOString() : undefined,
       priority: newTaskPriority,
     };
-    setTasks(prevTasks => [newTask, ...prevTasks].sort((a,b) => (a.completed ? 1 : -1) - (b.completed ? 1: -1) || (new Date(a.dueDate || 0).getTime()) - (new Date(b.dueDate || 0).getTime()) ));
+    setTasks(prevTasks => [newTask, ...prevTasks].sort((a,b) => (a.completed ? 1 : -1) - (b.completed ? 1 : -1) || (a.dueDate && b.dueDate ? new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime() : !a.dueDate ? 1 : -1)));
     setNewTaskText('');
     setNewTaskDueDate(undefined);
     setNewTaskPriority('medium');
@@ -90,7 +96,7 @@ export default function TodoListPage() {
     setTasks(prevTasks =>
       prevTasks.map(task =>
         task.id === taskId ? { ...task, completed: !task.completed } : task
-      ).sort((a,b) => (a.completed ? 1 : -1) - (b.completed ? 1: -1) || (new Date(a.dueDate || 0).getTime()) - (new Date(b.dueDate || 0).getTime()))
+      ).sort((a,b) => (a.completed ? 1 : -1) - (b.completed ? 1 : -1) || (a.dueDate && b.dueDate ? new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime() : !a.dueDate ? 1 : -1))
     );
   };
 
@@ -109,6 +115,33 @@ export default function TodoListPage() {
     toast({ title: "Success", description: `${completedCount} completed task(s) cleared.` });
   };
   
+  const handleEditTask = (task: Task) => {
+    setEditingTaskId(task.id);
+    setEditText(task.text);
+    setEditDueDate(task.dueDate ? parseISO(task.dueDate) : undefined);
+    setEditPriority(task.priority || 'medium');
+  };
+
+  const handleSaveEdit = () => {
+    if (!editingTaskId || editText.trim() === '') {
+      toast({ title: "Info", description: "Task text cannot be empty.", variant: "default" });
+      return;
+    }
+    setTasks(prevTasks =>
+      prevTasks.map(task =>
+        task.id === editingTaskId
+          ? { ...task, text: editText.trim(), dueDate: editDueDate?.toISOString(), priority: editPriority }
+          : task
+      ).sort((a,b) => (a.completed ? 1 : -1) - (b.completed ? 1 : -1) || (a.dueDate && b.dueDate ? new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime() : !a.dueDate ? 1 : -1))
+    );
+    setEditingTaskId(null);
+    toast({ title: "Success", description: "Task updated." });
+  };
+
+  const handleCancelEdit = () => {
+    setEditingTaskId(null);
+  };
+
   const completedTasksCount = tasks.filter(task => task.completed).length;
   const pendingTasksCount = tasks.length - completedTasksCount;
 
@@ -158,7 +191,7 @@ export default function TodoListPage() {
                             !newTaskDueDate && "text-muted-foreground"
                             )}
                         >
-                            <CalendarIcon className="mr-2 h-4 w-4" />
+                            <CalendarIconLucide className="mr-2 h-4 w-4" />
                             {newTaskDueDate ? format(newTaskDueDate, "PPP") : <span>Pick a date</span>}
                         </Button>
                         </PopoverTrigger>
@@ -187,9 +220,14 @@ export default function TodoListPage() {
                     </Select>
                 </div>
             </div>
-            <Button type="submit" aria-label="Add task" className="w-full sm:w-auto">
-              <PlusCircle className="mr-2 h-4 w-4" /> Add Task
-            </Button>
+             <Tooltip>
+                <TooltipTrigger asChild>
+                    <Button type="submit" aria-label="Add task" className="w-full sm:w-auto">
+                    <PlusCircle className="mr-2 h-4 w-4" /> Add Task
+                    </Button>
+                </TooltipTrigger>
+                <TooltipContent><p>Add the new task to your list.</p></TooltipContent>
+            </Tooltip>
           </form>
         </CardContent>
       </Card>
@@ -199,20 +237,25 @@ export default function TodoListPage() {
           <div>
             <CardTitle>Your Tasks</CardTitle>
             <CardDescription>
-              {pendingTasksCount > 0 ? `${pendingTasksCount} pending` : 'All tasks completed!'}
+              {pendingTasksCount > 0 ? `${pendingTasksCount} pending` : tasks.length === 0 ? 'No tasks yet.' : 'All tasks completed!'}
               {pendingTasksCount > 0 && completedTasksCount > 0 && ", "}
               {completedTasksCount > 0 && `${completedTasksCount} completed`}
             </CardDescription>
           </div>
           {completedTasksCount > 0 && (
-             <Button variant="outline" size="sm" onClick={handleClearCompleted} className="mt-2 sm:mt-0">
-                <XCircle className="mr-2 h-4 w-4" /> Clear Completed
-            </Button>
+             <Tooltip>
+                <TooltipTrigger asChild>
+                    <Button variant="outline" size="sm" onClick={handleClearCompleted} className="mt-2 sm:mt-0">
+                        <XCircle className="mr-2 h-4 w-4" /> Clear Completed
+                    </Button>
+                </TooltipTrigger>
+                <TooltipContent><p>Remove all completed tasks from the list.</p></TooltipContent>
+            </Tooltip>
           )}
         </CardHeader>
         <CardContent>
           {tasks.length === 0 && isClient ? (
-            <p className="text-muted-foreground text-center py-8">Your to-do list is empty. Add some tasks to get started!</p>
+            <p className="text-muted-foreground text-center py-8">Your to-do list is empty. Add some tasks above to get started!</p>
           ) : !isClient ? (
              <p className="text-muted-foreground text-center py-8">Loading tasks...</p>
           ) : (
@@ -222,51 +265,137 @@ export default function TodoListPage() {
                   <li
                     key={task.id}
                     className={cn(
-                        "flex items-start p-3 rounded-md border transition-all",
+                        "flex flex-col p-3 rounded-md border transition-all",
                         task.completed ? "bg-muted/30 border-muted/20" : "bg-card hover:bg-muted/20"
                     )}
                   >
-                    <Checkbox
-                      id={`task-${task.id}`}
-                      checked={task.completed}
-                      onCheckedChange={() => toggleTaskCompletion(task.id)}
-                      className="mr-3 mt-1 flex-shrink-0"
-                      aria-labelledby={`task-label-${task.id}`}
-                    />
-                    <div className="flex-grow">
-                        <label
-                        htmlFor={`task-${task.id}`}
-                        id={`task-label-${task.id}`}
-                        className={cn(
-                            "block cursor-pointer text-sm",
-                            task.completed ? "line-through text-muted-foreground" : "text-foreground"
-                        )}
-                        >
-                        {task.text}
-                        </label>
-                        <div className="flex items-center gap-2 mt-1">
-                            {task.dueDate && (
-                                <Badge variant="outline" className="text-xs">
-                                    <CalendarIcon className="mr-1 h-3 w-3" />
-                                    {format(parseISO(task.dueDate), "MMM d, yyyy")}
-                                </Badge>
-                            )}
-                            {task.priority && (
-                                <Badge variant={getPriorityBadgeVariant(task.priority)} className="text-xs capitalize">
-                                {task.priority}
-                                </Badge>
-                            )}
+                    {editingTaskId === task.id ? (
+                        // Editing UI
+                        <div className="space-y-3 w-full">
+                            <Input
+                                type="text"
+                                value={editText}
+                                onChange={(e) => setEditText(e.target.value)}
+                                className="text-base"
+                                autoFocus
+                            />
+                            <div className="flex flex-col sm:flex-row gap-3">
+                                <Popover>
+                                    <PopoverTrigger asChild>
+                                    <Button
+                                        variant={"outline"}
+                                        className={cn(
+                                        "w-full justify-start text-left font-normal",
+                                        !editDueDate && "text-muted-foreground"
+                                        )}
+                                    >
+                                        <CalendarIconLucide className="mr-2 h-4 w-4" />
+                                        {editDueDate ? format(editDueDate, "PPP") : <span>Due date</span>}
+                                    </Button>
+                                    </PopoverTrigger>
+                                    <PopoverContent className="w-auto p-0">
+                                    <Calendar
+                                        mode="single"
+                                        selected={editDueDate}
+                                        onSelect={setEditDueDate}
+                                        initialFocus
+                                        disabled={(date) => date < new Date(new Date().setDate(new Date().getDate() -1))}
+                                    />
+                                    </PopoverContent>
+                                </Popover>
+                                <Select value={editPriority} onValueChange={(value) => setEditPriority(value as TaskPriority)}>
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue placeholder="Priority" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="low">Low</SelectItem>
+                                        <SelectItem value="medium">Medium</SelectItem>
+                                        <SelectItem value="high">High</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                            <div className="flex gap-2 justify-end">
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <Button variant="ghost" size="sm" onClick={handleCancelEdit}><X className="h-4 w-4 mr-1"/>Cancel</Button>
+                                    </TooltipTrigger>
+                                    <TooltipContent><p>Cancel editing</p></TooltipContent>
+                                </Tooltip>
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <Button size="sm" onClick={handleSaveEdit}><Save className="h-4 w-4 mr-1"/>Save</Button>
+                                    </TooltipTrigger>
+                                    <TooltipContent><p>Save changes</p></TooltipContent>
+                                </Tooltip>
+                            </div>
                         </div>
-                    </div>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => handleDeleteTask(task.id)}
-                      className="ml-2 h-7 w-7 flex-shrink-0 text-muted-foreground hover:text-destructive"
-                      aria-label={`Delete task: ${task.text}`}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
+                    ) : (
+                        // Display UI
+                        <div className="flex items-start w-full">
+                            <Checkbox
+                            id={`task-${task.id}`}
+                            checked={task.completed}
+                            onCheckedChange={() => toggleTaskCompletion(task.id)}
+                            className="mr-3 mt-1 flex-shrink-0"
+                            aria-labelledby={`task-label-${task.id}`}
+                            />
+                            <div className="flex-grow">
+                                <label
+                                htmlFor={`task-${task.id}`}
+                                id={`task-label-${task.id}`}
+                                className={cn(
+                                    "block cursor-pointer text-sm",
+                                    task.completed ? "line-through text-muted-foreground" : "text-foreground"
+                                )}
+                                >
+                                {task.text}
+                                </label>
+                                <div className="flex items-center gap-2 mt-1 flex-wrap">
+                                    {task.dueDate && isValidDate(parseISO(task.dueDate)) && (
+                                        <Badge variant="outline" className="text-xs">
+                                            <CalendarIconLucide className="mr-1 h-3 w-3" />
+                                            {format(parseISO(task.dueDate), "MMM d, yyyy")}
+                                        </Badge>
+                                    )}
+                                    {task.priority && (
+                                        <Badge variant={getPriorityBadgeVariant(task.priority)} className="text-xs capitalize">
+                                        {task.priority}
+                                        </Badge>
+                                    )}
+                                </div>
+                            </div>
+                            <div className="flex flex-shrink-0 ml-2">
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        onClick={() => handleEditTask(task)}
+                                        className="h-7 w-7 text-muted-foreground hover:text-primary"
+                                        aria-label={`Edit task: ${task.text}`}
+                                        >
+                                        <Edit className="h-4 w-4" />
+                                        </Button>
+                                    </TooltipTrigger>
+                                    <TooltipContent><p>Edit task</p></TooltipContent>
+                                </Tooltip>
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        onClick={() => handleDeleteTask(task.id)}
+                                        className="h-7 w-7 text-muted-foreground hover:text-destructive"
+                                        aria-label={`Delete task: ${task.text}`}
+                                        >
+                                        <Trash2 className="h-4 w-4" />
+                                        </Button>
+                                    </TooltipTrigger>
+                                    <TooltipContent><p>Delete task</p></TooltipContent>
+                                </Tooltip>
+                            </div>
+                        </div>
+                    )}
                   </li>
                 ))}
               </ul>

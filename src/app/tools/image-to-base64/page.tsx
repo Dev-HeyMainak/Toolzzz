@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from 'react';
@@ -9,6 +8,7 @@ import { ImageUp, Copy, XCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Label } from '@/components/ui/label';
 import Image from 'next/image';
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 export default function ImageToBase64Page() {
   const [imageBase64, setImageBase64] = useState<string | null>(null);
@@ -125,12 +125,22 @@ export default function ImageToBase64Page() {
             />
           </div>
           <div className="flex gap-3">
-            <Button onClick={handleCopy}>
-              <Copy className="mr-2 h-4 w-4" /> Copy Base64 String
-            </Button>
-            <Button variant="outline" onClick={clearSelection}>
-              <XCircle className="mr-2 h-4 w-4" /> Clear
-            </Button>
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <Button onClick={handleCopy}>
+                    <Copy className="mr-2 h-4 w-4" /> Copy Base64 String
+                    </Button>
+                </TooltipTrigger>
+                <TooltipContent><p>Copy the generated Base64 string to your clipboard.</p></TooltipContent>
+            </Tooltip>
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <Button variant="outline" onClick={clearSelection}>
+                    <XCircle className="mr-2 h-4 w-4" /> Clear
+                    </Button>
+                </TooltipTrigger>
+                <TooltipContent><p>Clear the selected image and Base64 output.</p></TooltipContent>
+            </Tooltip>
           </div>
         </div>
       )}

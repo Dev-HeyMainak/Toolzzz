@@ -1,12 +1,12 @@
-
 "use client";
 
 import { useState, useEffect, useRef } from 'react';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Gauge, Play, RotateCcw, Type } from 'lucide-react';
+import { Gauge, Play, RotateCcw, Type, StopCircle } from 'lucide-react'; // Added StopCircle
 import { useToast } from '@/hooks/use-toast';
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 const sampleTexts = [
   "The quick brown fox jumps over the lazy dog. Pack my box with five dozen liquor jugs. How quickly daft jumping zebras vex.",
@@ -48,6 +48,7 @@ export default function TypingSpeedTestPage() {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isTesting, timeLeft, isClient]);
 
   const loadNewText = () => {
@@ -68,7 +69,7 @@ export default function TypingSpeedTestPage() {
   const endTest = () => {
     setIsTesting(false);
     if (timerRef.current) clearInterval(timerRef.current);
-    calculateResults();
+    calculateResults(false); // Ensure final calculation uses correct WPM logic
     toast({ title: "Test Finished!", description: `Your WPM: ${wpm.toFixed(0)}, Accuracy: ${accuracy.toFixed(1)}%` });
   };
 
@@ -80,36 +81,36 @@ export default function TypingSpeedTestPage() {
     setWpm(0);
     setAccuracy(0);
     loadNewText();
+    textAreaRef.current?.focus();
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    if (!isTesting && timeLeft === TEST_DURATION_SECONDS) { // Auto-start on first type if not already started
+    if (!isTesting && timeLeft === TEST_DURATION_SECONDS) { 
       startTest();
     }
-    if (!isTesting && timeLeft < TEST_DURATION_SECONDS && timeLeft > 0) { // Allow typing if paused
-       // If we want to allow typing while paused, this logic might need adjustment
-       // For now, we prevent typing if not actively testing or if time is up
+    if (!isTesting && timeLeft < TEST_DURATION_SECONDS && timeLeft > 0) { 
        return;
     }
-    if (timeLeft === 0) return; // Don't allow typing after time is up
+    if (timeLeft === 0) return; 
 
     setTypedText(event.target.value);
   };
   
   useEffect(() => {
-    if(isTesting && timeLeft > 0) { // Recalculate WPM and accuracy on each keystroke during test
+    if(isTesting && timeLeft > 0) { 
         calculateResults(true);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [typedText, isTesting, timeLeft]);
 
 
   const calculateResults = (intermediate = false) => {
-    const typedWords = typedText.trim().split(/\s+/).filter(Boolean);
-    const originalWords = currentText.trim().split(/\s+/).filter(Boolean);
+    const typedWordsArray = typedText.trim().split(/\s+/).filter(Boolean);
+    const originalWordsArray = currentText.trim().split(/\s+/).filter(Boolean);
     
     let correctChars = 0;
-    const minLength = Math.min(typedText.length, currentText.length);
-    for (let i = 0; i < minLength; i++) {
+    const minLengthCompare = Math.min(typedText.length, currentText.length);
+    for (let i = 0; i < minLengthCompare; i++) {
         if (typedText[i] === currentText[i]) {
             correctChars++;
         }
@@ -118,25 +119,27 @@ export default function TypingSpeedTestPage() {
     const currentAccuracy = typedText.length > 0 ? (correctChars / typedText.length) * 100 : 0;
     setAccuracy(currentAccuracy);
 
-    // WPM is often calculated as (all typed characters / 5) / time in minutes
-    // Or correctly typed words / time in minutes
-    // Let's use the common (typed characters / 5) / time for live WPM
-    const grossWpm = (typedText.length / 5) / ((TEST_DURATION_SECONDS - timeLeft) / 60);
+    const timeElapsedMinutes = (TEST_DURATION_SECONDS - timeLeft) / 60;
+
+    if (timeElapsedMinutes <= 0 && intermediate) {
+        setWpm(0);
+        return;
+    }
     
-    if (timeLeft === 0 || !intermediate) { // Final calculation
+    if (intermediate) { // Live WPM based on characters typed
+      const grossWpm = (typedText.length / 5) / timeElapsedMinutes;
+      setWpm(isNaN(grossWpm) || !isFinite(grossWpm) ? 0 : grossWpm);
+    } else { // Final WPM based on correctly typed words
       let correctWordsCount = 0;
-      const shorterLength = Math.min(typedWords.length, originalWords.length);
-      for(let i=0; i<shorterLength; i++){
-        if(typedWords[i] === originalWords[i]){
+      const wordsToCompare = Math.min(typedWordsArray.length, originalWordsArray.length);
+      for(let i=0; i < wordsToCompare; i++){
+        if(typedWordsArray[i] === originalWordsArray[i]){
           correctWordsCount++;
         }
       }
-      const finalWpm = (correctWordsCount / (TEST_DURATION_SECONDS / 60));
+      const finalWpm = timeElapsedMinutes > 0 ? (correctWordsCount / timeElapsedMinutes) : 0;
       setWpm(isNaN(finalWpm) || !isFinite(finalWpm) ? 0 : finalWpm);
-      setAccuracy(typedText.length > 0 ? (correctChars / typedText.length) * 100 : 0);
-
-    } else if (intermediate && (TEST_DURATION_SECONDS - timeLeft > 0)) { // Intermediate WPM
-        setWpm(isNaN(grossWpm) || !isFinite(grossWpm) ? 0 : grossWpm);
+      // Final accuracy is already set by currentAccuracy
     }
   };
   
@@ -144,7 +147,11 @@ export default function TypingSpeedTestPage() {
     return currentText.split('').map((char, index) => {
       let colorClass = 'text-muted-foreground';
       if (index < typedText.length) {
-        colorClass = typedText[index] === char ? 'text-green-500' : 'text-red-500 bg-red-500/20';
+        colorClass = typedText[index] === char ? 'text-green-500 dark:text-green-400' : 'text-red-500 dark:text-red-400 bg-red-500/20';
+      }
+      // Highlight current character to type
+      if (index === typedText.length && isTesting && timeLeft > 0) {
+        colorClass += ' underline decoration-primary decoration-2';
       }
       return <span key={index} className={colorClass}>{char}</span>;
     });
@@ -183,12 +190,12 @@ export default function TypingSpeedTestPage() {
 
       <Textarea
         ref={textAreaRef}
-        placeholder="Start typing here when ready..."
+        placeholder={isTesting ? "Start typing..." : "Click Start Test or begin typing..."}
         value={typedText}
         onChange={handleInputChange}
         className="min-h-[150px] text-lg rounded-lg shadow-sm mb-6 font-mono"
         aria-label="Typing input area"
-        disabled={isTesting && timeLeft === 0}
+        disabled={timeLeft === 0 && !isTesting} // Disabled when test is over but not reset yet
       />
 
       <div className="grid md:grid-cols-3 gap-6 mb-8">
@@ -199,19 +206,40 @@ export default function TypingSpeedTestPage() {
 
       <div className="flex justify-center gap-4">
         {!isTesting && timeLeft === TEST_DURATION_SECONDS && (
-          <Button onClick={startTest} size="lg" className="px-8 py-3 text-lg">
-            <Play className="mr-2 h-5 w-5" /> Start Test
-          </Button>
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <Button onClick={startTest} size="lg" className="px-8 py-3 text-lg">
+                        <Play className="mr-2 h-5 w-5" /> Start Test
+                    </Button>
+                </TooltipTrigger>
+                <TooltipContent><p>Begin the typing test.</p></TooltipContent>
+            </Tooltip>
         )}
-         {(isTesting || timeLeft < TEST_DURATION_SECONDS && timeLeft > 0) && (
-          <Button onClick={endTest} size="lg" variant="destructive" className="px-8 py-3 text-lg">
-             Stop Test
-          </Button>
+         {isTesting && timeLeft > 0 && (
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <Button onClick={endTest} size="lg" variant="destructive" className="px-8 py-3 text-lg">
+                        <StopCircle className="mr-2 h-5 w-5" /> Stop Test
+                    </Button>
+                </TooltipTrigger>
+                <TooltipContent><p>End the test prematurely.</p></TooltipContent>
+            </Tooltip>
         )}
-        <Button onClick={resetTest} variant="outline" size="lg" className="px-8 py-3 text-lg">
-          <RotateCcw className="mr-2 h-5 w-5" /> Reset
-        </Button>
+        <Tooltip>
+            <TooltipTrigger asChild>
+                <Button onClick={resetTest} variant="outline" size="lg" className="px-8 py-3 text-lg">
+                <RotateCcw className="mr-2 h-5 w-5" /> Reset
+                </Button>
+            </TooltipTrigger>
+            <TooltipContent><p>Reset the test with new sample text.</p></TooltipContent>
+        </Tooltip>
       </div>
+       {!isTesting && timeLeft < TEST_DURATION_SECONDS && timeLeft > 0 && (
+        <p className="text-muted-foreground text-center mt-4">Test paused. Click Start or type to resume, or Reset for a new test.</p>
+      )}
+       {timeLeft === 0 && !isTesting && (
+         <p className="text-primary font-semibold text-center mt-4">Test finished! Click Reset for another round.</p>
+       )}
     </div>
   );
 }

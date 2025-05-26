@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect, useMemo } from 'react';
@@ -9,14 +8,15 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Scale as ScaleIcon, ArrowRightLeft } from 'lucide-react'; // Renamed Scale to ScaleIcon
 import { useToast } from '@/hooks/use-toast';
 import { Label } from '@/components/ui/label';
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
-type UnitCategory = 'length' | 'weight' | 'temperature';
+type UnitCategory = 'length' | 'weight' | 'temperature' | 'time' | 'dataSize';
 
 interface Unit {
   symbol: string;
   name: string;
   category: UnitCategory;
-  toBase: (value: number) => number; // Converts to a base unit (e.g., meters, kilograms, Celsius)
+  toBase: (value: number) => number; // Converts to a base unit
   fromBase: (value: number) => number; // Converts from a base unit
 }
 
@@ -40,6 +40,17 @@ const units: Unit[] = [
   { symbol: '°C', name: 'Celsius', category: 'temperature', toBase: v => v, fromBase: v => v },
   { symbol: '°F', name: 'Fahrenheit', category: 'temperature', toBase: v => (v - 32) * 5/9, fromBase: v => (v * 9/5) + 32 },
   { symbol: 'K', name: 'Kelvin', category: 'temperature', toBase: v => v - 273.15, fromBase: v => v + 273.15 },
+  // Time (Base: Second)
+  { symbol: 's', name: 'Second', category: 'time', toBase: v => v, fromBase: v => v },
+  { symbol: 'min', name: 'Minute', category: 'time', toBase: v => v * 60, fromBase: v => v / 60 },
+  { symbol: 'hr', name: 'Hour', category: 'time', toBase: v => v * 3600, fromBase: v => v / 3600 },
+  { symbol: 'day', name: 'Day', category: 'time', toBase: v => v * 86400, fromBase: v => v / 86400 },
+  // Data Size (Base: Byte)
+  { symbol: 'B', name: 'Byte', category: 'dataSize', toBase: v => v, fromBase: v => v },
+  { symbol: 'KB', name: 'Kilobyte', category: 'dataSize', toBase: v => v * 1024, fromBase: v => v / 1024 },
+  { symbol: 'MB', name: 'Megabyte', category: 'dataSize', toBase: v => v * Math.pow(1024, 2), fromBase: v => v / Math.pow(1024, 2) },
+  { symbol: 'GB', name: 'Gigabyte', category: 'dataSize', toBase: v => v * Math.pow(1024, 3), fromBase: v => v / Math.pow(1024, 3) },
+  { symbol: 'TB', name: 'Terabyte', category: 'dataSize', toBase: v => v * Math.pow(1024, 4), fromBase: v => v / Math.pow(1024, 4) },
 ];
 
 export default function UnitConverterPage() {
@@ -54,11 +65,20 @@ export default function UnitConverterPage() {
     setIsClient(true);
   }, []);
   
-  const availableCategories = useMemo(() => Array.from(new Set(units.map(u => u.category))), []);
+  const availableCategories = useMemo(() => {
+    const categoryNames: Record<UnitCategory, string> = {
+        length: "Length",
+        weight: "Weight",
+        temperature: "Temperature",
+        time: "Time",
+        dataSize: "Data Size"
+    };
+    return Array.from(new Set(units.map(u => u.category))).map(cat => ({id: cat, name: categoryNames[cat]}));
+  }, []);
   
   const filteredUnits = useMemo(() => units.filter(u => u.category === selectedCategory), [selectedCategory]);
 
-  useEffect(() => { // Reset units if category changes and current units are not in new category
+  useEffect(() => { 
     if (isClient) {
         const currentFromUnit = units.find(u => u.symbol === fromUnitSymbol);
         const currentToUnit = units.find(u => u.symbol === toUnitSymbol);
@@ -66,8 +86,12 @@ export default function UnitConverterPage() {
         if (!currentFromUnit || currentFromUnit.category !== selectedCategory) {
             setFromUnitSymbol(filteredUnits[0]?.symbol || '');
         }
-        if (!currentToUnit || currentToUnit.category !== selectedCategory) {
-            setToUnitSymbol(filteredUnits[1]?.symbol || filteredUnits[0]?.symbol || '');
+        if (!currentToUnit || currentToUnit.category !== selectedCategory || (filteredUnits[0]?.symbol === filteredUnits[1]?.symbol && filteredUnits.length > 1)) {
+             setToUnitSymbol(filteredUnits[1]?.symbol || filteredUnits[0]?.symbol || '');
+        } else if (fromUnitSymbol === toUnitSymbol && filteredUnits.length > 1) {
+            // If from and to are same, try to pick a different toUnit
+            const differentToUnit = filteredUnits.find(u => u.symbol !== fromUnitSymbol);
+            if (differentToUnit) setToUnitSymbol(differentToUnit.symbol);
         }
     }
   }, [selectedCategory, filteredUnits, fromUnitSymbol, toUnitSymbol, isClient]);
@@ -85,9 +109,8 @@ export default function UnitConverterPage() {
     const baseValue = fromUnit.toBase(value);
     const result = toUnit.fromBase(baseValue);
     
-    // Format result to a reasonable number of decimal places
     if (Math.abs(result) < 0.00001 && result !== 0) return result.toExponential(4);
-    if (Math.abs(result) > 1000000) return result.toExponential(4);
+    if (Mathabs(result) > 1000000000) return result.toExponential(4); // Increased limit for larger numbers like bytes
     return parseFloat(result.toFixed(5)).toString();
 
   }, [inputValue, fromUnitSymbol, toUnitSymbol, selectedCategory]);
@@ -96,6 +119,8 @@ export default function UnitConverterPage() {
     const tempFrom = fromUnitSymbol;
     setFromUnitSymbol(toUnitSymbol);
     setToUnitSymbol(tempFrom);
+    // also swap input and output values
+    setInputValue(outputValue);
   };
 
   if (!isClient) {
@@ -114,7 +139,7 @@ export default function UnitConverterPage() {
         <h1 className="text-3xl font-semibold text-foreground">Unit Converter</h1>
       </div>
       <p className="text-muted-foreground mb-8">
-        Convert between various units of measurement like length, weight, and temperature.
+        Convert between various units of measurement like length, weight, temperature, time, and data size.
       </p>
 
       <Card className="max-w-2xl mx-auto rounded-lg shadow-sm">
@@ -130,7 +155,7 @@ export default function UnitConverterPage() {
               </SelectTrigger>
               <SelectContent>
                 {availableCategories.map(cat => (
-                  <SelectItem key={cat} value={cat} className="capitalize">{cat}</SelectItem>
+                  <SelectItem key={cat.id} value={cat.id} className="capitalize">{cat.name}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -161,10 +186,14 @@ export default function UnitConverterPage() {
                 </SelectContent>
               </Select>
             </div>
-
-            <Button variant="outline" size="icon" onClick={handleSwapUnits} className="h-12 w-12 flex-shrink-0 sm:mb-0" aria-label="Swap units">
-              <ArrowRightLeft className="h-5 w-5" />
-            </Button>
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <Button variant="outline" size="icon" onClick={handleSwapUnits} className="h-12 w-12 flex-shrink-0 sm:mb-0" aria-label="Swap units and values">
+                    <ArrowRightLeft className="h-5 w-5" />
+                    </Button>
+                </TooltipTrigger>
+                <TooltipContent><p>Swap units and values</p></TooltipContent>
+            </Tooltip>
 
             <div className="flex-1 w-full">
               <Label htmlFor="toUnit" className="mb-1 block">To</Label>
@@ -192,6 +221,9 @@ export default function UnitConverterPage() {
               )}
             </div>
           )}
+           {!outputValue && inputValue && parseFloat(inputValue) !== 0 && (
+                <p className="text-destructive text-sm pt-2">Please select valid units for conversion.</p>
+            )}
         </CardContent>
       </Card>
     </div>
