@@ -4,12 +4,16 @@ import { MessageSquareHeart } from 'lucide-react';
 export default function FeedbackPage() {
   return (
     <div className="container mx-auto px-4 py-12 md:px-6 md:py-20">
-      <header className="mb-12 text-center">
-        <MessageSquareHeart className="h-16 w-16 text-primary mx-auto mb-4" />
-        <h1 className="text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
-          Share Your Feedback
-        </h1>
-        <p className="mt-4 text-lg text-muted-foreground max-w-xl mx-auto">
+      <header className="mb-12">
+        <div className="flex flex-col items-center text-center md:flex-row md:items-center md:text-left">
+          <MessageSquareHeart className="h-10 w-10 md:h-12 md:w-12 text-primary mb-4 md:mb-0 md:mr-4 flex-shrink-0" />
+          <div>
+            <h1 className="text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
+              Share Your Feedback
+            </h1>
+          </div>
+        </div>
+        <p className="mt-4 text-lg text-muted-foreground max-w-xl mx-auto text-center">
           Your opinions and suggestions are invaluable to us. Help us make Office Toolkit better!
         </p>
       </header>
