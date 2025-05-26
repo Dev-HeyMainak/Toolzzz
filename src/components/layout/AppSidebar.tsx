@@ -12,7 +12,7 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
-  useSidebar, // Import useSidebar
+  useSidebar,
 } from '@/components/ui/sidebar';
 import {
   Accordion,
@@ -30,7 +30,7 @@ export function AppSidebar() {
   const pathname = usePathname();
   const [isClient, setIsClient] = useState(false);
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
-  const { state: sidebarState, isMobile: sidebarIsMobile } = useSidebar(); // Get sidebar context
+  const { state: sidebarState, isMobile: sidebarIsMobile } = useSidebar();
 
   useEffect(() => {
     setIsClient(true);
@@ -40,7 +40,7 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon" variant="sidebar" side="left" className="border-r">
       <SidebarHeader className="p-4 items-center hidden md:flex">
-        <Logo />
+        <Logo hideText={true} />
       </SidebarHeader>
       <SidebarContent asChild>
         {isClient ? (
@@ -53,9 +53,7 @@ export function AppSidebar() {
                       <AccordionTrigger
                         className={cn(
                           "flex w-full items-center justify-between rounded-md px-2 py-2 text-left text-sm font-medium text-sidebar-foreground outline-none ring-sidebar-ring transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground hover:no-underline",
-                          // Icon mode styling for the trigger itself
                           "group-data-[collapsible=icon]:h-8 group-data-[collapsible=icon]:w-8 group-data-[collapsible=icon]:p-2 group-data-[collapsible=icon]:justify-center",
-                          // Hide the default chevron (which is an SVG with class .lucide-chevron-down) in icon mode
                           "group-data-[collapsible=icon]:[&>.lucide-chevron-down]:hidden"
                         )}
                       >
@@ -75,7 +73,7 @@ export function AppSidebar() {
                   <AccordionContent
                     className={cn(
                       "overflow-hidden text-sm transition-all data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down",
-                      "group-data-[collapsible=icon]:hidden" // Content hidden when main sidebar is icon-only
+                      "group-data-[collapsible=icon]:hidden"
                     )}
                   >
                     <div className="pt-1 pb-1">
