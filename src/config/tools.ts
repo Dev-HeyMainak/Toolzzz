@@ -80,15 +80,6 @@ export const TOOLS: Tool[] = [
     dataAiHint: 'checklist tasks',
   },
   {
-    id: 'qr-code-generator',
-    name: 'QR Code Generator',
-    description: 'Generate QR codes for URLs or text.',
-    href: '/tools/qr-code-generator',
-    icon: QrCode,
-    categoryKey: 'utility',
-    dataAiHint: 'qr code',
-  },
-  {
     id: 'password-generator',
     name: 'Password Generator',
     description: 'Create strong, secure passwords with AI.',
