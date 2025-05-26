@@ -6,7 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
-import { CopyMinus, ArrowRightLeft, Copy, Eraser } from 'lucide-react';
+import { CopyMinus, ArrowRightLeft, Copy, Eraser, XCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 export default function TextDuplicateRemoverPage() {
@@ -132,3 +132,4 @@ export default function TextDuplicateRemoverPage() {
     </div>
   );
 }
+

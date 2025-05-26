@@ -1,6 +1,6 @@
 
 import type { LucideIcon } from 'lucide-react';
-import { ScanText, ALargeSmall, QrCode, LockKeyhole, MailCheck, TextIcon, Wrench, ListChecks, CopyMinus, BarChartHorizontalBig } from 'lucide-react';
+import { ScanText, ALargeSmall, LockKeyhole, MailCheck, TextIcon, Wrench, ListChecks, CopyMinus, BarChartHorizontalBig, Shuffle, Eraser, Rows3, Replace, Timer, XCircle } from 'lucide-react';
 
 export interface Tool {
   id: string;
@@ -76,8 +76,53 @@ export const TOOLS: Tool[] = [
     description: 'Organize your tasks with a simple to-do list.',
     href: '/tools/todo-list',
     icon: ListChecks,
-    categoryKey: 'text', // As requested by user, though typically a utility
+    categoryKey: 'text', 
     dataAiHint: 'checklist tasks',
+  },
+  {
+    id: 'text-reverser',
+    name: 'Text Reverser',
+    description: 'Reverse the characters in your text.',
+    href: '/tools/text-reverser',
+    icon: Shuffle,
+    categoryKey: 'text',
+    dataAiHint: 'text manipulation',
+  },
+  {
+    id: 'remove-extra-spaces',
+    name: 'Remove Extra Spaces',
+    description: 'Clean up text by removing unwanted spaces.',
+    href: '/tools/remove-extra-spaces',
+    icon: Eraser, // Using Eraser as a general cleaning icon
+    categoryKey: 'text',
+    dataAiHint: 'text formatting',
+  },
+  {
+    id: 'line-counter',
+    name: 'Line Counter',
+    description: 'Count the number of lines in your text.',
+    href: '/tools/line-counter',
+    icon: Rows3,
+    categoryKey: 'text',
+    dataAiHint: 'text analysis',
+  },
+  {
+    id: 'find-replace',
+    name: 'Find and Replace',
+    description: 'Find and replace specific text.',
+    href: '/tools/find-replace',
+    icon: Replace,
+    categoryKey: 'text',
+    dataAiHint: 'text editing',
+  },
+  {
+    id: 'reading-time-estimator',
+    name: 'Reading Time Estimator',
+    description: 'Estimate how long it takes to read text.',
+    href: '/tools/reading-time-estimator',
+    icon: Timer,
+    categoryKey: 'text',
+    dataAiHint: 'text analysis',
   },
   {
     id: 'password-generator',
@@ -98,3 +143,4 @@ export const TOOLS: Tool[] = [
     dataAiHint: 'email communication',
   },
 ];
+export { XCircle }; // Export XCircle for use in other components
