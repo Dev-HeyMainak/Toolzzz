@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { cn } from '@/lib/utils';
 import { Menu } from 'lucide-react';
-import { useSidebar } from '@/components/ui/sidebar'; // Added import
+import { useSidebar } from '@/components/ui/sidebar';
 
 export function Header() {
   const pathname = usePathname();
@@ -16,9 +16,9 @@ export function Header() {
 
   const navLinks = [
     { href: '/', label: 'Home' },
-    { href: '/about', label: 'About Us' },
     { href: '/contact', label: 'Contact' },
     { href: '/pro', label: 'Upgrade to Pro' },
+    { href: '/about', label: 'About' },
   ];
 
   return (
@@ -53,6 +53,7 @@ export function Header() {
             ))}
           </nav>
           <ThemeToggle />
+          {/* Auth UI removed */}
         </div>
       </div>
     </header>
