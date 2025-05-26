@@ -1,6 +1,28 @@
 
 import type { LucideIcon } from 'lucide-react';
-import { ScanText, ALargeSmall, LockKeyhole, MailCheck, TextIcon, Wrench, ListChecks, CopyMinus, BarChartHorizontalBig, Shuffle, Eraser, Rows3, Replace, Timer, XCircle } from 'lucide-react';
+import {
+  ScanText,
+  ALargeSmall,
+  LockKeyhole,
+  MailCheck,
+  TextIcon,
+  Wrench,
+  ListChecks,
+  CopyMinus,
+  BarChartHorizontalBig,
+  Shuffle,
+  Eraser,
+  Rows3,
+  Replace,
+  Timer,
+  XCircle,
+  Clock,
+  Hourglass,
+  Watch, // Changed from 'Stopwatch as StopwatchIcon'
+  StickyNote,
+  ClipboardCopy,
+  Keyboard
+} from 'lucide-react';
 
 export interface Tool {
   id: string;
@@ -34,6 +56,7 @@ export const TOOL_CATEGORIES: ToolCategory[] = [
 ];
 
 export const TOOLS: Tool[] = [
+  // Text Tools
   {
     id: 'word-counter',
     name: 'Word & Character Counter',
@@ -71,15 +94,6 @@ export const TOOLS: Tool[] = [
     dataAiHint: 'data chart',
   },
   {
-    id: 'todo-list',
-    name: 'To-Do List',
-    description: 'Organize your tasks with a simple to-do list.',
-    href: '/tools/todo-list',
-    icon: ListChecks,
-    categoryKey: 'text', 
-    dataAiHint: 'checklist tasks',
-  },
-  {
     id: 'text-reverser',
     name: 'Text Reverser',
     description: 'Reverse the characters in your text.',
@@ -93,7 +107,7 @@ export const TOOLS: Tool[] = [
     name: 'Remove Extra Spaces',
     description: 'Clean up text by removing unwanted spaces.',
     href: '/tools/remove-extra-spaces',
-    icon: Eraser, // Using Eraser as a general cleaning icon
+    icon: Eraser,
     categoryKey: 'text',
     dataAiHint: 'text formatting',
   },
@@ -124,6 +138,16 @@ export const TOOLS: Tool[] = [
     categoryKey: 'text',
     dataAiHint: 'text analysis',
   },
+  // Utility Tools
+  {
+    id: 'todo-list',
+    name: 'To-Do List',
+    description: 'Organize your tasks with a simple to-do list.',
+    href: '/tools/todo-list',
+    icon: ListChecks,
+    categoryKey: 'utility',
+    dataAiHint: 'checklist tasks',
+  },
   {
     id: 'password-generator',
     name: 'Password Generator',
@@ -141,6 +165,60 @@ export const TOOLS: Tool[] = [
     icon: MailCheck,
     categoryKey: 'utility',
     dataAiHint: 'email communication',
+  },
+  {
+    id: 'digital-clock',
+    name: 'Digital Clock',
+    description: 'View the current time in a digital format.',
+    href: '/tools/digital-clock',
+    icon: Clock,
+    categoryKey: 'utility',
+    dataAiHint: 'time interface',
+  },
+  {
+    id: 'countdown-timer',
+    name: 'Countdown Timer',
+    description: 'Set a timer that counts down to zero.',
+    href: '/tools/countdown-timer',
+    icon: Hourglass,
+    categoryKey: 'utility',
+    dataAiHint: 'timer alarm',
+  },
+  {
+    id: 'stopwatch',
+    name: 'Stopwatch',
+    description: 'Measure elapsed time with start, stop, and reset.',
+    href: '/tools/stopwatch',
+    icon: Watch, // Changed from StopwatchIcon
+    categoryKey: 'utility',
+    dataAiHint: 'time measurement',
+  },
+  {
+    id: 'quick-scratchpad',
+    name: 'Quick Scratchpad',
+    description: 'A simple scratchpad for quick notes, saved locally.',
+    href: '/tools/quick-scratchpad',
+    icon: StickyNote,
+    categoryKey: 'utility',
+    dataAiHint: 'notes writing',
+  },
+  {
+    id: 'text-snippets',
+    name: 'Text Snippets',
+    description: 'Save and quickly copy reusable text snippets.',
+    href: '/tools/text-snippets',
+    icon: ClipboardCopy,
+    categoryKey: 'utility',
+    dataAiHint: 'clipboard copy',
+  },
+  {
+    id: 'keyboard-shortcut-cheatsheet',
+    name: 'Keyboard Shortcut Cheatsheet',
+    description: 'A handy list of common keyboard shortcuts.',
+    href: '/tools/keyboard-shortcut-cheatsheet',
+    icon: Keyboard,
+    categoryKey: 'utility',
+    dataAiHint: 'keyboard shortcuts',
   },
 ];
 export { XCircle }; // Export XCircle for use in other components
