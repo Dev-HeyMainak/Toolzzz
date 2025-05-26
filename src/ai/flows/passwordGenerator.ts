@@ -23,7 +23,7 @@ export const generatePassword = async (
   if (options.includeLowercase) charSet += "abcdefghijklmnopqrstuvwxyz";
   if (options.includeUppercase) charSet += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   if (options.includeNumbers) charSet += "0123456789";
-  if (options.includeSymbols) charSet += "!@#$%^&amp;*()_+-=[]{}|;:,.&lt;&gt;?";
+  if (options.includeSymbols) charSet += "!@#$%^&*()_+-=[]{}|;:,.<>?";
 
   if (charSet === "") {
     return { error: "Please select at least one character type." };
@@ -35,7 +35,7 @@ export const generatePassword = async (
   }
 
   // Simulate an AI "strength" check (very basic)
-  if (options.length < 8 &amp;&amp; (options.includeSymbols || options.includeUppercase || options.includeNumbers)) {
+  if (options.length < 8 && (options.includeSymbols || options.includeUppercase || options.includeNumbers)) {
      // Pretend AI suggests a longer password for selected complexity
   }
 
