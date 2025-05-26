@@ -1,5 +1,6 @@
+
 import type { LucideIcon } from 'lucide-react';
-import { ScanText, ALargeSmall, QrCode, LockKeyhole, MailCheck, TextIcon, Wrench } from 'lucide-react';
+import { ScanText, ALargeSmall, QrCode, LockKeyhole, MailCheck, TextIcon, Wrench, ListChecks, CopyMinus, BarChartHorizontalBig } from 'lucide-react';
 
 export interface Tool {
   id: string;
@@ -28,7 +29,7 @@ export const TOOL_CATEGORIES: ToolCategory[] = [
   {
     id: 'utility',
     name: 'Utility Tools',
-    icon: Wrench, // Changed from UtilityKnifeIcon
+    icon: Wrench,
   },
 ];
 
@@ -50,6 +51,33 @@ export const TOOLS: Tool[] = [
     icon: ALargeSmall,
     categoryKey: 'text',
     dataAiHint: 'text formatting',
+  },
+  {
+    id: 'text-duplicate-remover',
+    name: 'Text Duplicate Remover',
+    description: 'Remove duplicate lines from your text.',
+    href: '/tools/text-duplicate-remover',
+    icon: CopyMinus,
+    categoryKey: 'text',
+    dataAiHint: 'text cleaning',
+  },
+  {
+    id: 'character-frequency-analyzer',
+    name: 'Character Frequency Analyzer',
+    description: 'Analyze character frequency in your text.',
+    href: '/tools/character-frequency-analyzer',
+    icon: BarChartHorizontalBig,
+    categoryKey: 'text',
+    dataAiHint: 'data chart',
+  },
+  {
+    id: 'todo-list',
+    name: 'To-Do List',
+    description: 'Organize your tasks with a simple to-do list.',
+    href: '/tools/todo-list',
+    icon: ListChecks,
+    categoryKey: 'text', // As requested by user, though typically a utility
+    dataAiHint: 'checklist tasks',
   },
   {
     id: 'qr-code-generator',
