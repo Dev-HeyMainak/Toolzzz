@@ -6,31 +6,46 @@ import { Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
+type Theme = "light" | "dark";
+
 export function ThemeToggle() {
-  const [theme, setThemeState] = React.useState<"theme-light" | "dark" | null>(null);
+  const [theme, setThemeState] = React.useState<Theme | null>(null);
 
   React.useEffect(() => {
-    const isDarkMode = document.documentElement.classList.contains("dark");
-    setThemeState(isDarkMode ? "dark" : "theme-light");
+    // Determine initial theme: 1. localStorage, 2. system preference, 3. default to 'light'
+    const storedTheme = localStorage.getItem("theme") as Theme | null;
+    if (storedTheme) {
+      setThemeState(storedTheme);
+    } else {
+      const systemPrefersDark = window.matchMedia(
+        "(prefers-color-scheme: dark)"
+      ).matches;
+      setThemeState(systemPrefersDark ? "dark" : "light");
+    }
   }, []);
   
   React.useEffect(() => {
-    if (theme !== null) {
+    if (theme) {
       const root = window.document.documentElement;
-      root.classList.remove("theme-light", "dark");
-      root.classList.add(theme);
+      if (theme === "dark") {
+        root.classList.add("dark");
+      } else {
+        root.classList.remove("dark");
+      }
       localStorage.setItem("theme", theme);
     }
   }, [theme]);
 
 
   const toggleTheme = () => {
-    setThemeState((prevTheme) => (prevTheme === "dark" ? "theme-light" : "dark"));
+    setThemeState((prevTheme) => (prevTheme === "dark" ? "light" : "dark"));
   };
   
   if (theme === null) {
-    // Avoid hydration mismatch by not rendering the button until theme is determined
-    return <Button variant="outline" size="icon" className="w-9 h-9 opacity-0" disabled />;
+    // Avoid hydration mismatch and FOUC by rendering a placeholder.
+    // 'invisible' class ensures it doesn't take up space if that's desired before hydration.
+    // 'opacity-0' makes it take up space but be invisible.
+    return <Button variant="outline" size="icon" className="w-9 h-9 opacity-0 invisible" disabled />;
   }
 
   return (
@@ -46,7 +61,7 @@ export function ThemeToggle() {
         </Button>
       </TooltipTrigger>
       <TooltipContent>
-        <p>Toggle between light and dark themes</p>
+        <p>Toggle theme</p>
       </TooltipContent>
     </Tooltip>
   );

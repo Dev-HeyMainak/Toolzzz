@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -7,45 +8,45 @@ body {
 }
 
 @layer base {
-  :root {
-    --background: 220 15% 8%; /* Very Dark Blue-Gray */
-    --foreground: 220 10% 85%; /* Light Gray text */
-    --card: 220 15% 12%; /* Darker Card Background */
-    --card-foreground: 220 10% 85%;
-    --popover: 220 15% 10%; /* Popover Background */
-    --popover-foreground: 220 10% 85%;
-    --primary: 270 70% 65%; /* Vibrant Purple */
+  :root { /* Light Theme */
+    --background: 0 0% 98%; /* Near White */
+    --foreground: 220 15% 20%; /* Dark Gray text */
+    --card: 0 0% 100%; /* White Card Background */
+    --card-foreground: 220 15% 20%;
+    --popover: 0 0% 100%; /* Popover Background */
+    --popover-foreground: 220 15% 20%;
+    --primary: 270 70% 55%; /* Purple */
     --primary-foreground: 0 0% 100%; /* White */
-    --secondary: 270 40% 30%; /* Muted Purple */
-    --secondary-foreground: 220 10% 90%;
-    --muted: 220 15% 20%; /* Muted Background Element */
-    --muted-foreground: 220 10% 60%; /* Muted Text */
-    --accent: 290 70% 70%; /* Lighter/Alternative Purple */
+    --secondary: 270 40% 90%; /* Very Light Purple */
+    --secondary-foreground: 270 40% 30%; /* Muted Purple Text */
+    --muted: 220 15% 90%; /* Light Gray */
+    --muted-foreground: 220 10% 45%; /* Medium Gray Text */
+    --accent: 290 70% 60%; /* Lighter/Alternative Purple */
     --accent-foreground: 0 0% 100%;
-    --destructive: 0 70% 55%; /* Red for destructive actions */
+    --destructive: 0 70% 50%; /* Red for destructive actions */
     --destructive-foreground: 0 0% 100%;
-    --border: 270 20% 30%; /* Muted Purple Border */
-    --input: 220 15% 15%; /* Dark Input Background */
-    --ring: 270 70% 70%; /* Purple for focus rings */
-    --chart-1: 270 70% 65%;
-    --chart-2: 290 60% 60%;
-    --chart-3: 250 50% 55%;
-    --chart-4: 310 65% 60%;
-    --chart-5: 230 75% 55%;
-    --radius: 0.75rem; /* Slightly more rounded */
+    --border: 220 15% 85%; /* Light Gray Border */
+    --input: 220 15% 95%; /* Very Light Gray Input Background */
+    --ring: 270 70% 60%; /* Purple for focus rings */
+    --chart-1: 270 70% 55%;
+    --chart-2: 290 60% 50%;
+    --chart-3: 250 50% 50%;
+    --chart-4: 310 65% 50%;
+    --chart-5: 230 75% 50%;
+    --radius: 0.75rem;
 
-    /* Sidebar specific colors to match dark theme */
-    --sidebar-background: 220 15% 10%; /* Slightly different dark for depth */
-    --sidebar-foreground: 220 10% 80%;
-    --sidebar-primary: 270 70% 70%;
+    /* Sidebar specific colors for light theme */
+    --sidebar-background: 220 15% 96%; /* Slightly off-white */
+    --sidebar-foreground: 220 15% 25%;
+    --sidebar-primary: 270 70% 55%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 270 70% 60%;
-    --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 270 15% 25%;
-    --sidebar-ring: 270 70% 70%;
+    --sidebar-accent: 270 70% 80%; /* Lighter purple for accents */
+    --sidebar-accent-foreground: 270 70% 20%;
+    --sidebar-border: 220 15% 80%;
+    --sidebar-ring: 270 70% 60%;
   }
 
-  .dark {
+  .dark { /* Dark Theme */
     --background: 220 15% 8%;
     --foreground: 220 10% 85%;
     --card: 220 15% 12%;
