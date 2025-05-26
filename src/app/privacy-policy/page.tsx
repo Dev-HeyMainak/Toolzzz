@@ -14,16 +14,14 @@ export default function PrivacyPolicyPage() {
 
   return (
     <div className="container mx-auto px-4 py-12 md:px-6 md:py-20">
-      <header className="mb-12">
-        <div className="flex flex-col items-center text-center md:flex-row md:items-center md:text-left">
-          <ShieldCheck className="h-10 w-10 md:h-12 md:w-12 text-primary mb-4 md:mb-0 md:mr-4 flex-shrink-0" />
-          <div>
-            <h1 className="text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
-              Privacy Policy
-            </h1>
-          </div>
+      <header className="mb-12 text-center">
+        <div className="inline-flex flex-col items-center">
+          <ShieldCheck className="h-10 w-10 md:h-12 md:w-12 text-primary mb-4" />
+          <h1 className="text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
+            Privacy Policy
+          </h1>
         </div>
-        <p className="mt-4 text-lg text-muted-foreground max-w-xl mx-auto text-center">
+        <p className="mt-4 text-lg text-muted-foreground max-w-xl mx-auto">
           Your privacy is important to us. This policy outlines how Office Toolkit handles your information.
         </p>
       </header>
