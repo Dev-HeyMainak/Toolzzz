@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect, FormEvent } from 'react';
@@ -5,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { ListChecks, PlusCircle, Trash2, XCircle, CalendarIcon as CalendarIconLucide, Edit, Save, X } from 'lucide-react'; // Added Edit, Save, X icons
+import { ListChecks, PlusCircle, Trash2, XCircle, CalendarIcon as CalendarIconLucide, Edit, Save, X } from 'lucide-react'; 
 import { useToast } from '@/hooks/use-toast';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
@@ -15,7 +16,7 @@ import { format, parseISO, isValid as isValidDate } from "date-fns";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 
 type TaskPriority = "low" | "medium" | "high";
@@ -28,7 +29,7 @@ interface Task {
   priority?: TaskPriority;
 }
 
-const LOCALSTORAGE_KEY_TODOS = 'todo-tasks-v3'; // Updated key for edit structure
+const LOCALSTORAGE_KEY_TODOS = 'todo-tasks-v3'; 
 
 export default function TodoListPage() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -156,6 +157,7 @@ export default function TodoListPage() {
 
 
   return (
+    <TooltipProvider>
     <div>
       <div className="flex items-center mb-6">
         <ListChecks className="h-8 w-8 text-primary mr-3" />
@@ -181,7 +183,15 @@ export default function TodoListPage() {
             />
             <div className="flex flex-col sm:flex-row gap-4">
                 <div className="flex-1">
-                    <Label htmlFor="dueDate" className="mb-1 block">Due Date (Optional)</Label>
+                    <div className="flex items-center mb-1">
+                      <Label htmlFor="dueDate" className="block mr-2">Due Date (Optional)</Label>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Badge variant="secondary" className="cursor-default text-xs">PRO</Badge>
+                        </TooltipTrigger>
+                        <TooltipContent><p>Setting due dates is a Pro feature!</p></TooltipContent>
+                      </Tooltip>
+                    </div>
                     <Popover>
                         <PopoverTrigger asChild>
                         <Button
@@ -207,7 +217,15 @@ export default function TodoListPage() {
                     </Popover>
                 </div>
                 <div className="flex-1">
-                    <Label htmlFor="priority" className="mb-1 block">Priority</Label>
+                     <div className="flex items-center mb-1">
+                        <Label htmlFor="priority" className="block mr-2">Priority</Label>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                            <Badge variant="secondary" className="cursor-default text-xs">PRO</Badge>
+                            </TooltipTrigger>
+                            <TooltipContent><p>Setting task priorities is a Pro feature!</p></TooltipContent>
+                        </Tooltip>
+                     </div>
                     <Select value={newTaskPriority} onValueChange={(value) => setNewTaskPriority(value as TaskPriority)}>
                         <SelectTrigger id="priority" className="w-full">
                             <SelectValue placeholder="Select priority" />
@@ -280,39 +298,62 @@ export default function TodoListPage() {
                                 autoFocus
                             />
                             <div className="flex flex-col sm:flex-row gap-3">
-                                <Popover>
-                                    <PopoverTrigger asChild>
-                                    <Button
-                                        variant={"outline"}
-                                        className={cn(
-                                        "w-full justify-start text-left font-normal",
-                                        !editDueDate && "text-muted-foreground"
-                                        )}
-                                    >
-                                        <CalendarIconLucide className="mr-2 h-4 w-4" />
-                                        {editDueDate ? format(editDueDate, "PPP") : <span>Due date</span>}
-                                    </Button>
-                                    </PopoverTrigger>
-                                    <PopoverContent className="w-auto p-0">
-                                    <Calendar
-                                        mode="single"
-                                        selected={editDueDate}
-                                        onSelect={setEditDueDate}
-                                        initialFocus
-                                        disabled={(date) => date < new Date(new Date().setDate(new Date().getDate() -1))}
-                                    />
-                                    </PopoverContent>
-                                </Popover>
-                                <Select value={editPriority} onValueChange={(value) => setEditPriority(value as TaskPriority)}>
-                                    <SelectTrigger className="w-full">
-                                        <SelectValue placeholder="Priority" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="low">Low</SelectItem>
-                                        <SelectItem value="medium">Medium</SelectItem>
-                                        <SelectItem value="high">High</SelectItem>
-                                    </SelectContent>
-                                </Select>
+                                <div className="flex-1">
+                                    <div className="flex items-center mb-1">
+                                    <Label htmlFor={`editDueDate-${task.id}`} className="block mr-2">Due Date</Label>
+                                    <Tooltip>
+                                        <TooltipTrigger asChild>
+                                        <Badge variant="secondary" className="cursor-default text-xs">PRO</Badge>
+                                        </TooltipTrigger>
+                                        <TooltipContent><p>Setting due dates is a Pro feature!</p></TooltipContent>
+                                    </Tooltip>
+                                    </div>
+                                    <Popover>
+                                        <PopoverTrigger asChild>
+                                        <Button
+                                            id={`editDueDate-${task.id}`}
+                                            variant={"outline"}
+                                            className={cn(
+                                            "w-full justify-start text-left font-normal",
+                                            !editDueDate && "text-muted-foreground"
+                                            )}
+                                        >
+                                            <CalendarIconLucide className="mr-2 h-4 w-4" />
+                                            {editDueDate ? format(editDueDate, "PPP") : <span>Pick a date</span>}
+                                        </Button>
+                                        </PopoverTrigger>
+                                        <PopoverContent className="w-auto p-0">
+                                        <Calendar
+                                            mode="single"
+                                            selected={editDueDate}
+                                            onSelect={setEditDueDate}
+                                            initialFocus
+                                            disabled={(date) => date < new Date(new Date().setDate(new Date().getDate() -1))}
+                                        />
+                                        </PopoverContent>
+                                    </Popover>
+                                </div>
+                                <div className="flex-1">
+                                     <div className="flex items-center mb-1">
+                                        <Label htmlFor={`editPriority-${task.id}`} className="block mr-2">Priority</Label>
+                                        <Tooltip>
+                                            <TooltipTrigger asChild>
+                                                <Badge variant="secondary" className="cursor-default text-xs">PRO</Badge>
+                                            </TooltipTrigger>
+                                            <TooltipContent><p>Setting task priorities is a Pro feature!</p></TooltipContent>
+                                        </Tooltip>
+                                     </div>
+                                    <Select value={editPriority} onValueChange={(value) => setEditPriority(value as TaskPriority)}>
+                                        <SelectTrigger id={`editPriority-${task.id}`} className="w-full">
+                                            <SelectValue placeholder="Priority" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="low">Low</SelectItem>
+                                            <SelectItem value="medium">Medium</SelectItem>
+                                            <SelectItem value="high">High</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
                             </div>
                             <div className="flex gap-2 justify-end">
                                 <Tooltip>
@@ -404,5 +445,7 @@ export default function TodoListPage() {
         </CardContent>
       </Card>
     </div>
+    </TooltipProvider>
   );
 }
+

@@ -23,8 +23,9 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Progress } from "@/components/ui/progress";
+import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 
 const passwordFormSchema = z.object({
@@ -88,7 +89,7 @@ export default function PasswordGeneratorPage() {
     { name: "includeUppercase" as const, label: "Uppercase (A-Z)", tooltip: "Include uppercase letters (A-Z) in the password." },
     { name: "includeLowercase" as const, label: "Lowercase (a-z)", tooltip: "Include lowercase letters (a-z) in the password." },
     { name: "includeNumbers" as const, label: "Numbers (0-9)", tooltip: "Include numbers (0-9) in the password." },
-    { name: "includeSymbols" as const, label: "Symbols (!@#$)", tooltip: "Include symbols (e.g., !@#$) in the password." },
+    { name: "includeSymbols" as const, label: "Symbols (!@#$)", tooltip: "Include symbols (e.g., !@#$) in the password.", isPro: true },
   ];
 
   const getStrengthProps = (strength: PasswordStrength | null): { value: number; colorClass: string; text: string } => {
@@ -104,13 +105,14 @@ export default function PasswordGeneratorPage() {
   const strengthProps = getStrengthProps(passwordStrength);
 
   return (
+    <TooltipProvider>
     <div>
       <div className="flex items-center mb-6">
         <LockKeyhole className="h-8 w-8 text-primary mr-3" />
         <h1 className="text-3xl font-semibold text-foreground">Password Generator</h1>
       </div>
       <p className="text-muted-foreground mb-6">
-        Create strong, secure, and unique passwords based on your preferences with AI assistance.
+        Create strong, secure, and unique passwords based on your preferences.
       </p>
       
       <div className="grid md:grid-cols-2 gap-8 items-start">
@@ -168,16 +170,26 @@ export default function PasswordGeneratorPage() {
                               id={opt.name}
                             />
                           </FormControl>
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <FormLabel htmlFor={opt.name} className="font-normal cursor-pointer flex-1 text-sm">
-                                {opt.label}
-                              </FormLabel>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <p>{opt.tooltip}</p>
-                            </TooltipContent>
-                          </Tooltip>
+                          <div className="flex items-center gap-1.5">
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <FormLabel htmlFor={opt.name} className="font-normal cursor-pointer flex-1 text-sm">
+                                  {opt.label}
+                                </FormLabel>
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p>{opt.tooltip}</p>
+                              </TooltipContent>
+                            </Tooltip>
+                            {opt.isPro && (
+                               <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <Badge variant="secondary" className="cursor-default text-xs">PRO</Badge>
+                                </TooltipTrigger>
+                                <TooltipContent><p>This is a Pro feature!</p></TooltipContent>
+                              </Tooltip>
+                            )}
+                          </div>
                         </FormItem>
                       )}
                     />
@@ -261,5 +273,7 @@ export default function PasswordGeneratorPage() {
         </Card>
       </div>
     </div>
+    </TooltipProvider>
   );
 }
+
