@@ -11,8 +11,7 @@ export default function HomePage() {
         style={{ animationDelay: '0.1s' }}
       >
         <h1 className="text-5xl font-extrabold tracking-tighter text-foreground sm:text-6xl lg:text-7xl xl:text-8xl">
-          <span className="block">Office</span>
-          <span className="block text-primary">Toolkit</span>
+          Office
         </h1>
         <p className="mt-6 text-lg text-muted-foreground sm:text-xl max-w-2xl mx-auto">
           Your free suite of essential tools for everyday office productivity. Modernized.
