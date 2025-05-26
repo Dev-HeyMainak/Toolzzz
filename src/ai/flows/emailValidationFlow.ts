@@ -1,3 +1,4 @@
+
 'use server';
 /**
  * @fileOverview An AI-powered email validation flow.
@@ -10,13 +11,13 @@
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
-// Mirroring the structure from the mock flow for consistency
-export const EmailValidationInputSchema = z.object({
+// Schema definitions are now local to this file, not exported as values.
+const EmailValidationInputSchema = z.object({
   email: z.string().describe('The email address to validate.'),
 });
 export type EmailValidationInput = z.infer<typeof EmailValidationInputSchema>;
 
-export const EmailValidationResultSchema = z.object({
+const EmailValidationResultSchema = z.object({
   isValid: z.boolean().describe('Whether the email is considered valid.'),
   reason: z.string().optional().describe('The reason why the email is valid or invalid.'),
   isDisposable: z.boolean().optional().describe('Whether the email address is from a known disposable email provider.'),
