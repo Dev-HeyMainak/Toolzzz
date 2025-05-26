@@ -30,6 +30,8 @@ import {
   Gauge, // Icon for Typing Speed Test
   Scale, // Icon for Unit Converter
   CalendarClock, // Icon for Countdown Calendar
+  FileText, // Icon for Lorem Ipsum
+  BookText, // Icon for Markdown Previewer
 } from 'lucide-react';
 
 export interface Tool {
@@ -269,6 +271,22 @@ export const TOOLS: Tool[] = [
     description: 'Set a date and see the countdown in days, hours, etc.',
     href: '/tools/countdown-calendar',
     icon: CalendarClock,
+    categoryKey: 'digital',
+  },
+  {
+    id: 'lorem-ipsum-generator',
+    name: 'Lorem Ipsum Generator',
+    description: 'Generate placeholder Lorem Ipsum text.',
+    href: '/tools/lorem-ipsum-generator',
+    icon: FileText,
+    categoryKey: 'digital',
+  },
+  {
+    id: 'markdown-previewer',
+    name: 'Markdown Previewer',
+    description: 'Write Markdown and see a basic live preview.',
+    href: '/tools/markdown-previewer',
+    icon: BookText,
     categoryKey: 'digital',
   },
 ];

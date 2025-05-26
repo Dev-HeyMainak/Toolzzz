@@ -13,18 +13,19 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { LockKeyhole, Copy, RefreshCw } from 'lucide-react';
-import { generatePassword, type PasswordOptions } from '@/ai/flows/passwordGenerator';
+import { generatePassword, type PasswordOptions, type PasswordStrength } from '@/ai/flows/passwordGenerator';
 import { useToast } from '@/hooks/use-toast';
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { Progress } from "@/components/ui/progress";
+import { cn } from '@/lib/utils';
 
 const passwordFormSchema = z.object({
   length: z.number().min(8).max(64),
@@ -34,12 +35,13 @@ const passwordFormSchema = z.object({
   includeSymbols: z.boolean(),
 }).refine(data => data.includeUppercase || data.includeLowercase || data.includeNumbers || data.includeSymbols, {
   message: "At least one character type must be selected.",
-  path: ["includeLowercase"], // Attach error to one of the checkboxes for UI indication
+  path: ["includeLowercase"], 
 });
 
 
 export default function PasswordGeneratorPage() {
   const [generatedPassword, setGeneratedPassword] = useState('');
+  const [passwordStrength, setPasswordStrength] = useState<PasswordStrength | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
@@ -57,10 +59,12 @@ export default function PasswordGeneratorPage() {
   async function onSubmit(values: z.infer<typeof passwordFormSchema>) {
     setIsLoading(true);
     setGeneratedPassword('');
+    setPasswordStrength(null);
     try {
       const result = await generatePassword(values);
       if (result.password) {
         setGeneratedPassword(result.password);
+        setPasswordStrength(result.strength || null);
       } else if (result.error) {
         toast({ title: "Error", description: result.error, variant: "destructive" });
       }
@@ -86,6 +90,18 @@ export default function PasswordGeneratorPage() {
     { name: "includeNumbers" as const, label: "Numbers (0-9)", tooltip: "Include numbers (0-9) in the password." },
     { name: "includeSymbols" as const, label: "Symbols (!@#$)", tooltip: "Include symbols (e.g., !@#$) in the password." },
   ];
+
+  const getStrengthProps = (strength: PasswordStrength | null): { value: number; colorClass: string; text: string } => {
+    switch (strength) {
+      case "Weak": return { value: 20, colorClass: "bg-red-500", text: "Weak" };
+      case "Fair": return { value: 40, colorClass: "bg-orange-500", text: "Fair" };
+      case "Good": return { value: 60, colorClass: "bg-yellow-500", text: "Good" };
+      case "Strong": return { value: 80, colorClass: "bg-green-500", text: "Strong" };
+      case "Very Strong": return { value: 100, colorClass: "bg-emerald-500", text: "Very Strong" };
+      default: return { value: 0, colorClass: "bg-muted", text: "" };
+    }
+  };
+  const strengthProps = getStrengthProps(passwordStrength);
 
   return (
     <div>
@@ -137,7 +153,7 @@ export default function PasswordGeneratorPage() {
                   )}
                 />
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {checkboxOptions.map(opt => (
                     <FormField
                       key={opt.name}
@@ -154,7 +170,7 @@ export default function PasswordGeneratorPage() {
                           </FormControl>
                           <Tooltip>
                             <TooltipTrigger asChild>
-                              <FormLabel htmlFor={opt.name} className="font-normal cursor-pointer flex-1">
+                              <FormLabel htmlFor={opt.name} className="font-normal cursor-pointer flex-1 text-sm">
                                 {opt.label}
                               </FormLabel>
                             </TooltipTrigger>
@@ -220,6 +236,22 @@ export default function PasswordGeneratorPage() {
                 </Tooltip>
               )}
             </div>
+            {generatedPassword && passwordStrength && (
+              <div className="space-y-1">
+                <div className="flex justify-between items-center text-sm">
+                    <Label>Strength:</Label>
+                    <span className={cn("font-semibold", 
+                        strengthProps.value <= 20 && "text-red-500",
+                        strengthProps.value > 20 && strengthProps.value <= 40 && "text-orange-500",
+                        strengthProps.value > 40 && strengthProps.value <= 60 && "text-yellow-500",
+                        strengthProps.value > 60 && strengthProps.value <= 80 && "text-green-500",
+                        strengthProps.value > 80 && "text-emerald-500"
+                    )}>{strengthProps.text}</span>
+                </div>
+                <Progress value={strengthProps.value} className={cn("h-2 [&>div]:bg-primary", strengthProps.colorClass)} />
+                
+              </div>
+            )}
             {generatedPassword && (
               <p className="text-xs text-muted-foreground">
                 Make sure to store your password in a safe place.

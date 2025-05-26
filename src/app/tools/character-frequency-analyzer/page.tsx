@@ -18,6 +18,8 @@ import {
   TableCaption,
 } from '@/components/ui/table';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+
 
 interface FrequencyData {
   char: string;
@@ -48,11 +50,10 @@ export default function CharacterFrequencyAnalyzerPage() {
       processedText = processedText.replace(/[0-9]/g, '');
     }
     if (ignoreSymbols) {
-      processedText = processedText.replace(/[^a-zA-Z0-9\s]/g, ''); // Keeps letters, numbers, spaces if not ignored
-      if(ignoreSpaces && ignoreNumbers) processedText = processedText.replace(/[^a-zA-Z]/g, ''); // only letters
-      else if(ignoreSpaces) processedText = processedText.replace(/[^a-zA-Z0-9]/g, ''); // letters and numbers
-      else if(ignoreNumbers) processedText = processedText.replace(/[^a-zA-Z\s]/g, ''); // letters and spaces
-
+      processedText = processedText.replace(/[^a-zA-Z0-9\s]/g, ''); 
+      if(ignoreSpaces && ignoreNumbers) processedText = processedText.replace(/[^a-zA-Z]/g, ''); 
+      else if(ignoreSpaces) processedText = processedText.replace(/[^a-zA-Z0-9]/g, ''); 
+      else if(ignoreNumbers) processedText = processedText.replace(/[^a-zA-Z\s]/g, ''); 
     }
     
     if (!processedText) return [];
@@ -69,9 +70,15 @@ export default function CharacterFrequencyAnalyzerPage() {
         count,
         percentage: totalChars > 0 ? parseFloat(((count / totalChars) * 100).toFixed(2)) : 0,
       }))
-      .sort((a, b) => b.count - a.count || a.char.localeCompare(b.char)); // Sort by count desc, then char asc
+      .sort((a, b) => b.count - a.count || a.char.localeCompare(b.char)); 
   }, [inputText, ignoreCase, ignoreSpaces, ignoreNumbers, ignoreSymbols]);
 
+  const analysisOptions = [
+    { id: "ignoreCase", checked: ignoreCase, setter: setIgnoreCase, label: "Ignore Case", tooltip: "Treat 'a' and 'A' as the same character." },
+    { id: "ignoreSpaces", checked: ignoreSpaces, setter: setIgnoreSpaces, label: "Ignore Spaces", tooltip: "Exclude spaces from the analysis." },
+    { id: "ignoreNumbers", checked: ignoreNumbers, setter: setIgnoreNumbers, label: "Ignore Numbers", tooltip: "Exclude numerical digits (0-9) from the analysis." },
+    { id: "ignoreSymbols", checked: ignoreSymbols, setter: setIgnoreSymbols, label: "Ignore Symbols", tooltip: "Exclude symbols (e.g., !, @, #) from the analysis." },
+  ];
 
   return (
     <div>
@@ -86,22 +93,17 @@ export default function CharacterFrequencyAnalyzerPage() {
       <div className="mb-6 space-y-3 p-4 border rounded-lg bg-muted/20">
         <h3 className="text-lg font-medium text-foreground">Analysis Options</h3>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <div className="flex items-center space-x-2">
-              <Checkbox id="ignoreCase" checked={ignoreCase} onCheckedChange={(checked) => setIgnoreCase(Boolean(checked))} />
-              <Label htmlFor="ignoreCase" className="cursor-pointer">Ignore Case</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Checkbox id="ignoreSpaces" checked={ignoreSpaces} onCheckedChange={(checked) => setIgnoreSpaces(Boolean(checked))} />
-              <Label htmlFor="ignoreSpaces" className="cursor-pointer">Ignore Spaces</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Checkbox id="ignoreNumbers" checked={ignoreNumbers} onCheckedChange={(checked) => setIgnoreNumbers(Boolean(checked))} />
-              <Label htmlFor="ignoreNumbers" className="cursor-pointer">Ignore Numbers</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Checkbox id="ignoreSymbols" checked={ignoreSymbols} onCheckedChange={(checked) => setIgnoreSymbols(Boolean(checked))} />
-              <Label htmlFor="ignoreSymbols" className="cursor-pointer">Ignore Symbols</Label>
-            </div>
+            {analysisOptions.map(opt => (
+                <div key={opt.id} className="flex items-center space-x-2">
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <Checkbox id={opt.id} checked={opt.checked} onCheckedChange={(checked) => opt.setter(Boolean(checked))} />
+                        </TooltipTrigger>
+                        <TooltipContent><p>{opt.tooltip}</p></TooltipContent>
+                    </Tooltip>
+                    <Label htmlFor={opt.id} className="cursor-pointer">{opt.label}</Label>
+                </div>
+            ))}
         </div>
       </div>
 
@@ -145,4 +147,3 @@ export default function CharacterFrequencyAnalyzerPage() {
     </div>
   );
 }
-

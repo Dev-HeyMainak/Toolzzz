@@ -8,6 +8,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Eraser, ArrowRightLeft, Copy, XCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 export default function RemoveExtraSpacesPage() {
   const [inputText, setInputText] = useState('');
@@ -35,10 +36,15 @@ export default function RemoveExtraSpacesPage() {
       processedText = processedText.replace(/\s/g, '');
     } else {
       if (collapseMultiple) {
-        processedText = processedText.replace(/\s+/g, ' ');
+        // Replace multiple spaces/tabs with a single space, but preserve newlines correctly
+        processedText = processedText.split('\n').map(line => line.replace(/[ \t]+/g, ' ')).join('\n');
       }
       if (trimWhitespace) {
-        processedText = processedText.trim();
+        processedText = processedText.split('\n').map(line => line.trim()).join('\n');
+        // Final trim for the whole block if it wasn't just empty lines before
+        if(processedText.split('\n').every(line => line.trim() === '')) processedText = '';
+        else processedText = processedText.trim();
+
       }
     }
     
@@ -66,6 +72,14 @@ export default function RemoveExtraSpacesPage() {
     setOutputText('');
   };
 
+  const options = [
+    { id: "trimWhitespace", checked: trimWhitespace, setter: setTrimWhitespace, label: "Trim leading/trailing spaces", tooltip: "Remove spaces and tabs from the beginning and end of each line and the entire text.", disabled: removeAllSpaces },
+    { id: "collapseMultiple", checked: collapseMultiple, setter: setCollapseMultiple, label: "Collapse multiple spaces to one", tooltip: "Reduce sequences of multiple spaces or tabs within lines to a single space.", disabled: removeAllSpaces },
+    { id: "removeEmptyLinesOpt", checked: removeEmptyLines, setter: setRemoveEmptyLinesOpt, label: "Remove empty lines", tooltip: "Delete lines that contain only whitespace or are completely empty.", disabled: false },
+    { id: "removeAllSpaces", checked: removeAllSpaces, setter: setRemoveAllSpaces, label: "Remove ALL spaces & tabs", tooltip: "Remove every space and tab character from the text, including newlines if not handled by 'Remove empty lines'.", disabled: false },
+  ];
+
+
   return (
     <div>
       <div className="flex items-center mb-6">
@@ -79,22 +93,17 @@ export default function RemoveExtraSpacesPage() {
       <div className="mb-6 space-y-3 p-4 border rounded-lg bg-muted/20">
         <h3 className="text-lg font-medium text-foreground">Processing Options</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="flex items-center space-x-2">
-              <Checkbox id="trimWhitespace" checked={trimWhitespace} onCheckedChange={(checked) => setTrimWhitespace(Boolean(checked))} disabled={removeAllSpaces} />
-              <Label htmlFor="trimWhitespace" className="cursor-pointer">Trim leading/trailing spaces</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Checkbox id="collapseMultiple" checked={collapseMultiple} onCheckedChange={(checked) => setCollapseMultiple(Boolean(checked))} disabled={removeAllSpaces} />
-              <Label htmlFor="collapseMultiple" className="cursor-pointer">Collapse multiple spaces to one</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Checkbox id="removeEmptyLinesOpt" checked={removeEmptyLines} onCheckedChange={(checked) => setRemoveEmptyLinesOpt(Boolean(checked))} />
-              <Label htmlFor="removeEmptyLinesOpt" className="cursor-pointer">Remove empty lines</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Checkbox id="removeAllSpaces" checked={removeAllSpaces} onCheckedChange={(checked) => setRemoveAllSpaces(Boolean(checked))} />
-              <Label htmlFor="removeAllSpaces" className="cursor-pointer">Remove ALL spaces</Label>
-            </div>
+            {options.map(opt => (
+                <div key={opt.id} className="flex items-center space-x-2">
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <Checkbox id={opt.id} checked={opt.checked} onCheckedChange={(checked) => opt.setter(Boolean(checked))} disabled={opt.disabled} />
+                        </TooltipTrigger>
+                        <TooltipContent><p>{opt.tooltip}</p></TooltipContent>
+                    </Tooltip>
+                    <Label htmlFor={opt.id} className="cursor-pointer text-sm">{opt.label}</Label>
+                </div>
+            ))}
         </div>
       </div>
 
@@ -115,19 +124,39 @@ export default function RemoveExtraSpacesPage() {
         />
       </div>
       <div className="mt-6 flex flex-wrap gap-3 items-center justify-between">
-        <Button onClick={handleProcessText} disabled={!inputText.trim()}>
-          <Eraser className="mr-2 h-4 w-4" /> Process Text
-        </Button>
+        <Tooltip>
+            <TooltipTrigger asChild>
+                <Button onClick={handleProcessText} disabled={!inputText.trim()}>
+                <Eraser className="mr-2 h-4 w-4" /> Process Text
+                </Button>
+            </TooltipTrigger>
+            <TooltipContent><p>Apply selected options to clean the input text.</p></TooltipContent>
+        </Tooltip>
         <div className="flex flex-wrap gap-3">
-            <Button variant="outline" onClick={handleSwap} disabled={!inputText && !outputText} aria-label="Swap input and output text">
-                <ArrowRightLeft className="h-4 w-4" />
-            </Button>
-            <Button variant="outline" onClick={handleCopy} disabled={!outputText} aria-label="Copy output text">
-                <Copy className="mr-2 h-4 w-4" /> Copy
-            </Button>
-             <Button variant="outline" onClick={handleClear} disabled={!inputText && !outputText} aria-label="Clear input and output text">
-                <XCircle className="mr-2 h-4 w-4" /> Clear
-            </Button>
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <Button variant="outline" onClick={handleSwap} disabled={!inputText && !outputText} aria-label="Swap input and output text">
+                        <ArrowRightLeft className="h-4 w-4" />
+                    </Button>
+                </TooltipTrigger>
+                <TooltipContent><p>Swap the content of input and output fields.</p></TooltipContent>
+            </Tooltip>
+            <Tooltip>
+                <TooltipTrigger asChild>
+                     <Button variant="outline" onClick={handleCopy} disabled={!outputText} aria-label="Copy output text">
+                        <Copy className="mr-2 h-4 w-4" /> Copy
+                    </Button>
+                </TooltipTrigger>
+                <TooltipContent><p>Copy the processed text to your clipboard.</p></TooltipContent>
+            </Tooltip>
+            <Tooltip>
+                 <TooltipTrigger asChild>
+                    <Button variant="outline" onClick={handleClear} disabled={!inputText && !outputText} aria-label="Clear input and output text">
+                        <XCircle className="mr-2 h-4 w-4" /> Clear
+                    </Button>
+                </TooltipTrigger>
+                <TooltipContent><p>Clear both input and output text fields.</p></TooltipContent>
+            </Tooltip>
         </div>
       </div>
     </div>
