@@ -1,8 +1,10 @@
+
 "use client";
 
 import * as React from "react";
 import { Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 export function ThemeToggle() {
   const [theme, setThemeState] = React.useState<"theme-light" | "dark" | null>(null);
@@ -32,13 +34,20 @@ export function ThemeToggle() {
   }
 
   return (
-    <Button variant="outline" size="icon" onClick={toggleTheme} className="w-9 h-9">
-      {theme === "dark" ? (
-        <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all" />
-      ) : (
-        <Moon className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all" />
-      )}
-      <span className="sr-only">Toggle theme</span>
-    </Button>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Button variant="outline" size="icon" onClick={toggleTheme} className="w-9 h-9">
+          {theme === "dark" ? (
+            <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all" />
+          ) : (
+            <Moon className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all" />
+          )}
+          <span className="sr-only">Toggle theme</span>
+        </Button>
+      </TooltipTrigger>
+      <TooltipContent>
+        <p>Toggle between light and dark themes</p>
+      </TooltipContent>
+    </Tooltip>
   );
 }

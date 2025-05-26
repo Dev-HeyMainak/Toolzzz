@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from 'react';
@@ -5,6 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { ALargeSmall, ArrowRightLeft, Copy } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 type CaseType = "uppercase" | "lowercase" | "sentencecase" | "titlecase" | "alternatingcase" | "invertedcase";
 
@@ -57,6 +59,15 @@ export default function CaseConverterPage() {
     setOutputText(inputText);
   };
 
+  const caseButtons: { type: CaseType, label: string, tooltip: string }[] = [
+    { type: 'uppercase', label: 'Uppercase', tooltip: 'Convert text to UPPERCASE' },
+    { type: 'lowercase', label: 'Lowercase', tooltip: 'Convert text to lowercase' },
+    { type: 'sentencecase', label: 'Sentence Case', tooltip: 'Convert text to Sentence case.' },
+    { type: 'titlecase', label: 'Title Case', tooltip: 'Convert Text To Title Case' },
+    { type: 'alternatingcase', label: 'AlTeRnAtInG CaSe', tooltip: 'Convert text to AlTeRnAtInG CaSe' },
+    { type: 'invertedcase', label: 'iNVERTED cASE', tooltip: 'Convert text to iNVERTED cASE (swaps letter casing)' },
+  ];
+
   return (
     <div>
       <div className="flex items-center mb-6">
@@ -87,20 +98,38 @@ export default function CaseConverterPage() {
       </div>
       <div className="mt-6 flex flex-wrap gap-3 items-center justify-between">
         <div className="flex flex-wrap gap-3">
-            <Button onClick={() => handleConvert('uppercase')}>Uppercase</Button>
-            <Button onClick={() => handleConvert('lowercase')}>Lowercase</Button>
-            <Button onClick={() => handleConvert('sentencecase')}>Sentence Case</Button>
-            <Button onClick={() => handleConvert('titlecase')}>Title Case</Button>
-            <Button onClick={() => handleConvert('alternatingcase')}>AlTeRnAtInG CaSe</Button>
-            <Button onClick={() => handleConvert('invertedcase')}>iNVERTED cASE</Button>
+            {caseButtons.map(btn => (
+              <Tooltip key={btn.type}>
+                <TooltipTrigger asChild>
+                  <Button onClick={() => handleConvert(btn.type)}>{btn.label}</Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{btn.tooltip}</p>
+                </TooltipContent>
+              </Tooltip>
+            ))}
         </div>
         <div className="flex gap-3">
-            <Button variant="outline" onClick={handleSwap} disabled={!inputText && !outputText} aria-label="Swap input and output text">
-                <ArrowRightLeft className="h-4 w-4" />
-            </Button>
-            <Button variant="outline" onClick={handleCopy} disabled={!outputText} aria-label="Copy output text">
-                <Copy className="mr-2 h-4 w-4" /> Copy
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="outline" onClick={handleSwap} disabled={!inputText && !outputText} aria-label="Swap input and output text">
+                    <ArrowRightLeft className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Swap input and output text</p>
+              </TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="outline" onClick={handleCopy} disabled={!outputText} aria-label="Copy output text">
+                    <Copy className="mr-2 h-4 w-4" /> Copy
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Copy output text to clipboard</p>
+              </TooltipContent>
+            </Tooltip>
         </div>
       </div>
     </div>

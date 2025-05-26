@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from 'react';
@@ -23,6 +24,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 const passwordFormSchema = z.object({
   length: z.number().min(8).max(64),
@@ -78,6 +80,13 @@ export default function PasswordGeneratorPage() {
     }
   };
 
+  const checkboxOptions = [
+    { name: "includeUppercase" as const, label: "Uppercase (A-Z)", tooltip: "Include uppercase letters (A-Z) in the password." },
+    { name: "includeLowercase" as const, label: "Lowercase (a-z)", tooltip: "Include lowercase letters (a-z) in the password." },
+    { name: "includeNumbers" as const, label: "Numbers (0-9)", tooltip: "Include numbers (0-9) in the password." },
+    { name: "includeSymbols" as const, label: "Symbols (!@#$)", tooltip: "Include symbols (e.g., !@#$) in the password." },
+  ];
+
   return (
     <div>
       <div className="flex items-center mb-6">
@@ -102,10 +111,17 @@ export default function PasswordGeneratorPage() {
                   name="length"
                   render={({ field }) => (
                     <FormItem>
-                      <div className="flex justify-between items-center">
-                        <FormLabel>Password Length</FormLabel>
-                        <span className="text-sm font-medium text-primary">{field.value}</span>
-                      </div>
+                       <Tooltip>
+                        <TooltipTrigger asChild>
+                          <div className="flex justify-between items-center cursor-help">
+                            <FormLabel>Password Length</FormLabel>
+                            <span className="text-sm font-medium text-primary">{field.value}</span>
+                          </div>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Set the desired length for your password (8-64 characters).</p>
+                        </TooltipContent>
+                      </Tooltip>
                       <FormControl>
                         <Slider
                           min={8}
@@ -122,86 +138,49 @@ export default function PasswordGeneratorPage() {
                 />
 
                 <div className="grid grid-cols-2 gap-4">
-                  <FormField
-                    control={form.control}
-                    name="includeUppercase"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-row items-center space-x-3 space-y-0 p-3 border rounded-md hover:bg-muted/50 transition-colors">
-                        <FormControl>
-                          <Checkbox
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                            id="includeUppercase"
-                          />
-                        </FormControl>
-                        <FormLabel htmlFor="includeUppercase" className="font-normal cursor-pointer flex-1">
-                          Uppercase (A-Z)
-                        </FormLabel>
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="includeLowercase"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-row items-center space-x-3 space-y-0 p-3 border rounded-md hover:bg-muted/50 transition-colors">
-                        <FormControl>
-                          <Checkbox
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                            id="includeLowercase"
-                          />
-                        </FormControl>
-                        <FormLabel htmlFor="includeLowercase" className="font-normal cursor-pointer flex-1">
-                          Lowercase (a-z)
-                        </FormLabel>
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="includeNumbers"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-row items-center space-x-3 space-y-0 p-3 border rounded-md hover:bg-muted/50 transition-colors">
-                        <FormControl>
-                          <Checkbox
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                            id="includeNumbers"
-                          />
-                        </FormControl>
-                        <FormLabel htmlFor="includeNumbers" className="font-normal cursor-pointer flex-1">
-                          Numbers (0-9)
-                        </FormLabel>
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="includeSymbols"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-row items-center space-x-3 space-y-0 p-3 border rounded-md hover:bg-muted/50 transition-colors">
-                        <FormControl>
-                          <Checkbox
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                            id="includeSymbols"
-                          />
-                        </FormControl>
-                        <FormLabel htmlFor="includeSymbols" className="font-normal cursor-pointer flex-1">
-                          Symbols (!@#$)
-                        </FormLabel>
-                      </FormItem>
-                    )}
-                  />
+                  {checkboxOptions.map(opt => (
+                    <FormField
+                      key={opt.name}
+                      control={form.control}
+                      name={opt.name}
+                      render={({ field }) => (
+                        <FormItem className="flex flex-row items-center space-x-3 space-y-0 p-3 border rounded-md hover:bg-muted/50 transition-colors">
+                          <FormControl>
+                            <Checkbox
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                              id={opt.name}
+                            />
+                          </FormControl>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <FormLabel htmlFor={opt.name} className="font-normal cursor-pointer flex-1">
+                                {opt.label}
+                              </FormLabel>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>{opt.tooltip}</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </FormItem>
+                      )}
+                    />
+                  ))}
                 </div>
                 <FormMessage>{form.formState.errors.root?.message || form.formState.errors.includeLowercase?.message}</FormMessage>
 
 
-                <Button type="submit" className="w-full" disabled={isLoading}>
-                  <RefreshCw className={`mr-2 h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
-                  {isLoading ? 'Generating...' : 'Generate Password'}
-                </Button>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button type="submit" className="w-full" disabled={isLoading}>
+                      <RefreshCw className={`mr-2 h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
+                      {isLoading ? 'Generating...' : 'Generate Password'}
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Generate a new password with the selected options.</p>
+                  </TooltipContent>
+                </Tooltip>
               </form>
             </Form>
           </CardContent>
@@ -223,15 +202,22 @@ export default function PasswordGeneratorPage() {
                 aria-label="Generated password"
               />
               {generatedPassword && (
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="absolute right-1 top-1/2 -translate-y-1/2 h-9 w-9"
-                  onClick={handleCopy}
-                  aria-label="Copy password"
-                >
-                  <Copy className="h-5 w-5" />
-                </Button>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="absolute right-1 top-1/2 -translate-y-1/2 h-9 w-9"
+                      onClick={handleCopy}
+                      aria-label="Copy password"
+                    >
+                      <Copy className="h-5 w-5" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Copy password to clipboard</p>
+                  </TooltipContent>
+                </Tooltip>
               )}
             </div>
             {generatedPassword && (
