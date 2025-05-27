@@ -70,7 +70,8 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/50 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between px-4 md:px-6">
-        <div className="flex items-center gap-2">
+        {/* LEFT GROUP: Sidebar Toggle + Logo */}
+        <div className="flex items-center gap-2 md:gap-4">
           <Button
             variant="ghost"
             size="icon"
@@ -83,9 +84,24 @@ export function Header() {
           <Logo />
         </div>
 
-        {/* Right side container */}
-        <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
-          {/* Search Bar Implementation */}
+        {/* CENTER GROUP: Navigation Links */}
+        <nav className="hidden md:flex flex-1 items-center justify-center gap-4 lg:gap-6">
+          {navLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className={cn(
+                "text-sm font-medium transition-colors hover:text-primary",
+                pathname === link.href ? "text-primary" : "text-muted-foreground"
+              )}
+            >
+              {link.label}
+            </Link>
+          ))}
+        </nav>
+
+        {/* RIGHT GROUP: Search + Theme Toggle */}
+        <div className="flex items-center gap-2 sm:gap-3">
           <div ref={searchRef} className="relative">
             <div className="relative flex items-center">
               <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground pointer-events-none" />
@@ -95,12 +111,12 @@ export function Header() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onFocus={() => setIsResultsVisible(searchQuery.length > 0 && searchResults.length > 0)}
-                className="h-9 w-32 rounded-md pl-8 pr-2 text-sm md:w-48 lg:w-64" 
+                className="h-9 w-32 rounded-md pl-8 pr-2 text-sm sm:w-36 md:w-40 lg:w-56" 
                 aria-label="Search tools"
               />
             </div>
             {isResultsVisible && searchResults.length > 0 && (
-              <div className="absolute top-full mt-1.5 w-[calc(100vw-2rem)] sm:w-72 md:w-80 max-w-md rounded-md border bg-popover text-popover-foreground shadow-lg z-[51] right-0 sm:right-auto">
+              <div className="absolute top-full mt-1.5 w-full min-w-[240px] sm:min-w-[280px] md:min-w-[300px] max-w-md rounded-md border bg-popover text-popover-foreground shadow-lg z-[51] right-0">
                 <ScrollArea className="h-auto max-h-[300px] rounded-md p-1">
                   {searchResults.map((tool) => (
                     <Link
@@ -108,8 +124,8 @@ export function Header() {
                       href={tool.href}
                       className="flex items-center gap-2 rounded-sm px-2 py-1.5 text-sm hover:bg-accent"
                       onClick={() => {
-                        setSearchQuery(''); // Clear search query
-                        setIsResultsVisible(false); // Hide results
+                        setSearchQuery(''); 
+                        setIsResultsVisible(false); 
                       }}
                     >
                       <tool.icon className="h-4 w-4 text-muted-foreground flex-shrink-0" />
@@ -120,21 +136,6 @@ export function Header() {
               </div>
             )}
           </div>
-
-          <nav className="hidden md:flex items-center gap-3 lg:gap-4">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={cn(
-                  "text-sm font-medium transition-colors hover:text-primary",
-                  pathname === link.href ? "text-primary" : "text-muted-foreground"
-                )}
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
           <ThemeToggle />
         </div>
       </div>
