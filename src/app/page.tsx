@@ -1,7 +1,10 @@
 
-import { ToolLinkPill } from '@/components/ToolLinkPill';
+import { ToolCard } from '@/components/ToolCard'; // Changed from ToolLinkPill
 import { TOOLS, TOOL_CATEGORIES } from '@/config/tools';
 import { Separator } from '@/components/ui/separator';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { ChevronRight } from 'lucide-react';
 
 export default function HomePage() {
   return (
@@ -27,26 +30,26 @@ export default function HomePage() {
       {TOOL_CATEGORIES.map((category, index) => (
         <section
           key={category.id}
-          className="mb-20 opacity-0 animate-fade-in-up"
+          className="mb-16 opacity-0 animate-fade-in-up"
           style={{ animationDelay: `${0.5 + index * 0.15}s` }}
         >
-          <div className="flex items-center mb-10">
-            <category.icon className="h-8 w-8 text-primary mr-4 md:h-10 md:w-10" />
-            <h2 className="text-3xl font-bold text-foreground tracking-tight md:text-4xl">{category.name}</h2>
+          <div className="flex items-center justify-between mb-10">
+            <div className="flex items-center">
+              <category.icon className="h-8 w-8 text-primary mr-4 md:h-10 md:w-10" />
+              <h2 className="text-3xl font-bold text-foreground tracking-tight md:text-4xl">{category.name}</h2>
+            </div>
+            {/* Optional: Add a "View All [Category] Tools" button if desired */}
           </div>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-            {TOOLS.filter(tool => tool.categoryKey === category.id).map((tool, toolIndex) => (
-              <div
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {TOOLS.filter(tool => tool.categoryKey === category.id).slice(0, 4).map((tool, toolIndex) => ( // Show first 4 tools as cards
+              <ToolCard
                 key={tool.id}
-                className="opacity-0 animate-fade-in-up"
-                style={{ animationDelay: `${0.55 + index * 0.15 + (toolIndex + 1) * 0.04}s` }}
-              >
-                <ToolLinkPill
-                  name={tool.name}
-                  href={tool.href}
-                  icon={tool.icon}
-                />
-              </div>
+                name={tool.name}
+                description={tool.description}
+                href={tool.href}
+                icon={tool.icon}
+                animationDelay={`${0.55 + index * 0.15 + (toolIndex + 1) * 0.05}s`}
+              />
             ))}
           </div>
           {index < TOOL_CATEGORIES.length -1 && <Separator className="my-16 border-border/50" />}

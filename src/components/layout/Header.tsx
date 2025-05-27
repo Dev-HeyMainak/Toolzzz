@@ -5,26 +5,28 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React, { useState, useEffect, useRef } from 'react';
 import { Logo } from '@/components/Logo';
-// Removed: import { ThemeToggle } from '@/components/ThemeToggle';
+import { ThemeToggle } from '@/components/ThemeToggle'; // Re-added ThemeToggle
 import { cn } from '@/lib/utils';
-import { Search } from 'lucide-react';
+import { Search, Menu } from 'lucide-react'; // Added Menu
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { TOOLS, type Tool } from '@/config/tools';
-import { useSidebar } from '@/components/ui/sidebar'; // Keep for potential future use, or remove if logo also stops toggling
+import { useSidebar } from '@/components/ui/sidebar';
+import { Button } from '@/components/ui/button'; // Added Button import
+
 
 export function Header() {
   const pathname = usePathname();
-  // const { toggleSidebarPanel } = useSidebar(); // If logo still toggles sidebar
+  const { toggleSidebarPanel } = useSidebar();
 
   const navLinks = [
     { href: '/', label: 'Home' },
-    { href: '/contact', label: 'Contact' },
-    { href: '/pro', label: 'Upgrade to Pro' },
     { href: '/about', label: 'About' },
+    { href: '/pro', label: 'Pro' },
+    { href: '/contact', label: 'Contact' },
+    { href: '/feedback', label: 'Feedback' },
   ];
 
-  // Search State
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<Tool[]>([]);
   const [isResultsVisible, setIsResultsVisible] = useState(false);
@@ -67,31 +69,40 @@ export function Header() {
   }, [searchRef]);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/50 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full border-b border-border/60 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between px-4 md:px-6">
-        {/* LEFT SIDE: Logo */}
+        {/* LEFT SIDE: Sidebar Toggle and Logo */}
         <div className="flex items-center gap-x-2 shrink-0">
-          {/* Sidebar toggle functionality is now only on the logo if useSidebar is kept */}
+           <Button 
+            variant="ghost" 
+            size="icon" 
+            className="text-foreground hover:text-primary h-9 w-9 md:hidden" // Only show on mobile
+            onClick={toggleSidebarPanel}
+            aria-label="Toggle Sidebar Panel"
+          >
+            <Menu className="h-5 w-5" />
+          </Button>
           <Logo />
         </div>
 
-        {/* RIGHT SIDE: Main Menu, Search Bar, Theme Toggle */}
-        <div className="flex items-center gap-x-3 sm:gap-x-4 shrink-0">
-          <nav className="hidden md:flex items-center gap-x-4 lg:gap-x-6">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={cn(
-                  "text-sm font-medium transition-colors hover:text-primary",
-                  pathname === link.href ? "text-primary" : "text-muted-foreground"
-                )}
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
+        {/* CENTER: Main Menu (visible on medium screens and up) */}
+        <nav className="hidden md:flex flex-grow items-center justify-center gap-x-4 lg:gap-x-6">
+          {navLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className={cn(
+                "text-sm font-medium transition-colors hover:text-primary",
+                pathname === link.href ? "text-primary" : "text-muted-foreground"
+              )}
+            >
+              {link.label}
+            </Link>
+          ))}
+        </nav>
 
+        {/* RIGHT SIDE: Search Bar & Theme Toggle */}
+        <div className="flex items-center gap-x-3 sm:gap-x-4 shrink-0">
           <div ref={searchRef} className="relative">
             <div className="relative flex items-center">
               <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground pointer-events-none" />
@@ -101,18 +112,18 @@ export function Header() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onFocus={() => setIsResultsVisible(searchQuery.length > 0 && searchResults.length > 0)}
-                className="h-9 w-32 rounded-md pl-8 pr-2 text-sm sm:w-36 md:w-40 lg:w-48 xl:w-56" 
+                className="h-9 w-32 rounded-md pl-8 pr-2 text-sm sm:w-40 md:w-48 lg:w-56 bg-background border-input focus:border-primary"
                 aria-label="Search tools"
               />
             </div>
             {isResultsVisible && searchResults.length > 0 && (
-              <div className="absolute top-full mt-1.5 w-full min-w-[240px] sm:min-w-[280px] md:min-w-[300px] max-w-md rounded-md border bg-popover text-popover-foreground shadow-lg z-[51] right-0">
+              <div className="absolute top-full mt-1.5 w-full min-w-[240px] sm:min-w-[280px] md:min-w-[300px] max-w-md rounded-md border bg-popover text-popover-foreground shadow-lg z-[51] right-0 md:left-0 md:right-auto">
                 <ScrollArea className="h-auto max-h-[300px] rounded-md p-1">
                   {searchResults.map((tool) => (
                     <Link
                       key={tool.id}
                       href={tool.href}
-                      className="flex items-center gap-2 rounded-sm px-2 py-1.5 text-sm hover:bg-accent"
+                      className="flex items-center gap-2 rounded-sm px-2 py-1.5 text-sm hover:bg-accent focus:bg-accent"
                       onClick={() => {
                         setSearchQuery(''); 
                         setIsResultsVisible(false); 
@@ -126,7 +137,7 @@ export function Header() {
               </div>
             )}
           </div>
-          {/* ThemeToggle component removed */}
+          <ThemeToggle />
         </div>
       </div>
     </header>
