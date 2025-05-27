@@ -1,29 +1,19 @@
 
-// Removed "use client";
-
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
-import { IBM_Plex_Mono } from 'next/font/google';
+import { Poppins } from 'next/font/google'; // Use Poppins
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { SidebarProvider, Sidebar } from '@/components/ui/sidebar';
 import { Header } from '@/components/layout/Header';
 import { AppSidebar } from '@/components/layout/AppSidebar';
 import { Footer } from '@/components/layout/Footer';
-import React from 'react'; // Removed useEffect, useRef, useState
-import { cn } from '@/lib/utils';
+import { MainLayoutClientBoundary } from '@/components/layout/MainLayoutClientBoundary';
 import { TooltipProvider } from '@/components/ui/tooltip';
-import { MainLayoutClientBoundary } from '@/components/layout/MainLayoutClientBoundary'; // New Import
 
-const inter = Inter({
-  variable: '--font-inter',
+const poppins = Poppins({ // Configure Poppins
+  variable: '--font-poppins',
   subsets: ['latin'],
-});
-
-const ibmPlexMono = IBM_Plex_Mono({
-  variable: '--font-ibm-plex-mono',
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
+  weight: ['300', '400', '500', '600', '700'], // Added various weights
 });
 
 export const metadata: Metadata = {
@@ -38,7 +28,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} ${ibmPlexMono.variable} font-sans antialiased bg-background`}>
+      <body 
+        className={`${poppins.variable} font-sans antialiased bg-background`} // Use Poppins variable, ensure font-sans is a fallback
+        suppressHydrationWarning
+      >
         <TooltipProvider>
           <SidebarProvider defaultOpen={false}>
             <Sidebar side="left">

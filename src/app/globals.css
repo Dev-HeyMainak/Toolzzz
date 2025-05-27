@@ -4,79 +4,80 @@
 @tailwind utilities;
 
 body {
-  font-family: var(--font-sans), sans-serif;
+  font-family: var(--font-poppins), sans-serif; /* Ensure Poppins is the primary font */
+  @apply bg-background text-foreground;
   @apply transition-colors duration-300 ease-in-out;
   @apply overflow-x-clip;
 }
 
 @layer base {
   :root { /* Light Theme - Inspired by Vercel/Linear */
-    --background: 210 20% 98%; /* Very Light Gray / Off-white */
+    --background: 220 20% 98%; /* Very Light Gray / Off-white */
     --foreground: 220 15% 20%; /* Dark Gray / Near Black text */
     --card: 0 0% 100%; /* White Card Background */
     --card-foreground: 220 15% 20%;
     --popover: 0 0% 100%;
     --popover-foreground: 220 15% 20%;
-    --primary: 221 83% 53%; /* Vibrant Blue (Vercel-like) */
+    --primary: 220 70% 55%; /* Vibrant Blue (Vercel-like) */
     --primary-foreground: 0 0% 100%; /* White text on primary */
-    --secondary: 210 30% 96%; /* Lighter Gray for secondary elements */
+    --secondary: 220 30% 96%; /* Lighter Gray for secondary elements */
     --secondary-foreground: 220 15% 35%;
-    --muted: 210 30% 93%; /* Muted Gray */
+    --muted: 220 30% 93%; /* Muted Gray */
     --muted-foreground: 220 10% 45%;
     --accent: 260 80% 60%; /* Purple for accents (can be adjusted) */
     --accent-foreground: 0 0% 100%;
     --destructive: 0 70% 50%;
     --destructive-foreground: 0 0% 100%;
-    --border: 210 20% 90%; /* Softer border for light mode */
-    --input: 210 20% 95%;
-    --ring: 221 83% 58%; /* Blue for focus rings */
-    --chart-1: 221 83% 53%;
+    --border: 220 15% 88%; /* Softer border for light mode */
+    --input: 220 20% 95%;
+    --ring: 220 70% 60%; /* Blue for focus rings */
+    --chart-1: 220 70% 55%;
     --chart-2: 200 70% 50%;
     --chart-3: 240 60% 60%;
     --chart-4: 180 50% 50%;
     --chart-5: 260 65% 55%;
-    --radius: 0.5rem;
+    --radius: 0.5rem; /* Consistent radius */
 
-    --sidebar-background: 210 20% 97%;
+    --sidebar-background: 220 20% 97%;
     --sidebar-foreground: 220 15% 25%;
-    --sidebar-border: 210 20% 88%;
-    --sidebar-accent: 221 83% 92%; /* Light blue accent for sidebar */
-    --sidebar-accent-foreground: 221 83% 30%;
-    --sidebar-primary: 221 83% 53%;
+    --sidebar-border: 220 20% 88%;
+    --sidebar-accent: 220 70% 92%; /* Light blue accent for sidebar */
+    --sidebar-accent-foreground: 220 70% 30%;
+    --sidebar-primary: 220 70% 55%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-ring: 221 83% 58%;
+    --sidebar-ring: 220 70% 60%;
   }
 
   .dark { /* Dark Theme - Inspired by Vercel/Linear */
-    --background: 225 20% 6%; /* Very Dark Blue-Gray */
+    --background: 225 10% 6%; /* Very Dark Blue-Gray */
     --foreground: 210 20% 90%; /* Lighter Gray Text */
-    --card: 225 20% 9%; /* Slightly Lighter Dark Blue-Gray */
+    --card: 225 10% 9%; /* Slightly Lighter Dark Blue-Gray */
     --card-foreground: 210 20% 88%;
-    --popover: 225 20% 8%;
+    --popover: 225 10% 8%;
     --popover-foreground: 210 20% 88%;
     --primary: 260 85% 66%; /* Vibrant Purple (Linear-like) */
     --primary-foreground: 0 0% 100%; /* White text on primary */
-    --secondary: 225 20% 14%; /* Darker Muted Blue-Gray */
+    --secondary: 225 10% 14%; /* Darker Muted Blue-Gray */
     --secondary-foreground: 210 20% 75%;
-    --muted: 225 15% 18%; /* Muted Blue-Gray */
+    --muted: 225 10% 18%; /* Muted Blue-Gray */
     --muted-foreground: 210 10% 60%;
     --accent: 330 80% 65%; /* Vibrant Pink/Magenta for secondary accents */
     --accent-foreground: 0 0% 100%;
     --destructive: 0 60% 50%;
     --destructive-foreground: 0 0% 100%;
-    --border: 225 20% 18%; /* Darker Border */
-    --input: 225 20% 12%; /* Dark Input Background */
+    --border: 225 10% 18%; /* Darker Border */
+    --input: 225 10% 12%; /* Dark Input Background */
     --ring: 260 85% 70%; /* Purple for focus rings */
     --chart-1: 260 85% 66%;
     --chart-2: 330 80% 65%;
     --chart-3: 250 60% 60%;
     --chart-4: 290 65% 60%;
     --chart-5: 230 75% 60%;
-    --radius: 0.5rem;
+    --radius: 0.5rem; /* Consistent radius */
 
-    --sidebar-background: 225 20% 8%;
+    --sidebar-background: 225 10% 8%;
     --sidebar-foreground: 210 20% 80%;
-    --sidebar-border: 225 20% 15%;
+    --sidebar-border: 225 10% 15%;
     --sidebar-accent: 260 85% 18%; /* Darker purple for sidebar accent bg */
     --sidebar-accent-foreground: 0 0% 100%;
     --sidebar-primary: 260 85% 66%;
@@ -88,9 +89,6 @@ body {
 @layer base {
   * {
     @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
   }
 }
 
