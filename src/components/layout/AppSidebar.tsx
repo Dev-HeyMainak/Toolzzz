@@ -12,7 +12,7 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
-  useSidebar,
+  useSidebar, // This was missing
 } from '@/components/ui/sidebar';
 import {
   Accordion,
@@ -30,12 +30,17 @@ export function AppSidebar() {
   const pathname = usePathname();
   const [isClient, setIsClient] = useState(false);
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
-  const { state: sidebarState, isMobile: sidebarIsMobile } = useSidebar();
+  const { isOpen: isSidebarPanelOpen, isMobile: sidebarIsMobile } = useSidebar(); // Use a more descriptive name
 
   useEffect(() => {
     setIsClient(true);
     setCurrentYear(new Date().getFullYear());
   }, []);
+
+  // Determine if the sidebar is effectively in icon-only mode
+  // This depends on the main panel being collapsed *and* not being on a mobile view where it's always full width when open.
+  const isEffectivelyIconOnly = !isSidebarPanelOpen && !sidebarIsMobile;
+
 
   return (
     <Sidebar collapsible="icon" variant="sidebar" side="left" className="border-r">
@@ -53,17 +58,16 @@ export function AppSidebar() {
                       <AccordionTrigger
                         className={cn(
                           "flex w-full items-center justify-between rounded-md px-2 py-2 text-left text-sm font-medium text-sidebar-foreground outline-none ring-sidebar-ring transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground hover:no-underline",
-                          "group-data-[collapsible=icon]:h-8 group-data-[collapsible=icon]:w-8 group-data-[collapsible=icon]:p-2 group-data-[collapsible=icon]:justify-center",
-                          "group-data-[collapsible=icon]:[&>.lucide-chevron-down]:hidden"
+                           isEffectivelyIconOnly && "h-8 w-8 p-2 justify-center [&>.lucide-chevron-down]:hidden"
                         )}
                       >
                         <div className="flex items-center gap-2">
                           <category.icon className="h-4 w-4 shrink-0" />
-                          <span className="group-data-[collapsible=icon]:hidden">{category.name}</span>
+                          <span className={cn(isEffectivelyIconOnly && "hidden")}>{category.name}</span>
                         </div>
                       </AccordionTrigger>
                     </TooltipTrigger>
-                    {sidebarState === "collapsed" && !sidebarIsMobile && (
+                    {isEffectivelyIconOnly && (
                       <TooltipContent side="right" align="center">
                         <p>{category.name}</p>
                       </TooltipContent>
@@ -73,7 +77,7 @@ export function AppSidebar() {
                   <AccordionContent
                     className={cn(
                       "overflow-hidden text-sm transition-all data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down",
-                      "group-data-[collapsible=icon]:hidden"
+                      isEffectivelyIconOnly && "hidden"
                     )}
                   >
                     <div className="pt-1 pb-1">
@@ -111,7 +115,7 @@ export function AppSidebar() {
       </SidebarContent>
       <SidebarFooter className="p-4 border-t mt-auto">
          <p className="text-xs text-muted-foreground text-center">
-            © {currentYear} Office Toolkit
+            © {currentYear} Toolzzz
           </p>
       </SidebarFooter>
     </Sidebar>

@@ -10,22 +10,28 @@ export default function HomePage() {
   return (
     <div className="container mx-auto px-4 py-12 md:px-6 md:py-20">
       <header
-        className="mb-16 text-center opacity-0 animate-fade-in-up"
+        className="mb-12 text-center opacity-0 animate-fade-in-up"
         style={{ animationDelay: '0.1s' }}
       >
         <h1 className="text-4xl font-medium tracking-tight text-foreground sm:text-5xl lg:text-6xl xl:text-7xl">
-          Add a little <span className="text-primary font-bold">structure</span> to your files
+          Tool<span className="text-primary font-bold">zzz</span>
         </h1>
         <p className="mt-6 text-lg text-muted-foreground sm:text-xl max-w-2xl mx-auto">
           Get started faster with UI kits, wireframe templates, and more.
         </p>
       </header>
+      <p
+        className="mb-16 text-center text-base text-muted-foreground sm:text-lg max-w-3xl mx-auto opacity-0 animate-fade-in-up"
+        style={{ animationDelay: '0.3s' }}
+      >
+        Welcome! Dive into our curated collection of robust and easy-to-use tools, thoughtfully organized by category. Whether you&apos;re looking to manipulate text, manage tasks, or utilize digital utilities, Toolzzz is here to streamline your workflow.
+      </p>
 
       {TOOL_CATEGORIES.map((category, index) => (
         <section
           key={category.id}
           className="mb-16 opacity-0 animate-fade-in-up"
-          style={{ animationDelay: `${0.3 + index * 0.15}s` }} // Adjusted delay for categories
+          style={{ animationDelay: `${0.5 + index * 0.15}s` }}
         >
           <div className="flex items-center mb-8">
             <category.icon className="h-7 w-7 text-primary mr-3" />
@@ -36,7 +42,7 @@ export default function HomePage() {
               <div
                 key={tool.id}
                 className="opacity-0 animate-fade-in-up"
-                style={{ animationDelay: `${0.35 + index * 0.15 + (toolIndex + 1) * 0.04}s` }} // Adjusted delay for pills
+                style={{ animationDelay: `${0.55 + index * 0.15 + (toolIndex + 1) * 0.04}s` }}
               >
                 <ToolLinkPill
                   name={tool.name}
@@ -50,12 +56,12 @@ export default function HomePage() {
         </section>
       ))}
 
-      <section 
+      <section
         className="my-20 opacity-0 animate-fade-in-up"
-        style={{ animationDelay: `${0.4 + TOOL_CATEGORIES.length * 0.15}s` }} // Adjusted delay for curated section
+        style={{ animationDelay: `${0.6 + TOOL_CATEGORIES.length * 0.15}s` }}
       >
         <div className="mb-10 text-center sm:text-left">
-          <h2 className="text-2xl font-semibold text-foreground tracking-tight">Curated by Office Toolkit</h2>
+          <h2 className="text-2xl font-semibold text-foreground tracking-tight">Curated by Toolzzz</h2>
           <p className="text-muted-foreground mt-1">Explore these handpicked resources.</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

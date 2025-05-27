@@ -19,8 +19,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Office Toolkit - Your Free Online Office Tools',
-  description: 'A collection of free tools for everyday office tasks: text utilities, QR generator, password manager, email validator, and more.',
+  title: 'Toolzzz - Your Free Online Utilities',
+  description: 'A collection of free utilities for everyday tasks: text tools, productivity aids, digital converters, and more.',
 };
 
 export default function RootLayout({

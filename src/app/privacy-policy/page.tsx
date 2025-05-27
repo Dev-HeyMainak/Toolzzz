@@ -22,7 +22,7 @@ export default function PrivacyPolicyPage() {
           </h1>
         </div>
         <p className="mt-4 text-lg text-muted-foreground max-w-xl mx-auto">
-          Your privacy is important to us. This policy outlines how Office Toolkit handles your information.
+          Your privacy is important to us. This policy outlines how Toolzzz handles your information.
         </p>
       </header>
 
@@ -30,7 +30,7 @@ export default function PrivacyPolicyPage() {
         <div>
           <h2 className="text-2xl font-semibold text-foreground mb-2">1. Information We Don&apos;t Collect</h2>
           <p className="text-muted-foreground">
-            Office Toolkit is designed to be a client-side application for most of its features. This means:
+            Toolzzz is designed to be a client-side application for most of its features. This means:
           </p>
           <ul className="list-disc list-inside text-muted-foreground ml-4 mt-2 space-y-1">
             <li>We do not require user accounts for most tools.</li>
@@ -49,7 +49,7 @@ export default function PrivacyPolicyPage() {
         <div>
           <h2 className="text-2xl font-semibold text-foreground mb-2">3. Third-Party Services</h2>
            <p className="text-muted-foreground">
-            Currently, Office Toolkit primarily operates client-side. We do not integrate third-party APIs that collect personal user data. If we integrate actual third-party APIs or AI services in the future, this policy will be updated to reflect how data is shared with those services.
+            Currently, Toolzzz primarily operates client-side. We do not integrate third-party APIs that collect personal user data. If we integrate actual third-party APIs or AI services in the future, this policy will be updated to reflect how data is shared with those services.
           </p>
         </div>
 
