@@ -30,6 +30,13 @@ import {
   CalendarClock,
   FileText,
   BookText,
+  FileImage,
+  Globe2,
+  GalleryVerticalEnd,
+  Maximize,
+  Crop,
+  Binary,
+  Printer
 } from 'lucide-react';
 
 export interface Tool {
@@ -157,14 +164,22 @@ export const TOOLS: Tool[] = [
     icon: BarChartHorizontalBig,
     categoryKey: 'text_content',
   },
+   {
+    id: 'base64-text-encoder-decoder',
+    name: 'Base64 Text Encoder/Decoder',
+    description: 'Encode text to Base64 or decode from it.',
+    href: '/tools/base64-text-encoder-decoder',
+    icon: Binary,
+    categoryKey: 'text_content',
+  },
 
   // Category 2: Productivity & Time Management
   {
     id: 'todo-list',
     name: 'To-Do List',
-    description: 'Organize your tasks with a simple to-do list.',
+    description: 'Organize your tasks with features like due dates and priorities.',
     href: '/tools/todo-list',
-    icon: ListChecks, // Tool icon is the same as category for now
+    icon: ListChecks, 
     categoryKey: 'productivity_time',
   },
   {
@@ -213,6 +228,14 @@ export const TOOLS: Tool[] = [
     description: 'Set a date and see the countdown in days, hours, etc.',
     href: '/tools/countdown-calendar',
     icon: CalendarClock,
+    categoryKey: 'productivity_time',
+  },
+  {
+    id: 'time-zone-converter',
+    name: 'Time Zone Converter',
+    description: 'Convert times between different time zones.',
+    href: '/tools/time-zone-converter',
+    icon: Globe2,
     categoryKey: 'productivity_time',
   },
   {
@@ -266,6 +289,14 @@ export const TOOLS: Tool[] = [
     categoryKey: 'digital_utilities',
   },
   {
+    id: 'image-to-pdf',
+    name: 'Image to PDF Converter',
+    description: 'Convert JPG, PNG, etc. images to a PDF document.',
+    href: '/tools/image-to-pdf',
+    icon: Printer, 
+    categoryKey: 'digital_utilities',
+  },
+  {
     id: 'csv-to-table',
     name: 'CSV to Table Viewer',
     description: 'Upload a CSV file and view its contents as a table.',
@@ -279,6 +310,30 @@ export const TOOLS: Tool[] = [
     description: 'Quickly check the size of your local files.',
     href: '/tools/file-size-checker',
     icon: FilePieChart,
+    categoryKey: 'digital_utilities',
+  },
+  {
+    id: 'basic-collage-maker',
+    name: 'Basic Collage Maker',
+    description: 'Combine a few images into a simple collage.',
+    href: '/tools/basic-collage-maker',
+    icon: GalleryVerticalEnd,
+    categoryKey: 'digital_utilities',
+  },
+  {
+    id: 'image-resizer',
+    name: 'Image Resizer',
+    description: 'Resize images to new dimensions client-side.',
+    href: '/tools/image-resizer',
+    icon: Maximize,
+    categoryKey: 'digital_utilities',
+  },
+  {
+    id: 'image-cropper',
+    name: 'Image Cropper',
+    description: 'Crop images to specific dimensions client-side.',
+    href: '/tools/image-cropper',
+    icon: Crop,
     categoryKey: 'digital_utilities',
   },
 ];
