@@ -18,14 +18,17 @@ export default function ProPage() {
     "Access to advanced tool features",
     "Ad-free experience",
     "Standard customer support",
+    "Access to all current tools",
   ];
 
-  const proAnnualFeatures = [
+  const proLifetimeFeatures = [
     "All features from Pro Monthly",
+    "One-time payment, lifetime access",
     "Cloud Sync (Coming Soon!)",
     "Priority customer support",
-    "Early access to new tools",
+    "Early access to all new tools & features",
     "Enhanced customization options",
+    "Special 'Lifetime Member' badge (Conceptual)",
   ];
 
   return (
@@ -70,8 +73,8 @@ export default function ProPage() {
           <Card className="rounded-xl shadow-lg flex flex-col">
             <CardHeader className="pb-4">
               <CardTitle className="text-2xl">Pro Monthly</CardTitle>
-              <CardDescription>Get started with premium features.</CardDescription>
-              <p className="text-4xl font-bold text-primary pt-2">$9<span className="text-lg font-normal text-muted-foreground">/month</span></p>
+              <CardDescription>Flexible access to premium features.</CardDescription>
+              <p className="text-4xl font-bold text-primary pt-2">$1<span className="text-lg font-normal text-muted-foreground">/month</span></p>
             </CardHeader>
             <CardContent className="space-y-3 flex-grow">
               <ul className="space-y-2">
@@ -90,19 +93,19 @@ export default function ProPage() {
             </CardFooter>
           </Card>
 
-          {/* Pro Annual Plan (Best Value) */}
+          {/* Pro Lifetime Plan (Best Value) */}
           <Card className="rounded-xl shadow-lg border-2 border-primary flex flex-col relative overflow-hidden">
             <Badge variant="destructive" className="absolute top-0 right-0 -mr-0 mt-0 rounded-none rounded-bl-lg px-3 py-1 text-xs font-semibold tracking-wider">
-                BEST VALUE
+                LIFETIME DEAL
             </Badge>
             <CardHeader className="pb-4">
-              <CardTitle className="text-2xl">Pro Annual</CardTitle>
-              <CardDescription>Maximize savings and unlock all features.</CardDescription>
-              <p className="text-4xl font-bold text-primary pt-2">$79<span className="text-lg font-normal text-muted-foreground">/year</span></p>
+              <CardTitle className="text-2xl">Lifetime Pro</CardTitle>
+              <CardDescription>One payment for forever access to all Pro features.</CardDescription>
+              <p className="text-4xl font-bold text-primary pt-2">$99<span className="text-lg font-normal text-muted-foreground"> one-time</span></p>
             </CardHeader>
             <CardContent className="space-y-3 flex-grow">
               <ul className="space-y-2">
-                {proAnnualFeatures.map((feature, index) => (
+                {proLifetimeFeatures.map((feature, index) => (
                   <li key={index} className="flex items-center">
                     <Check className="h-5 w-5 text-primary mr-2 flex-shrink-0" />
                     <span className="text-sm text-muted-foreground">{feature}</span>
@@ -112,7 +115,7 @@ export default function ProPage() {
             </CardContent>
             <CardFooter>
               <Button size="lg" className="w-full" disabled>
-                Choose Annual (Coming Soon!)
+                Get Lifetime Access (Coming Soon!)
               </Button>
             </CardFooter>
           </Card>
