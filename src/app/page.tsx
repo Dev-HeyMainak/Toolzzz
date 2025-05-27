@@ -1,5 +1,5 @@
 
-import { ToolCard } from '@/components/ToolCard'; // Changed from ToolLinkPill
+import { ToolCard } from '@/components/ToolCard';
 import { TOOLS, TOOL_CATEGORIES } from '@/config/tools';
 import { Separator } from '@/components/ui/separator';
 import Link from 'next/link';
@@ -41,7 +41,7 @@ export default function HomePage() {
             {/* Optional: Add a "View All [Category] Tools" button if desired */}
           </div>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {TOOLS.filter(tool => tool.categoryKey === category.id).slice(0, 4).map((tool, toolIndex) => ( // Show first 4 tools as cards
+            {TOOLS.filter(tool => tool.categoryKey === category.id).map((tool, toolIndex) => (
               <ToolCard
                 key={tool.id}
                 name={tool.name}
