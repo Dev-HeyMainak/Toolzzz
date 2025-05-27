@@ -32,17 +32,25 @@ export function Header() {
   const searchRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const normalizeForSearch = (text: string): string => {
+      return text.toLowerCase().replace(/[^a-z0-9]/gi, '');
+    };
+
     if (searchQuery.trim() === '') {
       setSearchResults([]);
       setIsResultsVisible(false);
       return;
     }
-    const lowerCaseQuery = searchQuery.toLowerCase();
-    const filtered = TOOLS.filter(
-      (tool) =>
-        tool.name.toLowerCase().includes(lowerCaseQuery) ||
-        tool.description.toLowerCase().includes(lowerCaseQuery)
-    );
+
+    const normalizedQuery = normalizeForSearch(searchQuery);
+
+    const filtered = TOOLS.filter((tool) => {
+      const normalizedToolName = normalizeForSearch(tool.name);
+      const normalizedToolDescription = normalizeForSearch(tool.description);
+      
+      return normalizedToolName.includes(normalizedQuery) || normalizedToolDescription.includes(normalizedQuery);
+    });
+
     setSearchResults(filtered);
     setIsResultsVisible(filtered.length > 0);
   }, [searchQuery]);
@@ -100,8 +108,8 @@ export function Header() {
                       href={tool.href}
                       className="flex items-center gap-2 rounded-sm px-2 py-1.5 text-sm hover:bg-accent"
                       onClick={() => {
-                        setSearchQuery('');
-                        setIsResultsVisible(false);
+                        setSearchQuery(''); // Clear search query
+                        setIsResultsVisible(false); // Hide results
                       }}
                     >
                       <tool.icon className="h-4 w-4 text-muted-foreground flex-shrink-0" />
