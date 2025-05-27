@@ -16,7 +16,7 @@ import {
   XCircle,
   Clock,
   Hourglass,
-  Watch,
+  Watch, // Corrected from StopwatchIcon
   StickyNote,
   ClipboardCopy,
   Keyboard,
@@ -35,8 +35,16 @@ import {
   GalleryVerticalEnd,
   Maximize,
   Crop,
-  Binary, // Added for Base64 tool
-  Printer
+  Binary,
+  Printer,
+  SortAsc,
+  Zap, // For Morse Code
+  Link2, // For URL Encode/Decode
+  ListOrdered, // For Add Line Numbers
+  ListX, // For Remove Line Numbers
+  FileCode, // For HTML Encode/Decode
+  Hash, // For Hex Encode/Decode
+  Braces, // For JSON Stringify/Unstringify
 } from 'lucide-react';
 
 export interface Tool {
@@ -79,7 +87,7 @@ export const TOOLS: Tool[] = [
   {
     id: 'word-counter',
     name: 'Word & Character Counter',
-    description: 'Count words and characters in your text.',
+    description: 'Count words, characters, sentences, and paragraphs.',
     href: '/tools/word-counter',
     icon: ScanText,
     categoryKey: 'text_content',
@@ -87,7 +95,7 @@ export const TOOLS: Tool[] = [
   {
     id: 'case-converter',
     name: 'Case Converter',
-    description: 'Convert text to various case formats.',
+    description: 'Convert text to uppercase, lowercase, title case, etc.',
     href: '/tools/case-converter',
     icon: ALargeSmall,
     categoryKey: 'text_content',
@@ -102,8 +110,8 @@ export const TOOLS: Tool[] = [
   },
   {
     id: 'find-replace',
-    name: 'Find and Replace',
-    description: 'Find and replace specific text.',
+    name: 'Find and Replace Tool',
+    description: 'Easily find text and replace it with new content.',
     href: '/tools/find-replace',
     icon: Replace,
     categoryKey: 'text_content',
@@ -111,7 +119,7 @@ export const TOOLS: Tool[] = [
   {
     id: 'text-reverser',
     name: 'Text Reverser',
-    description: 'Reverse the characters in your text.',
+    description: 'Reverse the characters in your text string.',
     href: '/tools/text-reverser',
     icon: Shuffle,
     categoryKey: 'text_content',
@@ -119,7 +127,7 @@ export const TOOLS: Tool[] = [
   {
     id: 'line-counter',
     name: 'Line Counter',
-    description: 'Count the number of lines in your text.',
+    description: 'Count the total and non-empty lines in text.',
     href: '/tools/line-counter',
     icon: Rows3,
     categoryKey: 'text_content',
@@ -127,9 +135,33 @@ export const TOOLS: Tool[] = [
   {
     id: 'text-duplicate-remover',
     name: 'Text Duplicate Line Remover',
-    description: 'Remove duplicate lines from your text.',
+    description: 'Remove duplicate lines from any text block.',
     href: '/tools/text-duplicate-remover',
     icon: CopyMinus,
+    categoryKey: 'text_content',
+  },
+   {
+    id: 'sort-text-lines',
+    name: 'Sort Text Lines',
+    description: 'Sort lines of text alphabetically or numerically.',
+    href: '/tools/sort-text-lines',
+    icon: SortAsc,
+    categoryKey: 'text_content',
+  },
+  {
+    id: 'add-line-numbers',
+    name: 'Add Line Numbers',
+    description: 'Prepend line numbers to each line of text.',
+    href: '/tools/add-line-numbers',
+    icon: ListOrdered,
+    categoryKey: 'text_content',
+  },
+  {
+    id: 'remove-line-numbers',
+    name: 'Remove Line Numbers',
+    description: 'Remove leading line numbers from your text.',
+    href: '/tools/remove-line-numbers',
+    icon: ListX,
     categoryKey: 'text_content',
   },
   {
@@ -172,6 +204,103 @@ export const TOOLS: Tool[] = [
     icon: Binary,
     categoryKey: 'text_content',
   },
+  {
+    id: 'text-to-binary',
+    name: 'Text to Binary Converter',
+    description: 'Convert plain text into binary code (0s and 1s).',
+    href: '/tools/text-to-binary',
+    icon: Binary,
+    categoryKey: 'text_content',
+  },
+  {
+    id: 'binary-to-text',
+    name: 'Binary to Text Converter',
+    description: 'Convert binary code back into readable text.',
+    href: '/tools/binary-to-text',
+    icon: Binary,
+    categoryKey: 'text_content',
+  },
+  {
+    id: 'html-encode-text',
+    name: 'HTML-encode Text',
+    description: 'Convert special characters to HTML entities.',
+    href: '/tools/html-encode-text',
+    icon: FileCode,
+    categoryKey: 'text_content',
+  },
+  {
+    id: 'html-decode-text',
+    name: 'HTML-decode Text',
+    description: 'Convert HTML entities back to characters.',
+    href: '/tools/html-decode-text',
+    icon: FileCode,
+    categoryKey: 'text_content',
+  },
+  {
+    id: 'text-to-hex',
+    name: 'Text to Hex Converter',
+    description: 'Convert plain text to hexadecimal values.',
+    href: '/tools/text-to-hex',
+    icon: Hash,
+    categoryKey: 'text_content',
+  },
+  {
+    id: 'hex-to-text',
+    name: 'Hex to Text Converter',
+    description: 'Convert hexadecimal values back to text.',
+    href: '/tools/hex-to-text',
+    icon: Hash,
+    categoryKey: 'text_content',
+  },
+  {
+    id: 'json-stringify-text',
+    name: 'JSON Stringify Text',
+    description: 'Convert text to a JSON-escaped string.',
+    href: '/tools/json-stringify-text',
+    icon: Braces,
+    categoryKey: 'text_content',
+  },
+  {
+    id: 'json-unstringify-text',
+    name: 'JSON Unstringify Text',
+    description: 'Parse a JSON string back to plain text.',
+    href: '/tools/json-unstringify-text',
+    icon: Braces,
+    categoryKey: 'text_content',
+  },
+   {
+    id: 'text-to-morse-code',
+    name: 'Text to Morse Code',
+    description: 'Convert text into Morse code signals.',
+    href: '/tools/text-to-morse-code',
+    icon: Zap,
+    categoryKey: 'text_content',
+  },
+  {
+    id: 'morse-code-to-text',
+    name: 'Morse Code to Text',
+    description: 'Decode Morse code signals back into text.',
+    href: '/tools/morse-code-to-text',
+    icon: Zap,
+    categoryKey: 'text_content',
+  },
+  {
+    id: 'url-encode-text',
+    name: 'URL-encode Text',
+    description: 'Encode text for safe use in URLs (percent-encoding).',
+    href: '/tools/url-encode-text',
+    icon: Link2,
+    categoryKey: 'text_content',
+  },
+  {
+    id: 'url-decode-text',
+    name: 'URL-decode Text',
+    description: 'Decode URL-encoded text (percent-encoding).',
+    href: '/tools/url-decode-text',
+    icon: Link2,
+    categoryKey: 'text_content',
+  },
+
 
   // Category 2: Productivity & Time Management
   {
@@ -179,7 +308,7 @@ export const TOOLS: Tool[] = [
     name: 'To-Do List',
     description: 'Organize your tasks with features like due dates and priorities.',
     href: '/tools/todo-list',
-    icon: ListChecks, 
+    icon: ListChecks,
     categoryKey: 'productivity_time',
   },
   {
@@ -228,14 +357,6 @@ export const TOOLS: Tool[] = [
     description: 'Set a date and see the countdown in days, hours, etc.',
     href: '/tools/countdown-calendar',
     icon: CalendarClock,
-    categoryKey: 'productivity_time',
-  },
-  {
-    id: 'time-zone-converter',
-    name: 'Time Zone Converter',
-    description: 'Convert times between different time zones.',
-    href: '/tools/time-zone-converter',
-    icon: Globe2,
     categoryKey: 'productivity_time',
   },
   {
@@ -293,7 +414,7 @@ export const TOOLS: Tool[] = [
     name: 'Image to PDF Converter',
     description: 'Convert JPG, PNG, etc. images to a PDF document.',
     href: '/tools/image-to-pdf',
-    icon: Printer, 
+    icon: Printer,
     categoryKey: 'digital_utilities',
   },
   {
@@ -338,5 +459,3 @@ export const TOOLS: Tool[] = [
   },
 ];
 export { XCircle };
-
-    
