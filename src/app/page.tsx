@@ -25,7 +25,7 @@ export default function HomePage() {
         <section
           key={category.id}
           className="mb-16 opacity-0 animate-fade-in-up"
-          style={{ animationDelay: `${0.3 + index * 0.2}s` }}
+          style={{ animationDelay: `${0.3 + index * 0.15}s` }} // Adjusted delay for categories
         >
           <div className="flex items-center mb-8">
             <category.icon className="h-7 w-7 text-primary mr-3" />
@@ -36,7 +36,7 @@ export default function HomePage() {
               <div
                 key={tool.id}
                 className="opacity-0 animate-fade-in-up"
-                style={{ animationDelay: `${0.3 + index * 0.2 + (toolIndex + 1) * 0.05}s` }}
+                style={{ animationDelay: `${0.35 + index * 0.15 + (toolIndex + 1) * 0.04}s` }} // Adjusted delay for pills
               >
                 <ToolLinkPill
                   name={tool.name}
@@ -52,7 +52,7 @@ export default function HomePage() {
 
       <section 
         className="my-20 opacity-0 animate-fade-in-up"
-        style={{ animationDelay: `${0.5 + TOOL_CATEGORIES.length * 0.2}s` }}
+        style={{ animationDelay: `${0.4 + TOOL_CATEGORIES.length * 0.15}s` }} // Adjusted delay for curated section
       >
         <div className="mb-10 text-center sm:text-left">
           <h2 className="text-2xl font-semibold text-foreground tracking-tight">Curated by Office Toolkit</h2>

@@ -72,7 +72,7 @@ body {
     --chart-3: 250 60% 60%;
     --chart-4: 290 65% 60%;
     --chart-5: 230 75% 60%;
-    /* radius will use the value from :root unless overridden here */
+    --radius: 0.5rem; /* Consistent radius */
 
     --sidebar-background: 225 20% 8%;
     --sidebar-foreground: 220 15% 80%;
