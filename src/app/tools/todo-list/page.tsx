@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { ListChecks, PlusCircle, Trash2, XCircle, CalendarIcon as CalendarIconLucide, Edit, Save, X } from 'lucide-react'; 
+import { ListChecks, PlusCircle, Trash2, XCircle, CalendarIcon as CalendarIconLucide, Edit, Save, X, Trash } from 'lucide-react'; 
 import { useToast } from '@/hooks/use-toast';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
@@ -29,7 +29,7 @@ interface Task {
   priority?: TaskPriority;
 }
 
-const LOCALSTORAGE_KEY_TODOS = 'todo-tasks-v3'; 
+const LOCALSTORAGE_KEY_TODOS = 'toolzzz-todo-tasks-v3'; 
 
 export default function TodoListPage() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -114,6 +114,15 @@ export default function TodoListPage() {
     }
     setTasks(prevTasks => prevTasks.filter(task => !task.completed));
     toast({ title: "Success", description: `${completedCount} completed task(s) cleared.` });
+  };
+
+  const handleClearAllTasks = () => {
+    if (tasks.length === 0) {
+      toast({ title: "Info", description: "Task list is already empty.", variant: "default" });
+      return;
+    }
+    setTasks([]);
+    toast({ title: "All Cleared", description: "All tasks have been removed." });
   };
   
   const handleEditTask = (task: Task) => {
@@ -260,16 +269,28 @@ export default function TodoListPage() {
               {completedTasksCount > 0 && `${completedTasksCount} completed`}
             </CardDescription>
           </div>
-          {completedTasksCount > 0 && (
-             <Tooltip>
+          <div className="flex gap-2 mt-2 sm:mt-0">
+            {tasks.length > 0 && (
+              <Tooltip>
                 <TooltipTrigger asChild>
-                    <Button variant="outline" size="sm" onClick={handleClearCompleted} className="mt-2 sm:mt-0">
-                        <XCircle className="mr-2 h-4 w-4" /> Clear Completed
-                    </Button>
+                  <Button variant="destructive" size="sm" onClick={handleClearAllTasks}>
+                    <Trash className="mr-2 h-4 w-4" /> Clear All
+                  </Button>
                 </TooltipTrigger>
-                <TooltipContent><p>Remove all completed tasks from the list.</p></TooltipContent>
-            </Tooltip>
-          )}
+                <TooltipContent><p>Remove all tasks from the list.</p></TooltipContent>
+              </Tooltip>
+            )}
+            {completedTasksCount > 0 && (
+              <Tooltip>
+                  <TooltipTrigger asChild>
+                      <Button variant="outline" size="sm" onClick={handleClearCompleted} className="mt-2 sm:mt-0">
+                          <XCircle className="mr-2 h-4 w-4" /> Clear Completed
+                      </Button>
+                  </TooltipTrigger>
+                  <TooltipContent><p>Remove all completed tasks from the list.</p></TooltipContent>
+              </Tooltip>
+            )}
+          </div>
         </CardHeader>
         <CardContent>
           {tasks.length === 0 && isClient ? (
@@ -449,3 +470,4 @@ export default function TodoListPage() {
   );
 }
 
+    

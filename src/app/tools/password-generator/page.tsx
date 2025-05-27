@@ -62,7 +62,7 @@ export default function PasswordGeneratorPage() {
     setGeneratedPassword('');
     setPasswordStrength(null);
     try {
-      const result = await generatePassword(values);
+      const result = await generatePassword(values); // This has a mock delay
       if (result.password) {
         setGeneratedPassword(result.password);
         setPasswordStrength(result.strength || null);
@@ -269,6 +269,12 @@ export default function PasswordGeneratorPage() {
                 Make sure to store your password in a safe place.
               </p>
             )}
+             {!generatedPassword && !isLoading && (
+                <p className="text-sm text-muted-foreground text-center py-4">Click "Generate Password" to create a new password.</p>
+            )}
+             {isLoading && (
+                <p className="text-sm text-muted-foreground text-center py-4">Generating your secure password...</p>
+            )}
           </CardContent>
         </Card>
       </div>
@@ -277,3 +283,4 @@ export default function PasswordGeneratorPage() {
   );
 }
 
+    

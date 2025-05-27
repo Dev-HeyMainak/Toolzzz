@@ -35,7 +35,7 @@ import {
   GalleryVerticalEnd,
   Maximize,
   Crop,
-  Binary,
+  Binary, // Added for Base64 tool
   Printer
 } from 'lucide-react';
 
@@ -338,3 +338,5 @@ export const TOOLS: Tool[] = [
   },
 ];
 export { XCircle };
+
+    

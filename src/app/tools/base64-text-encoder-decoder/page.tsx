@@ -21,14 +21,14 @@ export default function Base64TextEncoderDecoderPage() {
       return;
     }
     try {
-      const encoded = btoa(inputText);
+      // For robust UTF-8 support, encodeURIComponent is needed before btoa
+      const encoded = btoa(unescape(encodeURIComponent(inputText)));
       setOutputText(encoded);
       toast({ title: "Encoded!", description: "Text successfully encoded to Base64." });
     } catch (error) {
-      // btoa can throw an error if the string contains characters outside of the Latin1 range.
       console.error("Base64 Encoding Error:", error);
       setOutputText('');
-      toast({ title: "Encoding Error", description: "Could not encode text. Ensure it contains valid characters (e.g. no emojis directly, consider UTF-8 to Base64 for broader support).", variant: "destructive" });
+      toast({ title: "Encoding Error", description: "Could not encode text. Ensure it contains valid characters.", variant: "destructive" });
     }
   };
 
@@ -39,7 +39,8 @@ export default function Base64TextEncoderDecoderPage() {
       return;
     }
     try {
-      const decoded = atob(inputText);
+      // For robust UTF-8 support, decodeURIComponent is needed after atob
+      const decoded = decodeURIComponent(escape(atob(inputText)));
       setOutputText(decoded);
       toast({ title: "Decoded!", description: "Base64 successfully decoded to text." });
     } catch (error) {
@@ -61,18 +62,13 @@ export default function Base64TextEncoderDecoderPage() {
   
   const handleSwap = () => {
     setInputText(outputText);
-    setOutputText(inputText); // Keep output as is, user can re-process
+    setOutputText(inputText); 
   };
 
   const handleClear = () => {
     setInputText('');
     setOutputText('');
   };
-
-  // For robust UTF-8 support, a more complex approach is needed:
-  // const encodeUTF8ToBase64 = (str: string) => btoa(unescape(encodeURIComponent(str)));
-  // const decodeBase64ToUTF8 = (str: string) => decodeURIComponent(escape(atob(str)));
-  // For simplicity, this basic version uses btoa/atob which work well for ASCII/Latin1.
 
   return (
     <div>
@@ -81,8 +77,7 @@ export default function Base64TextEncoderDecoderPage() {
         <h1 className="text-3xl font-semibold text-foreground">Base64 Text Encoder/Decoder</h1>
       </div>
       <p className="text-muted-foreground mb-8">
-        Encode your text into a Base64 string, or decode a Base64 string back to text.
-        (Note: This basic version best supports ASCII/Latin1 characters.)
+        Encode your text into a Base64 string (UTF-8 compatible), or decode a Base64 string back to text.
       </p>
 
       <div className="grid gap-6">
@@ -164,3 +159,5 @@ export default function Base64TextEncoderDecoderPage() {
     </div>
   );
 }
+
+    

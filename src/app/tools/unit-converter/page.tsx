@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect, useMemo } from 'react';
@@ -8,7 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Scale as ScaleIcon, ArrowRightLeft } from 'lucide-react'; // Renamed Scale to ScaleIcon
 import { useToast } from '@/hooks/use-toast';
 import { Label } from '@/components/ui/label';
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 
 type UnitCategory = 'length' | 'weight' | 'temperature' | 'time' | 'dataSize';
 
@@ -110,7 +111,7 @@ export default function UnitConverterPage() {
     const result = toUnit.fromBase(baseValue);
     
     if (Math.abs(result) < 0.00001 && result !== 0) return result.toExponential(4);
-    if (Mathabs(result) > 1000000000) return result.toExponential(4); // Increased limit for larger numbers like bytes
+    if (Math.abs(result) > 1000000000) return result.toExponential(4);
     return parseFloat(result.toFixed(5)).toString();
 
   }, [inputValue, fromUnitSymbol, toUnitSymbol, selectedCategory]);
@@ -119,7 +120,6 @@ export default function UnitConverterPage() {
     const tempFrom = fromUnitSymbol;
     setFromUnitSymbol(toUnitSymbol);
     setToUnitSymbol(tempFrom);
-    // also swap input and output values
     setInputValue(outputValue);
   };
 
@@ -133,6 +133,7 @@ export default function UnitConverterPage() {
   }
 
   return (
+    <TooltipProvider>
     <div>
       <div className="flex items-center mb-6">
         <ScaleIcon className="h-8 w-8 text-primary mr-3" />
@@ -149,42 +150,58 @@ export default function UnitConverterPage() {
         <CardContent className="space-y-6">
           <div>
             <Label htmlFor="categorySelect" className="mb-1 block">Category</Label>
-            <Select value={selectedCategory} onValueChange={(value) => setSelectedCategory(value as UnitCategory)}>
-              <SelectTrigger id="categorySelect" className="w-full">
-                <SelectValue placeholder="Select category" />
-              </SelectTrigger>
-              <SelectContent>
-                {availableCategories.map(cat => (
-                  <SelectItem key={cat.id} value={cat.id} className="capitalize">{cat.name}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <Select value={selectedCategory} onValueChange={(value) => setSelectedCategory(value as UnitCategory)}>
+                    <SelectTrigger id="categorySelect" className="w-full">
+                        <SelectValue placeholder="Select category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {availableCategories.map(cat => (
+                        <SelectItem key={cat.id} value={cat.id} className="capitalize">{cat.name}</SelectItem>
+                        ))}
+                    </SelectContent>
+                    </Select>
+                </TooltipTrigger>
+                <TooltipContent><p>Select the type of unit you want to convert (e.g., Length, Weight).</p></TooltipContent>
+            </Tooltip>
           </div>
           
           <div className="flex flex-col sm:flex-row items-end gap-4">
             <div className="flex-1 w-full">
               <Label htmlFor="inputValue" className="mb-1 block">Value</Label>
-              <Input
-                id="inputValue"
-                type="number"
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                placeholder="Enter value"
-                className="text-lg h-12"
-              />
+               <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Input
+                        id="inputValue"
+                        type="number"
+                        value={inputValue}
+                        onChange={(e) => setInputValue(e.target.value)}
+                        placeholder="Enter value"
+                        className="text-lg h-12"
+                        aria-label="Input value for conversion"
+                    />
+                  </TooltipTrigger>
+                  <TooltipContent><p>Enter the numerical value you want to convert.</p></TooltipContent>
+                </Tooltip>
             </div>
             <div className="flex-1 w-full">
               <Label htmlFor="fromUnit" className="mb-1 block">From</Label>
-              <Select value={fromUnitSymbol} onValueChange={setFromUnitSymbol}>
-                <SelectTrigger id="fromUnit" className="w-full h-12">
-                  <SelectValue placeholder="Select unit" />
-                </SelectTrigger>
-                <SelectContent>
-                  {filteredUnits.map(unit => (
-                    <SelectItem key={unit.symbol} value={unit.symbol}>{unit.name} ({unit.symbol})</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                    <Select value={fromUnitSymbol} onValueChange={setFromUnitSymbol}>
+                    <SelectTrigger id="fromUnit" className="w-full h-12">
+                        <SelectValue placeholder="Select unit" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {filteredUnits.map(unit => (
+                        <SelectItem key={unit.symbol} value={unit.symbol}>{unit.name} ({unit.symbol})</SelectItem>
+                        ))}
+                    </SelectContent>
+                    </Select>
+                </TooltipTrigger>
+                <TooltipContent><p>Select the unit you are converting from.</p></TooltipContent>
+              </Tooltip>
             </div>
             <Tooltip>
                 <TooltipTrigger asChild>
@@ -192,28 +209,33 @@ export default function UnitConverterPage() {
                     <ArrowRightLeft className="h-5 w-5" />
                     </Button>
                 </TooltipTrigger>
-                <TooltipContent><p>Swap units and values</p></TooltipContent>
+                <TooltipContent><p>Swap the 'From' and 'To' units and values.</p></TooltipContent>
             </Tooltip>
 
             <div className="flex-1 w-full">
               <Label htmlFor="toUnit" className="mb-1 block">To</Label>
-              <Select value={toUnitSymbol} onValueChange={setToUnitSymbol}>
-                <SelectTrigger id="toUnit" className="w-full h-12">
-                  <SelectValue placeholder="Select unit" />
-                </SelectTrigger>
-                <SelectContent>
-                  {filteredUnits.map(unit => (
-                    <SelectItem key={unit.symbol} value={unit.symbol}>{unit.name} ({unit.symbol})</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                    <Select value={toUnitSymbol} onValueChange={setToUnitSymbol}>
+                    <SelectTrigger id="toUnit" className="w-full h-12">
+                        <SelectValue placeholder="Select unit" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {filteredUnits.map(unit => (
+                        <SelectItem key={unit.symbol} value={unit.symbol}>{unit.name} ({unit.symbol})</SelectItem>
+                        ))}
+                    </SelectContent>
+                    </Select>
+                </TooltipTrigger>
+                <TooltipContent><p>Select the unit you are converting to.</p></TooltipContent>
+               </Tooltip>
             </div>
           </div>
 
           {outputValue && (
             <div className="pt-4">
               <Label className="block text-sm font-medium text-muted-foreground">Result</Label>
-              <p className="text-3xl font-bold text-primary mt-1 break-all">{outputValue}</p>
+              <p className="text-3xl font-bold text-primary mt-1 break-all" aria-live="polite">{outputValue}</p>
               {inputValue && fromUnitSymbol && toUnitSymbol && units.find(u=>u.symbol === fromUnitSymbol) && units.find(u=>u.symbol === toUnitSymbol) && (
                 <p className="text-sm text-muted-foreground">
                   {inputValue} {units.find(u=>u.symbol === fromUnitSymbol)?.name} = {outputValue} {units.find(u=>u.symbol === toUnitSymbol)?.name}
@@ -224,8 +246,14 @@ export default function UnitConverterPage() {
            {!outputValue && inputValue && parseFloat(inputValue) !== 0 && (
                 <p className="text-destructive text-sm pt-2">Please select valid units for conversion.</p>
             )}
+            {outputValue === '' && (!inputValue || parseFloat(inputValue) === 0) && (
+                 <p className="text-muted-foreground text-center pt-4">Enter a value and select units to see the conversion.</p>
+            )}
         </CardContent>
       </Card>
     </div>
+    </TooltipProvider>
   );
 }
+
+    
