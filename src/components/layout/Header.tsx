@@ -10,13 +10,9 @@ import { Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { TOOLS, type Tool } from '@/config/tools';
-// Removed: import { useSidebar } from '@/components/ui/sidebar';
-// Removed: import { Button } from '@/components/ui/button';
-// Removed: import { Menu } from 'lucide-react';
 
 export function Header() {
   const pathname = usePathname();
-  // Removed: const { toggleSidebarPanel } = useSidebar();
 
   const navLinks = [
     { href: '/', label: 'Home' },
@@ -69,9 +65,12 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/60 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 max-w-screen-2xl items-center px-4 md:px-6">
-        {/* LEFT SECTION: Navigation */}
-        <div className="flex flex-1 items-center justify-start">
+      <div className="container flex h-16 max-w-screen-2xl items-center justify-between px-4 md:px-6">
+        {/* LEFT SECTION: Logo */}
+        <Logo />
+
+        {/* RIGHT SECTION: Navigation & Search */}
+        <div className="flex items-center gap-x-4 lg:gap-x-6">
           <nav className="hidden md:flex items-center gap-x-4 lg:gap-x-6">
             {navLinks.map((link) => (
               <Link
@@ -86,16 +85,7 @@ export function Header() {
               </Link>
             ))}
           </nav>
-          {/* Placeholder for mobile menu trigger if sidebar is re-enabled from header */}
-        </div>
-
-        {/* CENTER SECTION: Logo */}
-        <div className="flex justify-center">
-          <Logo />
-        </div>
-
-        {/* RIGHT SECTION: Search Bar */}
-        <div className="flex flex-1 items-center justify-end gap-x-2">
+          
           <div ref={searchRef} className="relative">
             <div className="relative flex items-center">
               <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground pointer-events-none" />
@@ -130,7 +120,6 @@ export function Header() {
               </div>
             )}
           </div>
-          {/* ThemeToggle was here - ensure it's removed or handled if re-added */}
         </div>
       </div>
     </header>
