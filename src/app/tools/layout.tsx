@@ -9,7 +9,7 @@ export default function ToolLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="w-full px-4 py-8 md:px-6 md:py-12"> {/* Changed container mx-auto to w-full */}
+    <div className="container mx-auto px-4 py-8 md:px-6 md:py-12"> {/* Reverted to container mx-auto */}
        <Button variant="outline" asChild className="mb-6">
         <Link href="/">
           <ChevronLeft className="mr-2 h-4 w-4" />

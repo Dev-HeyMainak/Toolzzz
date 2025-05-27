@@ -2,13 +2,10 @@
 import { ToolCard } from '@/components/ToolCard';
 import { TOOLS, TOOL_CATEGORIES } from '@/config/tools';
 import { Separator } from '@/components/ui/separator';
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { ChevronRight } from 'lucide-react';
 
 export default function HomePage() {
   return (
-    <div className="w-full px-4 py-12 md:px-6 md:py-20"> {/* Changed container mx-auto to w-full */}
+    <div className="container mx-auto px-4 py-12 md:px-6 md:py-20"> {/* Reverted to container mx-auto */}
       <header
         className="mb-12 text-center opacity-0 animate-fade-in-up"
         style={{ animationDelay: '0.1s' }}
@@ -33,14 +30,11 @@ export default function HomePage() {
           className="mb-16 opacity-0 animate-fade-in-up"
           style={{ animationDelay: `${0.5 + index * 0.15}s` }}
         >
-          <div className="flex items-center justify-between mb-10">
-            <div className="flex items-center">
-              <category.icon className="h-8 w-8 text-primary mr-4 md:h-10 md:w-10" />
-              <h2 className="text-3xl font-bold text-foreground tracking-tight md:text-4xl">{category.name}</h2>
-            </div>
-            {/* Optional: Add a "View All [Category] Tools" button if desired */}
+          <div className="flex items-center mb-10">
+            <category.icon className="h-8 w-8 text-primary mr-4 md:h-10 md:w-10" />
+            <h2 className="text-3xl font-bold text-foreground tracking-tight md:text-4xl">{category.name}</h2>
           </div>
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"> {/* Adjusted grid for md */}
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {TOOLS.filter(tool => tool.categoryKey === category.id).map((tool, toolIndex) => (
               <ToolCard
                 key={tool.id}
