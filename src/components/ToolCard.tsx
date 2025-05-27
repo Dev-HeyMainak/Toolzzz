@@ -18,15 +18,15 @@ export function ToolCard({ name, description, href, icon: Icon, animationDelay }
   return (
     <Card 
       className={cn(
-        "group flex flex-col h-full bg-card hover:shadow-xl hover:shadow-primary/10 transition-all duration-300 ease-in-out hover:border-primary/30 rounded-xl overflow-hidden transform hover:-translate-y-1",
+        "group flex flex-col h-full bg-card border border-border/60 hover:border-primary/50 hover:shadow-lg transition-all duration-300 ease-in-out rounded-xl overflow-hidden transform hover:-translate-y-1",
         animationDelay && "opacity-0 animate-fade-in-up"
       )}
       style={animationDelay ? { animationDelay } : {}}
     >
       <CardHeader className="flex flex-row items-center gap-4 p-5">
         <div className={cn(
-            "p-3 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors duration-300 flex-shrink-0",
-            "group-hover:[&_svg]:animate-subtle-spin-hover" // Apply spin to icon on card hover
+            "p-3 rounded-lg bg-primary/10 text-primary transition-colors duration-300 flex-shrink-0", // Removed group-hover:bg-primary group-hover:text-primary-foreground
+            "group-hover:[&_svg]:animate-subtle-spin-hover"
           )}
         >
           <Icon className="h-7 w-7" />
