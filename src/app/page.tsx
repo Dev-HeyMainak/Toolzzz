@@ -1,5 +1,5 @@
 
-import { ToolCard } from '@/components/ToolCard';
+import { ToolLinkPill } from '@/components/ToolLinkPill';
 import { TOOLS, TOOL_CATEGORIES } from '@/config/tools';
 import { Separator } from '@/components/ui/separator';
 
@@ -28,31 +28,29 @@ export default function HomePage() {
       {TOOL_CATEGORIES.map((category, index) => (
         <section
           key={category.id}
-          className="mb-20 opacity-0 animate-fade-in-up"
-          style={{ animationDelay: `${0.5 + index * 0.3}s` }} // Adjusted base delay and stagger
+          className="mb-16 opacity-0 animate-fade-in-up"
+          style={{ animationDelay: `${0.5 + index * 0.2}s` }}
         >
-          <div className="flex items-center mb-10">
-            <category.icon className="h-10 w-10 text-primary mr-4" />
-            <h2 className="text-4xl font-bold text-foreground tracking-tight">{category.name}</h2>
+          <div className="flex items-center mb-8">
+            <category.icon className="h-8 w-8 text-primary mr-4" />
+            <h2 className="text-3xl font-bold text-foreground tracking-tight">{category.name}</h2>
           </div>
-          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
             {TOOLS.filter(tool => tool.categoryKey === category.id).map((tool, toolIndex) => (
               <div
                 key={tool.id}
                 className="opacity-0 animate-fade-in-up"
-                // Stagger cards within each category section
-                style={{ animationDelay: `${0.5 + index * 0.3 + (toolIndex + 1) * 0.1}s` }}
+                style={{ animationDelay: `${0.5 + index * 0.2 + (toolIndex + 1) * 0.05}s` }}
               >
-                <ToolCard
+                <ToolLinkPill
                   name={tool.name}
-                  description={tool.description}
                   href={tool.href}
                   icon={tool.icon}
                 />
               </div>
             ))}
           </div>
-          {TOOL_CATEGORIES.indexOf(category) < TOOL_CATEGORIES.length -1 && <Separator className="my-16 border-border/50" />}
+          {index < TOOL_CATEGORIES.length -1 && <Separator className="my-16 border-border/50" />}
         </section>
       ))}
     </div>

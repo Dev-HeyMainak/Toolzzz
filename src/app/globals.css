@@ -8,78 +8,78 @@ body {
 }
 
 @layer base {
-  :root { /* Light Theme */
+  :root { /* Light Theme (Fallback, but dark is default) */
     --background: 0 0% 98%; /* Near White */
     --foreground: 220 15% 20%; /* Dark Gray text */
     --card: 0 0% 100%; /* White Card Background */
     --card-foreground: 220 15% 20%;
-    --popover: 0 0% 100%; /* Popover Background */
+    --popover: 0 0% 100%;
     --popover-foreground: 220 15% 20%;
-    --primary: 270 70% 55%; /* Purple */
+    --primary: 260 75% 55%; /* Brighter Purple for Light Mode */
     --primary-foreground: 0 0% 100%; /* White */
-    --secondary: 270 40% 90%; /* Very Light Purple */
-    --secondary-foreground: 270 40% 30%; /* Muted Purple Text */
-    --muted: 220 15% 90%; /* Light Gray */
-    --muted-foreground: 220 10% 45%; /* Medium Gray Text */
-    --accent: 290 70% 60%; /* Lighter/Alternative Purple */
+    --secondary: 260 60% 95%; /* Very Light Purple */
+    --secondary-foreground: 260 60% 25%;
+    --muted: 220 15% 90%;
+    --muted-foreground: 220 10% 45%;
+    --accent: 330 80% 60%; /* Pinkish-Purple for Light Mode */
     --accent-foreground: 0 0% 100%;
-    --destructive: 0 70% 50%; /* Red for destructive actions */
+    --destructive: 0 70% 50%;
     --destructive-foreground: 0 0% 100%;
-    --border: 220 15% 85%; /* Light Gray Border */
-    --input: 220 15% 95%; /* Very Light Gray Input Background */
-    --ring: 270 70% 60%; /* Purple for focus rings */
-    --chart-1: 270 70% 55%;
-    --chart-2: 290 60% 50%;
-    --chart-3: 250 50% 50%;
-    --chart-4: 310 65% 50%;
-    --chart-5: 230 75% 50%;
+    --border: 220 15% 85%;
+    --input: 220 15% 95%;
+    --ring: 260 75% 60%;
+    --chart-1: 260 70% 55%;
+    --chart-2: 280 60% 50%;
+    --chart-3: 240 50% 50%;
+    --chart-4: 300 65% 50%;
+    --chart-5: 220 75% 50%;
     --radius: 0.75rem;
 
-    /* Sidebar specific colors for light theme */
-    --sidebar-background: 220 15% 96%; /* Slightly off-white */
+    --sidebar-background: 220 15% 96%;
     --sidebar-foreground: 220 15% 25%;
-    --sidebar-primary: 270 70% 55%;
+    --sidebar-primary: 260 75% 55%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 270 70% 80%; /* Lighter purple for accents */
-    --sidebar-accent-foreground: 270 70% 20%;
+    --sidebar-accent: 260 75% 85%;
+    --sidebar-accent-foreground: 260 75% 20%;
     --sidebar-border: 220 15% 80%;
-    --sidebar-ring: 270 70% 60%;
+    --sidebar-ring: 260 75% 60%;
   }
 
-  .dark { /* Dark Theme */
-    --background: 220 15% 8%;
-    --foreground: 220 10% 85%;
-    --card: 220 15% 12%;
-    --card-foreground: 220 10% 85%;
-    --popover: 220 15% 10%;
-    --popover-foreground: 220 10% 85%;
-    --primary: 270 70% 65%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 270 40% 30%;
-    --secondary-foreground: 220 10% 90%;
-    --muted: 220 15% 20%;
+  .dark { /* Dark Theme - Inspired by Figma Community */
+    --background: 225 20% 6%; /* Very Dark Blue-Gray */
+    --foreground: 220 15% 90%; /* Light Gray Text */
+    --card: 225 20% 12%; /* Slightly Lighter Dark Blue-Gray */
+    --card-foreground: 220 15% 88%;
+    --popover: 225 20% 8%;
+    --popover-foreground: 220 15% 88%;
+    --primary: 270 70% 60%; /* Vibrant Purple */
+    --primary-foreground: 0 0% 100%; /* White text on primary */
+    --secondary: 225 20% 18%; /* Darker Muted Blue-Gray */
+    --secondary-foreground: 220 15% 75%;
+    --muted: 225 15% 22%; /* Muted Blue-Gray */
     --muted-foreground: 220 10% 60%;
-    --accent: 290 70% 70%;
+    --accent: 330 80% 65%; /* Vibrant Pink/Magenta */
     --accent-foreground: 0 0% 100%;
-    --destructive: 0 70% 55%;
+    --destructive: 0 60% 50%;
     --destructive-foreground: 0 0% 100%;
-    --border: 270 20% 30%;
-    --input: 220 15% 15%;
-    --ring: 270 70% 70%;
-    --chart-1: 270 70% 65%;
-    --chart-2: 290 60% 60%;
-    --chart-3: 250 50% 55%;
-    --chart-4: 310 65% 60%;
-    --chart-5: 230 75% 55%;
+    --border: 225 20% 20%; /* Darker Border */
+    --input: 225 20% 15%; /* Dark Input Background */
+    --ring: 270 70% 65%; /* Purple for focus rings */
+    --chart-1: 270 70% 60%;
+    --chart-2: 330 80% 65%;
+    --chart-3: 250 60% 60%;
+    --chart-4: 290 65% 60%;
+    --chart-5: 230 75% 60%;
+    --radius: 0.75rem;
 
-    --sidebar-background: 220 15% 10%;
-    --sidebar-foreground: 220 10% 80%;
-    --sidebar-primary: 270 70% 70%;
+    --sidebar-background: 225 20% 8%;
+    --sidebar-foreground: 220 15% 80%;
+    --sidebar-primary: 270 70% 65%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 270 70% 60%;
+    --sidebar-accent: 270 70% 25%; /* Darker purple for sidebar accent bg */
     --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 270 15% 25%;
-    --sidebar-ring: 270 70% 70%;
+    --sidebar-border: 225 20% 15%;
+    --sidebar-ring: 270 70% 65%;
   }
 }
 
@@ -88,6 +88,8 @@ body {
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground transition-colors duration-300 ease-in-out;
+    @apply bg-background text-foreground;
+    @apply transition-colors duration-300 ease-in-out;
+    overflow-x: clip;
   }
 }
