@@ -6,17 +6,13 @@ import { usePathname } from 'next/navigation';
 import React, { useState, useEffect, useRef } from 'react';
 import { Logo } from '@/components/Logo';
 import { cn } from '@/lib/utils';
-import { Search, Menu } from 'lucide-react';
+import { Search } from 'lucide-react'; // Menu icon removed as it's no longer used
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { TOOLS, type Tool } from '@/config/tools';
-import { useSidebar } from '@/components/ui/sidebar';
-import { Button } from '@/components/ui/button';
-
 
 export function Header() {
   const pathname = usePathname();
-  // const { toggleSidebarPanel } = useSidebar(); // No longer used here as logo toggles sidebar
 
   const navLinks = [
     { href: '/', label: 'Home' },
@@ -69,29 +65,29 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/60 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center justify-between px-4 md:px-6">
-        {/* LEFT SIDE: Logo (acts as sidebar toggle) */}
-        <div className="flex items-center gap-x-2 shrink-0">
-          {/* Sidebar toggle functionality is now on the Logo in AppSidebar via SheetTrigger or directly on Logo */}
+      <div className="container flex h-16 max-w-screen-2xl items-center justify-between px-4 md:px-6">
+        {/* LEFT SIDE: Logo */}
+        <div className="flex items-center shrink-0">
           <Logo />
         </div>
 
-        {/* RIGHT SIDE: Main Menu, Search Bar & Theme Toggle */}
-        <div className="flex items-center gap-x-3 sm:gap-x-4">
-            <nav className="hidden md:flex items-center gap-x-4 lg:gap-x-6">
+        {/* RIGHT SIDE: Main Menu & Search Bar */}
+        <div className="flex items-center gap-x-4 sm:gap-x-6">
+          <nav className="hidden md:flex items-center gap-x-4 lg:gap-x-6">
             {navLinks.map((link) => (
-                <Link
+              <Link
                 key={link.href}
                 href={link.href}
                 className={cn(
-                    "text-sm font-medium transition-colors hover:text-primary",
-                    pathname === link.href ? "text-primary" : "text-muted-foreground"
+                  "text-sm font-medium transition-colors hover:text-primary",
+                  pathname === link.href ? "text-primary" : "text-muted-foreground"
                 )}
-                >
+              >
                 {link.label}
-                </Link>
+              </Link>
             ))}
-            </nav>
+          </nav>
+
           <div ref={searchRef} className="relative">
             <div className="relative flex items-center">
               <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground pointer-events-none" />
@@ -106,7 +102,7 @@ export function Header() {
               />
             </div>
             {isResultsVisible && searchResults.length > 0 && (
-              <div className="absolute top-full mt-1.5 w-full min-w-[240px] sm:min-w-[280px] md:min-w-[300px] max-w-md rounded-md border bg-popover text-popover-foreground shadow-lg z-[51] right-0 md:left-auto md:right-0"> {/* Adjusted to right-align dropdown */}
+              <div className="absolute top-full mt-1.5 w-full min-w-[240px] sm:min-w-[280px] md:min-w-[300px] max-w-md rounded-md border bg-popover text-popover-foreground shadow-lg z-[51] right-0 md:left-auto md:right-0">
                 <ScrollArea className="h-auto max-h-[300px] rounded-md p-1">
                   {searchResults.map((tool) => (
                     <Link
@@ -114,8 +110,8 @@ export function Header() {
                       href={tool.href}
                       className="flex items-center gap-2 rounded-sm px-2 py-1.5 text-sm hover:bg-accent focus:bg-accent"
                       onClick={() => {
-                        setSearchQuery(''); 
-                        setIsResultsVisible(false); 
+                        setSearchQuery('');
+                        setIsResultsVisible(false);
                       }}
                     >
                       <tool.icon className="h-4 w-4 text-muted-foreground flex-shrink-0" />
@@ -126,7 +122,7 @@ export function Header() {
               </div>
             )}
           </div>
-          {/* ThemeToggle was removed previously as per user request */}
+          {/* ThemeToggle was previously here and removed by user request */}
         </div>
       </div>
     </header>
