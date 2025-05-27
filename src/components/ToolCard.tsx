@@ -23,24 +23,25 @@ export function ToolCard({ name, description, href, icon: Icon, animationDelay }
       )}
       style={animationDelay ? { animationDelay } : {}}
     >
-      <CardHeader className="flex flex-row items-center gap-4 p-5">
+      <CardHeader className="flex flex-row items-center gap-3 p-4">
         <div className={cn(
-            "p-3 rounded-lg bg-primary/10 text-primary transition-colors duration-300 flex-shrink-0", // Removed group-hover:bg-primary group-hover:text-primary-foreground
+            "p-2 rounded-lg bg-primary/10 text-primary transition-colors duration-300 flex-shrink-0", 
             "group-hover:[&_svg]:animate-subtle-spin-hover"
           )}
         >
-          <Icon className="h-7 w-7" />
+          <Icon className="h-6 w-6" />
         </div>
         <div>
-          <CardTitle className="text-xl font-semibold group-hover:text-primary transition-colors">{name}</CardTitle>
+          <CardTitle className="text-lg font-semibold group-hover:text-primary transition-colors">{name}</CardTitle>
         </div>
       </CardHeader>
-      <CardContent className="p-5 flex-grow pb-4">
-        <CardDescription className="text-sm text-muted-foreground mb-0 min-h-[40px] leading-relaxed">{description}</CardDescription>
+      <CardContent className="p-4 flex-grow pb-3">
+        <CardDescription className="text-sm text-muted-foreground mb-0 min-h-[36px] leading-relaxed">{description}</CardDescription>
       </CardContent>
-      <div className="p-5 pt-0 mt-auto">
+      <div className="p-4 pt-0 mt-auto">
         <Button
           asChild
+          size="sm"
           variant="outline"
           className="w-full group/button bg-transparent border-input hover:border-primary text-muted-foreground hover:text-primary hover:bg-primary/5 transition-all duration-200 ease-in-out active:scale-95"
         >
