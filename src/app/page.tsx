@@ -21,7 +21,7 @@ export default function HomePage() {
         </p>
       </header>
       <p
-        className="mb-16 text-center text-base text-muted-foreground sm:text-lg max-w-3xl mx-auto opacity-0 animate-fade-in-up"
+        className="mb-16 text-center text-sm text-muted-foreground sm:text-base max-w-5xl mx-auto opacity-0 animate-fade-in-up"
         style={{ animationDelay: '0.3s' }}
       >
         Welcome to Toolzzz, your go-to hub for smart, free online utilities! We&apos;ve assembled a powerful suite of easy-to-use tools, all designed to simplify your digital tasks. From text wizardry and productivity boosters to essential digital converters, Toolzzz is built to make your workflow smoother and your day a little easier. Explore our categories and discover how we can help you get things done, effortlessly.
