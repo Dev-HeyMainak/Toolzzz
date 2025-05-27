@@ -5,17 +5,17 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React, { useState, useEffect, useRef } from 'react';
 import { Logo } from '@/components/Logo';
-import { ThemeToggle } from '@/components/ThemeToggle';
+// Removed: import { ThemeToggle } from '@/components/ThemeToggle';
 import { cn } from '@/lib/utils';
 import { Search } from 'lucide-react';
-// Removed useSidebar and toggleSidebarPanel as sidebar toggle is removed from header
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { TOOLS, type Tool } from '@/config/tools';
+import { useSidebar } from '@/components/ui/sidebar'; // Keep for potential future use, or remove if logo also stops toggling
 
 export function Header() {
   const pathname = usePathname();
-  // Removed: const { toggleSidebarPanel } = useSidebar();
+  // const { toggleSidebarPanel } = useSidebar(); // If logo still toggles sidebar
 
   const navLinks = [
     { href: '/', label: 'Home' },
@@ -70,11 +70,13 @@ export function Header() {
     <header className="sticky top-0 z-50 w-full border-b border-border/50 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between px-4 md:px-6">
         {/* LEFT SIDE: Logo */}
-        {/* onClick for sidebar toggle removed from Logo wrapper/Logo itself */}
-        <Logo />
+        <div className="flex items-center gap-x-2 shrink-0">
+          {/* Sidebar toggle functionality is now only on the logo if useSidebar is kept */}
+          <Logo />
+        </div>
 
         {/* RIGHT SIDE: Main Menu, Search Bar, Theme Toggle */}
-        <div className="flex items-center gap-x-3 sm:gap-x-4">
+        <div className="flex items-center gap-x-3 sm:gap-x-4 shrink-0">
           <nav className="hidden md:flex items-center gap-x-4 lg:gap-x-6">
             {navLinks.map((link) => (
               <Link
@@ -124,7 +126,7 @@ export function Header() {
               </div>
             )}
           </div>
-          <ThemeToggle />
+          {/* ThemeToggle component removed */}
         </div>
       </div>
     </header>
