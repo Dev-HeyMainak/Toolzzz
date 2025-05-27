@@ -1,7 +1,8 @@
 
-import { Sparkles, CheckCircle2 } from 'lucide-react';
+import { Sparkles, CheckCircle2, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 
 export default function ProPage() {
   const proBenefits = [
@@ -11,6 +12,20 @@ export default function ProPage() {
     "Priority customer support.",
     "Early access to new Pro-only tools and features as they are released.",
     "More customization options for tools and themes.",
+  ];
+
+  const proMonthlyFeatures = [
+    "Access to advanced tool features",
+    "Ad-free experience",
+    "Standard customer support",
+  ];
+
+  const proAnnualFeatures = [
+    "All features from Pro Monthly",
+    "Cloud Sync (Coming Soon!)",
+    "Priority customer support",
+    "Early access to new tools",
+    "Enhanced customization options",
   ];
 
   return (
@@ -27,33 +42,84 @@ export default function ProPage() {
         </p>
       </header>
 
-      <section className="max-w-2xl mx-auto">
+      <section className="max-w-2xl mx-auto mb-16">
         <Card className="rounded-xl shadow-lg">
           <CardHeader>
             <CardTitle className="text-2xl text-center">Why Go Pro?</CardTitle>
-            <CardDescription className="text-center">
+            <CardDescription className="text-center mt-1">
               Elevate your workflow with these premium benefits:
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-4 pt-2">
             <ul className="space-y-3">
               {proBenefits.map((benefit, index) => (
                 <li key={index} className="flex items-start">
-                  <CheckCircle2 className="h-6 w-6 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
+                  <CheckCircle2 className="h-6 w-6 text-green-500 dark:text-green-400 mr-3 mt-0.5 flex-shrink-0" />
                   <span className="text-muted-foreground">{benefit}</span>
                 </li>
               ))}
             </ul>
-            <div className="pt-6 text-center">
-              <Button size="lg" className="w-full sm:w-auto" disabled>
-                Upgrade to Pro (Coming Soon!)
-              </Button>
-              <p className="text-xs text-muted-foreground mt-3">
-                Thank you for your interest! Pro features are currently under development.
-              </p>
-            </div>
           </CardContent>
         </Card>
+      </section>
+
+      <section className="mb-16">
+        <h2 className="text-3xl font-bold text-foreground tracking-tight text-center mb-10">Choose Your Plan</h2>
+        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          {/* Pro Monthly Plan */}
+          <Card className="rounded-xl shadow-lg flex flex-col">
+            <CardHeader className="pb-4">
+              <CardTitle className="text-2xl">Pro Monthly</CardTitle>
+              <CardDescription>Get started with premium features.</CardDescription>
+              <p className="text-4xl font-bold text-primary pt-2">$9<span className="text-lg font-normal text-muted-foreground">/month</span></p>
+            </CardHeader>
+            <CardContent className="space-y-3 flex-grow">
+              <ul className="space-y-2">
+                {proMonthlyFeatures.map((feature, index) => (
+                  <li key={index} className="flex items-center">
+                    <Check className="h-5 w-5 text-primary mr-2 flex-shrink-0" />
+                    <span className="text-sm text-muted-foreground">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+            </CardContent>
+            <CardFooter>
+              <Button size="lg" className="w-full" disabled>
+                Choose Monthly (Coming Soon!)
+              </Button>
+            </CardFooter>
+          </Card>
+
+          {/* Pro Annual Plan (Best Value) */}
+          <Card className="rounded-xl shadow-lg border-2 border-primary flex flex-col relative overflow-hidden">
+            <Badge variant="destructive" className="absolute top-0 right-0 -mr-0 mt-0 rounded-none rounded-bl-lg px-3 py-1 text-xs font-semibold tracking-wider">
+                BEST VALUE
+            </Badge>
+            <CardHeader className="pb-4">
+              <CardTitle className="text-2xl">Pro Annual</CardTitle>
+              <CardDescription>Maximize savings and unlock all features.</CardDescription>
+              <p className="text-4xl font-bold text-primary pt-2">$79<span className="text-lg font-normal text-muted-foreground">/year</span></p>
+            </CardHeader>
+            <CardContent className="space-y-3 flex-grow">
+              <ul className="space-y-2">
+                {proAnnualFeatures.map((feature, index) => (
+                  <li key={index} className="flex items-center">
+                    <Check className="h-5 w-5 text-primary mr-2 flex-shrink-0" />
+                    <span className="text-sm text-muted-foreground">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+            </CardContent>
+            <CardFooter>
+              <Button size="lg" className="w-full" disabled>
+                Choose Annual (Coming Soon!)
+              </Button>
+            </CardFooter>
+          </Card>
+        </div>
+         <p className="text-xs text-muted-foreground mt-8 text-center">
+            Thank you for your interest! Pro features and subscriptions are currently under development.
+          </p>
       </section>
 
       <section className="mt-16 text-center">
