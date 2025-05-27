@@ -4,7 +4,7 @@
 @tailwind utilities;
 
 body {
-  font-family: var(--font-poppins), sans-serif; /* Ensure Poppins is the primary font */
+  font-family: var(--font-jetbrains-mono), monospace; /* Default to JetBrains Mono */
   @apply bg-background text-foreground;
   @apply transition-colors duration-300 ease-in-out;
   @apply overflow-x-clip;
@@ -18,22 +18,22 @@ body {
     --card-foreground: 210 20% 90%;
     --popover: 225 10% 8%;
     --popover-foreground: 210 20% 90%;
-    --primary: 260 85% 66%; /* Vibrant Purple (Linear-like) */
-    --primary-foreground: 0 0% 100%; /* White text on primary */
+    --primary: 145 100% 50%;   /* Neon Green */
+    --primary-foreground: 220 15% 10%; /* Dark text for neon buttons */
     --secondary: 225 10% 14%; /* Darker Muted Blue-Gray */
     --secondary-foreground: 210 20% 80%;
     --muted: 225 10% 18%; /* Muted Blue-Gray */
     --muted-foreground: 210 10% 65%;
-    --accent: 330 80% 65%; /* Vibrant Pink/Magenta for secondary accents */
+    --accent: 260 85% 66%; /* Purple for secondary accents */
     --accent-foreground: 0 0% 100%;
     --destructive: 0 60% 50%;
     --destructive-foreground: 0 0% 100%;
-    --border: 225 10% 18%; /* Darker Border */
+    --border: 225 10% 25%; /* Darker Border */
     --input: 225 10% 12%; /* Dark Input Background */
-    --ring: 260 85% 70%; /* Purple for focus rings */
-    --chart-1: 260 85% 66%;
-    --chart-2: 330 80% 65%;
-    --chart-3: 250 60% 60%;
+    --ring: 145 100% 60%; /* Neon Green for focus rings */
+    --chart-1: 145 100% 50%;
+    --chart-2: 260 85% 66%;
+    --chart-3: 330 80% 65%;
     --chart-4: 290 65% 60%;
     --chart-5: 230 75% 60%;
     --radius: 0.5rem; /* Consistent radius */
@@ -41,11 +41,11 @@ body {
     --sidebar-background: 225 10% 8%;
     --sidebar-foreground: 210 20% 85%;
     --sidebar-border: 225 10% 15%;
-    --sidebar-accent: 260 85% 18%; /* Darker purple for sidebar accent bg */
+    --sidebar-accent: 145 100% 18%; /* Darker neon green for sidebar accent bg */
     --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-primary: 260 85% 66%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-ring: 260 85% 70%;
+    --sidebar-primary: 145 100% 50%;
+    --sidebar-primary-foreground: 220 15% 10%;
+    --sidebar-ring: 145 100% 60%;
     --primary-shadow: hsl(var(--primary) / 0.3);
   }
 
@@ -56,22 +56,22 @@ body {
     --card-foreground: 210 20% 88%;
     --popover: 225 10% 8%;
     --popover-foreground: 210 20% 88%;
-    --primary: 260 85% 66%; /* Vibrant Purple (Linear-like) */
-    --primary-foreground: 0 0% 100%; /* White text on primary */
+    --primary: 145 100% 50%; /* Neon Green */
+    --primary-foreground: 220 15% 10%; /* Dark text for neon buttons */
     --secondary: 225 10% 14%; /* Darker Muted Blue-Gray */
     --secondary-foreground: 210 20% 75%;
     --muted: 225 10% 18%; /* Muted Blue-Gray */
     --muted-foreground: 210 10% 60%;
-    --accent: 330 80% 65%; /* Vibrant Pink/Magenta for secondary accents */
+    --accent: 260 85% 66%; /* Purple for secondary accents */
     --accent-foreground: 0 0% 100%;
     --destructive: 0 60% 50%;
     --destructive-foreground: 0 0% 100%;
-    --border: 225 10% 18%; /* Darker Border */
+    --border: 225 10% 25%; /* Darker Border */
     --input: 225 10% 12%; /* Dark Input Background */
-    --ring: 260 85% 70%; /* Purple for focus rings */
-    --chart-1: 260 85% 66%;
-    --chart-2: 330 80% 65%;
-    --chart-3: 250 60% 60%;
+    --ring: 145 100% 60%; /* Neon Green for focus rings */
+    --chart-1: 145 100% 50%;
+    --chart-2: 260 85% 66%;
+    --chart-3: 330 80% 65%;
     --chart-4: 290 65% 60%;
     --chart-5: 230 75% 60%;
     --radius: 0.5rem; /* Consistent radius */
@@ -79,11 +79,11 @@ body {
     --sidebar-background: 225 10% 8%;
     --sidebar-foreground: 210 20% 80%;
     --sidebar-border: 225 10% 15%;
-    --sidebar-accent: 260 85% 18%; /* Darker purple for sidebar accent bg */
+    --sidebar-accent: 145 100% 18%; /* Darker neon green for sidebar accent bg */
     --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-primary: 260 85% 66%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-ring: 260 85% 70%;
+    --sidebar-primary: 145 100% 50%;
+    --sidebar-primary-foreground: 220 15% 10%;
+    --sidebar-ring: 145 100% 60%;
     --primary-shadow: hsl(var(--primary) / 0.3);
   }
 }
