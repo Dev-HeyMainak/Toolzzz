@@ -8,7 +8,7 @@ import { ChevronRight } from 'lucide-react';
 
 export default function HomePage() {
   return (
-    <div className="container mx-auto px-4 py-12 md:px-6 md:py-20">
+    <div className="w-full px-4 py-12 md:px-6 md:py-20"> {/* Changed container mx-auto to w-full */}
       <header
         className="mb-12 text-center opacity-0 animate-fade-in-up"
         style={{ animationDelay: '0.1s' }}
@@ -40,7 +40,7 @@ export default function HomePage() {
             </div>
             {/* Optional: Add a "View All [Category] Tools" button if desired */}
           </div>
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"> {/* Adjusted grid for md */}
             {TOOLS.filter(tool => tool.categoryKey === category.id).map((tool, toolIndex) => (
               <ToolCard
                 key={tool.id}
