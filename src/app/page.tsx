@@ -2,9 +2,6 @@
 import { ToolLinkPill } from '@/components/ToolLinkPill';
 import { TOOLS, TOOL_CATEGORIES } from '@/config/tools';
 import { Separator } from '@/components/ui/separator';
-import Image from 'next/image';
-import { Button } from '@/components/ui/button';
-import { ArrowRight } from 'lucide-react';
 
 export default function HomePage() {
   return (
@@ -55,8 +52,6 @@ export default function HomePage() {
           {index < TOOL_CATEGORIES.length -1 && <Separator className="my-16 border-border/50" />}
         </section>
       ))}
-
-      {/* Removed Curated by Toolzzz section */}
     </div>
   );
 }

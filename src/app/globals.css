@@ -10,7 +10,7 @@ body {
 }
 
 @layer base {
-  :root { /* Light Theme - Figma Inspired Default */
+  :root { /* Light Theme - Inspired by 10015.io & Figma Community */
     --background: 220 20% 98%; /* Very Light Gray / Off-white */
     --foreground: 220 15% 20%; /* Dark Gray / Near Black text */
     --card: 0 0% 100%; /* White Card Background */
@@ -23,7 +23,7 @@ body {
     --secondary-foreground: 220 15% 30%;
     --muted: 220 15% 90%;
     --muted-foreground: 220 10% 45%;
-    --accent: 260 80% 60%; /* Purple for accents like "Curated by" cards */
+    --accent: 260 80% 60%; /* Purple for accents */
     --accent-foreground: 0 0% 100%;
     --destructive: 0 70% 50%;
     --destructive-foreground: 0 0% 100%;
@@ -47,7 +47,7 @@ body {
     --sidebar-ring: 220 70% 60%;
   }
 
-  .dark { /* Dark Theme - Retained previous dark theme from user request */
+  .dark { /* Dark Theme - Retained previous dark theme structure */
     --background: 225 20% 6%; /* Very Dark Blue-Gray */
     --foreground: 220 15% 90%; /* Light Gray Text */
     --card: 225 20% 12%; /* Slightly Lighter Dark Blue-Gray */
