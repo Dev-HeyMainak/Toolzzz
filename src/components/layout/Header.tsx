@@ -8,7 +8,7 @@ import { Logo } from '@/components/Logo';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { cn } from '@/lib/utils';
-import { Menu, Search } from 'lucide-react';
+import { Search } from 'lucide-react'; // Removed Menu icon if no longer needed
 import { useSidebar } from '@/components/ui/sidebar';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -16,7 +16,7 @@ import { TOOLS, type Tool } from '@/config/tools';
 
 export function Header() {
   const pathname = usePathname();
-  const { toggleSidebarPanel } = useSidebar();
+  const { toggleSidebarPanel } = useSidebar(); // Still needed for the Logo toggle
 
   const navLinks = [
     { href: '/', label: 'Home' },
@@ -69,23 +69,21 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/50 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      {/* Changed justify-between to items-center. Rely on flex-grow for middle section */}
       <div className="container flex h-16 items-center px-4 md:px-6">
-        {/* LEFT GROUP: Sidebar Toggle + Logo */}
-        <div className="flex items-center gap-2 md:gap-4 shrink-0"> {/* Added shrink-0 */}
+        {/* LEFT GROUP: Logo (also acts as sidebar toggle) */}
+        <div className="flex items-center gap-2 md:gap-4 shrink-0">
+          {/* Sidebar Toggle Button removed */}
           <Button
             variant="ghost"
-            size="icon"
             onClick={toggleSidebarPanel}
-            className="text-foreground hover:text-primary h-9 w-9"
+            className="p-0 h-auto hover:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0"
             aria-label="Toggle Sidebar Panel"
           >
-            <Menu className="h-5 w-5" />
+            <Logo />
           </Button>
-          <Logo />
         </div>
 
-        {/* CENTER GROUP: Navigation Links - Changed flex-1 to grow */}
+        {/* CENTER GROUP: Navigation Links */}
         <nav className="hidden md:flex grow items-center justify-center gap-4 lg:gap-6">
           {navLinks.map((link) => (
             <Link
@@ -102,7 +100,7 @@ export function Header() {
         </nav>
 
         {/* RIGHT GROUP: Search + Theme Toggle */}
-        <div className="flex items-center gap-2 sm:gap-3 shrink-0"> {/* Added shrink-0 */}
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           <div ref={searchRef} className="relative">
             <div className="relative flex items-center">
               <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground pointer-events-none" />
