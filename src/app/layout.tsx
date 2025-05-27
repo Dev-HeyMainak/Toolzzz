@@ -25,7 +25,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning> {/* Removed default "dark" class */}
+    <html lang="en" suppressHydrationWarning>
       <body className={`${poppins.variable} antialiased bg-background`}>
         <SidebarProvider defaultOpen={false}>
           <Sidebar side="left">
