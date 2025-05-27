@@ -26,7 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${poppins.variable} antialiased bg-background`}>
+      <body className={`${poppins.variable} antialiased bg-background`} suppressHydrationWarning>
         <SidebarProvider defaultOpen={false}>
           <Sidebar side="left">
             <AppSidebar />
