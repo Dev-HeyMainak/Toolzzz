@@ -10,13 +10,9 @@ import { Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { TOOLS, type Tool } from '@/config/tools';
-// import { useSidebar } from '@/components/ui/sidebar'; // No longer used here
-// import { Button } from '../ui/button'; // No longer used here
-// import { Menu } from 'lucide-react'; // No longer used here
 
 export function Header() {
   const pathname = usePathname();
-  // const { toggleSidebarPanel } = useSidebar(); // Sidebar toggle removed from header
 
   const navLinks = [
     { href: '/', label: 'Home' },
@@ -69,11 +65,10 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/60 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      {/* Inner container for content alignment */}
-      <div className="container flex h-16 items-center justify-between px-4 md:px-6">
+      {/* Added mx-auto to this container div */}
+      <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
         {/* Left Section: Logo */}
         <div className="flex items-center">
-          {/* Sidebar toggle button removed as per user request */}
           <Logo />
         </div>
 
@@ -103,7 +98,7 @@ export function Header() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onFocus={() => setIsResultsVisible(searchQuery.length > 0 && searchResults.length > 0)}
-                className="h-9 w-full max-w-[150px] rounded-md pl-8 pr-2 text-sm sm:max-w-[180px] md:max-w-[200px] lg:max-w-[220px] bg-background border-input focus:border-primary"
+                className="h-9 w-full max-w-xs rounded-md pl-8 pr-2 text-sm sm:max-w-[180px] md:max-w-[200px] lg:max-w-[220px] bg-background border-input focus:border-primary"
                 aria-label="Search tools"
               />
             </div>
@@ -128,7 +123,7 @@ export function Header() {
               </div>
             )}
           </div>
-          {/* ThemeToggle has been removed */}
+          {/* ThemeToggle was previously removed and is not re-added here */}
         </div>
       </div>
     </header>
