@@ -17,7 +17,7 @@ export default function HomePage() {
           Tool<span className="text-primary font-bold">zzz</span>
         </h1>
         <p className="mt-6 text-lg text-muted-foreground sm:text-xl max-w-2xl mx-auto">
-          Get started faster with UI kits, wireframe templates, and more.
+          Add a little <span className='text-primary font-bold'>structure</span> to your files
         </p>
       </header>
       <p
@@ -80,7 +80,7 @@ export default function HomePage() {
           </div>
           <div className="group relative flex flex-col rounded-xl bg-gradient-to-br from-pink-500 to-orange-500 p-8 text-primary-foreground shadow-2xl transition-all hover:scale-[1.02] hover:shadow-pink-500/30">
              <div className="absolute -left-4 -bottom-4 h-32 w-32 opacity-20 group-hover:opacity-30 transition-opacity">
-               <Image src="https://placehold.co/200x200.png" alt="Abstract graphic 2" layout="fill" objectFit="contain" data-ai-hint="geometric pattern" className="rounded-lg"/>
+               <Image src="https://images.unsplash.com/photo-1531297484001-80022131f5a1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHx0ZWNofGVufDB8fHx8MTc0ODIxMTY2NXww&ixlib=rb-4.1.0&q=80&w=1080" alt="Abstract graphic 2" layout="fill" objectFit="contain" data-ai-hint="geometric pattern" className="rounded-lg"/>
             </div>
             <p className="text-sm font-medium uppercase tracking-wider opacity-80">20+ Utilities</p>
             <h3 className="mt-2 text-3xl font-bold">Discover New Utilities</h3>
