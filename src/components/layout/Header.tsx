@@ -5,19 +5,18 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React, { useState, useEffect, useRef } from 'react';
 import { Logo } from '@/components/Logo';
-import { ThemeToggle } from '@/components/ThemeToggle'; // Re-added ThemeToggle
 import { cn } from '@/lib/utils';
-import { Search, Menu } from 'lucide-react'; // Added Menu
+import { Search, Menu } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { TOOLS, type Tool } from '@/config/tools';
 import { useSidebar } from '@/components/ui/sidebar';
-import { Button } from '@/components/ui/button'; // Added Button import
+import { Button } from '@/components/ui/button';
 
 
 export function Header() {
   const pathname = usePathname();
-  const { toggleSidebarPanel } = useSidebar();
+  // const { toggleSidebarPanel } = useSidebar(); // No longer used here as logo toggles sidebar
 
   const navLinks = [
     { href: '/', label: 'Home' },
@@ -71,38 +70,28 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/60 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between px-4 md:px-6">
-        {/* LEFT SIDE: Sidebar Toggle and Logo */}
+        {/* LEFT SIDE: Logo (acts as sidebar toggle) */}
         <div className="flex items-center gap-x-2 shrink-0">
-           <Button 
-            variant="ghost" 
-            size="icon" 
-            className="text-foreground hover:text-primary h-9 w-9 md:hidden" // Only show on mobile
-            onClick={toggleSidebarPanel}
-            aria-label="Toggle Sidebar Panel"
-          >
-            <Menu className="h-5 w-5" />
-          </Button>
+          {/* Sidebar toggle functionality is now on the Logo in AppSidebar via SheetTrigger or directly on Logo */}
           <Logo />
         </div>
 
-        {/* CENTER: Main Menu (visible on medium screens and up) */}
-        <nav className="hidden md:flex flex-grow items-center justify-center gap-x-4 lg:gap-x-6">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={cn(
-                "text-sm font-medium transition-colors hover:text-primary",
-                pathname === link.href ? "text-primary" : "text-muted-foreground"
-              )}
-            >
-              {link.label}
-            </Link>
-          ))}
-        </nav>
-
-        {/* RIGHT SIDE: Search Bar & Theme Toggle */}
-        <div className="flex items-center gap-x-3 sm:gap-x-4 shrink-0">
+        {/* RIGHT SIDE: Main Menu, Search Bar & Theme Toggle */}
+        <div className="flex items-center gap-x-3 sm:gap-x-4">
+            <nav className="hidden md:flex items-center gap-x-4 lg:gap-x-6">
+            {navLinks.map((link) => (
+                <Link
+                key={link.href}
+                href={link.href}
+                className={cn(
+                    "text-sm font-medium transition-colors hover:text-primary",
+                    pathname === link.href ? "text-primary" : "text-muted-foreground"
+                )}
+                >
+                {link.label}
+                </Link>
+            ))}
+            </nav>
           <div ref={searchRef} className="relative">
             <div className="relative flex items-center">
               <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground pointer-events-none" />
@@ -117,7 +106,7 @@ export function Header() {
               />
             </div>
             {isResultsVisible && searchResults.length > 0 && (
-              <div className="absolute top-full mt-1.5 w-full min-w-[240px] sm:min-w-[280px] md:min-w-[300px] max-w-md rounded-md border bg-popover text-popover-foreground shadow-lg z-[51] right-0 md:left-0 md:right-auto">
+              <div className="absolute top-full mt-1.5 w-full min-w-[240px] sm:min-w-[280px] md:min-w-[300px] max-w-md rounded-md border bg-popover text-popover-foreground shadow-lg z-[51] right-0 md:left-auto md:right-0"> {/* Adjusted to right-align dropdown */}
                 <ScrollArea className="h-auto max-h-[300px] rounded-md p-1">
                   {searchResults.map((tool) => (
                     <Link
@@ -137,7 +126,7 @@ export function Header() {
               </div>
             )}
           </div>
-          <ThemeToggle />
+          {/* ThemeToggle was removed previously as per user request */}
         </div>
       </div>
     </header>
