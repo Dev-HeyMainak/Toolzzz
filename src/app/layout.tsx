@@ -29,13 +29,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning> {/* Removed default "dark" class */}
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background`}>
-        <SidebarProvider defaultOpen={false}> {/* Panel is closed by default */}
-          <Sidebar side="left"> {/* This is the Sheet wrapper */}
-            <AppSidebar /> {/* This is the content of the Sheet */}
+        <SidebarProvider defaultOpen={false}>
+          <Sidebar side="left">
+            <AppSidebar />
           </Sidebar>
-          <div className="flex flex-col min-h-screen w-full overflow-hidden"> {/* Main content area */}
+          <div className="flex flex-col min-h-screen w-full overflow-hidden">
             <Header />
             <main className="flex-1">
               {children}

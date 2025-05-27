@@ -15,14 +15,12 @@ export function ToolLinkPill({ href, icon: Icon, name, className }: ToolLinkPill
     <Link
       href={href}
       className={cn(
-        "flex items-center gap-3 rounded-lg border border-border bg-card p-4 text-card-foreground shadow-sm transition-all duration-200 ease-in-out hover:shadow-md hover:border-primary/70 hover:bg-muted/50 hover:scale-[1.02] active:scale-[0.98]",
+        "flex items-center gap-3 rounded-md border border-input bg-card p-3 text-card-foreground shadow-sm transition-all duration-200 ease-in-out hover:shadow-lg hover:border-primary hover:bg-muted/60 active:scale-[0.97]",
         className
       )}
     >
-      <div className="rounded-md bg-primary/10 p-2 text-primary">
-        <Icon className="h-5 w-5" />
-      </div>
-      <span className="font-medium text-sm">{name}</span>
+      <Icon className="h-5 w-5 text-primary flex-shrink-0" />
+      <span className="font-medium text-sm text-foreground group-hover:text-primary transition-colors">{name}</span>
     </Link>
   );
 }

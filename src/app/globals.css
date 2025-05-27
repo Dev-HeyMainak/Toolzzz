@@ -5,47 +5,49 @@
 
 body {
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  @apply transition-colors duration-300 ease-in-out;
+  @apply overflow-x-clip;
 }
 
 @layer base {
-  :root { /* Light Theme (Fallback, but dark is default) */
-    --background: 0 0% 98%; /* Near White */
-    --foreground: 220 15% 20%; /* Dark Gray text */
+  :root { /* Light Theme - Figma Inspired Default */
+    --background: 220 20% 98%; /* Very Light Gray / Off-white */
+    --foreground: 220 15% 20%; /* Dark Gray / Near Black text */
     --card: 0 0% 100%; /* White Card Background */
     --card-foreground: 220 15% 20%;
     --popover: 0 0% 100%;
     --popover-foreground: 220 15% 20%;
-    --primary: 260 75% 55%; /* Brighter Purple for Light Mode */
-    --primary-foreground: 0 0% 100%; /* White */
-    --secondary: 260 60% 95%; /* Very Light Purple */
-    --secondary-foreground: 260 60% 25%;
+    --primary: 220 70% 55%; /* Vibrant Blue */
+    --primary-foreground: 0 0% 100%; /* White text on primary */
+    --secondary: 220 15% 93%; /* Light Gray */
+    --secondary-foreground: 220 15% 30%;
     --muted: 220 15% 90%;
     --muted-foreground: 220 10% 45%;
-    --accent: 330 80% 60%; /* Pinkish-Purple for Light Mode */
+    --accent: 260 80% 60%; /* Purple for accents like "Curated by" cards */
     --accent-foreground: 0 0% 100%;
     --destructive: 0 70% 50%;
     --destructive-foreground: 0 0% 100%;
-    --border: 220 15% 85%;
+    --border: 220 15% 88%; /* Softer border for light mode */
     --input: 220 15% 95%;
-    --ring: 260 75% 60%;
-    --chart-1: 260 70% 55%;
-    --chart-2: 280 60% 50%;
-    --chart-3: 240 50% 50%;
-    --chart-4: 300 65% 50%;
-    --chart-5: 220 75% 50%;
-    --radius: 0.75rem;
+    --ring: 220 70% 60%; /* Blue for focus rings */
+    --chart-1: 220 70% 55%;
+    --chart-2: 200 70% 50%;
+    --chart-3: 240 60% 60%;
+    --chart-4: 180 50% 50%;
+    --chart-5: 260 65% 55%;
+    --radius: 0.5rem; /* Slightly less rounded for a more modern/crisp feel */
 
     --sidebar-background: 220 15% 96%;
     --sidebar-foreground: 220 15% 25%;
-    --sidebar-primary: 260 75% 55%;
+    --sidebar-primary: 220 70% 55%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 260 75% 85%;
-    --sidebar-accent-foreground: 260 75% 20%;
-    --sidebar-border: 220 15% 80%;
-    --sidebar-ring: 260 75% 60%;
+    --sidebar-accent: 220 70% 90%;
+    --sidebar-accent-foreground: 220 70% 20%;
+    --sidebar-border: 220 15% 85%;
+    --sidebar-ring: 220 70% 60%;
   }
 
-  .dark { /* Dark Theme - Inspired by Figma Community */
+  .dark { /* Dark Theme - Retained previous dark theme from user request */
     --background: 225 20% 6%; /* Very Dark Blue-Gray */
     --foreground: 220 15% 90%; /* Light Gray Text */
     --card: 225 20% 12%; /* Slightly Lighter Dark Blue-Gray */
@@ -70,7 +72,7 @@ body {
     --chart-3: 250 60% 60%;
     --chart-4: 290 65% 60%;
     --chart-5: 230 75% 60%;
-    --radius: 0.75rem;
+    /* radius will use the value from :root unless overridden here */
 
     --sidebar-background: 225 20% 8%;
     --sidebar-foreground: 220 15% 80%;
@@ -89,7 +91,5 @@ body {
   }
   body {
     @apply bg-background text-foreground;
-    @apply transition-colors duration-300 ease-in-out;
-    overflow-x: clip;
   }
 }
