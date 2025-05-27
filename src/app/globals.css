@@ -3,39 +3,43 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  font-family: var(--font-jetbrains-mono), monospace; /* Default to JetBrains Mono */
-  @apply bg-background text-foreground;
-  @apply transition-colors duration-300 ease-in-out;
-  @apply overflow-x-clip;
-}
-
 @layer base {
   :root { /* Default Theme - Now Dark/Black Background */
-    --background: 225 10% 4%; /* Very Dark Blue-Gray, almost black */
+    --background: 0 0% 0%; /* Pure Black */
     --foreground: 210 20% 95%; /* Light Gray Text for contrast */
+    
     --card: 225 10% 9%; /* Slightly Lighter Dark Blue-Gray for cards */
     --card-foreground: 210 20% 90%;
+    
     --popover: 225 10% 8%;
     --popover-foreground: 210 20% 90%;
+    
     --primary: 145 100% 50%;   /* Neon Green */
     --primary-foreground: 220 15% 10%; /* Dark text for neon buttons */
+    --primary-shadow: hsl(var(--primary) / 0.3);
+
     --secondary: 225 10% 14%; /* Darker Muted Blue-Gray */
     --secondary-foreground: 210 20% 80%;
+    
     --muted: 225 10% 18%; /* Muted Blue-Gray */
     --muted-foreground: 210 10% 65%;
+    
     --accent: 260 85% 66%; /* Purple for secondary accents */
     --accent-foreground: 0 0% 100%;
+    
     --destructive: 0 60% 50%;
     --destructive-foreground: 0 0% 100%;
+    
     --border: 225 10% 25%; /* Darker Border */
     --input: 225 10% 12%; /* Dark Input Background */
     --ring: 145 100% 60%; /* Neon Green for focus rings */
+    
     --chart-1: 145 100% 50%;
     --chart-2: 260 85% 66%;
     --chart-3: 330 80% 65%;
     --chart-4: 290 65% 60%;
     --chart-5: 230 75% 60%;
+    
     --radius: 0.5rem; /* Consistent radius */
 
     --sidebar-background: 225 10% 8%;
@@ -46,51 +50,61 @@ body {
     --sidebar-primary: 145 100% 50%;
     --sidebar-primary-foreground: 220 15% 10%;
     --sidebar-ring: 145 100% 60%;
-    --primary-shadow: hsl(var(--primary) / 0.3);
   }
 
   .dark { /* Kept for potential future use, but :root is now the primary dark theme */
-    --background: 225 10% 6%; /* Very Dark Blue-Gray */
-    --foreground: 210 20% 90%; /* Lighter Gray Text */
-    --card: 225 10% 9%; /* Slightly Lighter Dark Blue-Gray */
-    --card-foreground: 210 20% 88%;
+    --background: 0 0% 0%; /* Pure Black */
+    --foreground: 210 20% 95%; /* Light Gray Text for contrast */
+    
+    --card: 225 10% 9%; /* Slightly Lighter Dark Blue-Gray for cards */
+    --card-foreground: 210 20% 90%;
+    
     --popover: 225 10% 8%;
-    --popover-foreground: 210 20% 88%;
+    --popover-foreground: 210 20% 90%;
+    
     --primary: 145 100% 50%; /* Neon Green */
     --primary-foreground: 220 15% 10%; /* Dark text for neon buttons */
+    --primary-shadow: hsl(var(--primary) / 0.3);
+
     --secondary: 225 10% 14%; /* Darker Muted Blue-Gray */
-    --secondary-foreground: 210 20% 75%;
+    --secondary-foreground: 210 20% 80%;
+    
     --muted: 225 10% 18%; /* Muted Blue-Gray */
-    --muted-foreground: 210 10% 60%;
+    --muted-foreground: 210 10% 65%;
+    
     --accent: 260 85% 66%; /* Purple for secondary accents */
     --accent-foreground: 0 0% 100%;
+    
     --destructive: 0 60% 50%;
     --destructive-foreground: 0 0% 100%;
+    
     --border: 225 10% 25%; /* Darker Border */
     --input: 225 10% 12%; /* Dark Input Background */
     --ring: 145 100% 60%; /* Neon Green for focus rings */
+    
     --chart-1: 145 100% 50%;
     --chart-2: 260 85% 66%;
     --chart-3: 330 80% 65%;
     --chart-4: 290 65% 60%;
     --chart-5: 230 75% 60%;
+    
     --radius: 0.5rem; /* Consistent radius */
 
     --sidebar-background: 225 10% 8%;
-    --sidebar-foreground: 210 20% 80%;
+    --sidebar-foreground: 210 20% 85%;
     --sidebar-border: 225 10% 15%;
     --sidebar-accent: 145 100% 18%; /* Darker neon green for sidebar accent bg */
     --sidebar-accent-foreground: 0 0% 100%;
     --sidebar-primary: 145 100% 50%;
     --sidebar-primary-foreground: 220 15% 10%;
     --sidebar-ring: 145 100% 60%;
-    --primary-shadow: hsl(var(--primary) / 0.3);
   }
-}
 
-@layer base {
-  * {
-    @apply border-border;
+  body {
+    font-family: var(--font-jetbrains-mono), monospace; /* Default to JetBrains Mono */
+    @apply bg-background text-foreground;
+    @apply transition-colors duration-300 ease-in-out;
+    @apply overflow-x-clip; /* Keep this to prevent horizontal scrollbars */
   }
 }
 
