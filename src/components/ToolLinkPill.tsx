@@ -15,7 +15,7 @@ export function ToolLinkPill({ href, icon: Icon, name, className }: ToolLinkPill
     <Link
       href={href}
       className={cn(
-        "flex items-center gap-3 rounded-md border border-input bg-card p-3 text-card-foreground shadow-sm transition-all duration-200 ease-in-out hover:shadow-lg hover:border-primary hover:bg-muted/60 active:scale-[0.97]",
+        "flex items-center gap-3 rounded-lg border border-input bg-card p-4 text-card-foreground shadow-sm transition-all duration-200 ease-in-out hover:shadow-lg hover:border-primary hover:bg-muted/60 active:scale-[0.97]",
         className
       )}
     >

@@ -33,9 +33,9 @@ export default function HomePage() {
           className="mb-16 opacity-0 animate-fade-in-up"
           style={{ animationDelay: `${0.5 + index * 0.15}s` }}
         >
-          <div className="flex items-center mb-8">
-            <category.icon className="h-7 w-7 text-primary mr-3" />
-            <h2 className="text-2xl font-semibold text-foreground tracking-tight">{category.name}</h2>
+          <div className="flex items-center mb-10">
+            <category.icon className="h-8 w-8 text-primary mr-4 md:h-10 md:w-10" />
+            <h2 className="text-3xl font-bold text-foreground tracking-tight md:text-4xl">{category.name}</h2>
           </div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
             {TOOLS.filter(tool => tool.categoryKey === category.id).map((tool, toolIndex) => (
