@@ -12,9 +12,6 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-// Log the API key to help with debugging
-// console.log('[FirebaseSetup] Attempting to use API Key:', process.env.NEXT_PUBLIC_FIREBASE_API_KEY);
-
 if (!firebaseConfig.apiKey) {
   console.error(
     '[FirebaseSetup] ERROR: Firebase API Key is missing or undefined. ' +
@@ -32,6 +29,6 @@ if (!getApps().length) {
   app = getApps()[0]; // Use the already initialized app
 }
 
-// Auth is no longer initialized or exported here
+// Authentication specific code removed
 
 export { app };
