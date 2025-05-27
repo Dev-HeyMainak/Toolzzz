@@ -13,11 +13,11 @@ export default function HomePage() {
         className="mb-12 text-center opacity-0 animate-fade-in-up"
         style={{ animationDelay: '0.1s' }}
       >
-        <h1 className="text-4xl font-medium tracking-tight text-foreground sm:text-5xl lg:text-6xl xl:text-7xl">
+        <h1 className="text-5xl font-extrabold tracking-tighter text-foreground sm:text-6xl lg:text-7xl xl:text-8xl">
           Tool<span className="text-primary font-bold">zzz</span>
         </h1>
         <p className="mt-6 text-lg text-muted-foreground sm:text-xl max-w-2xl mx-auto">
-          Add a little <span className='text-primary font-bold'>structure</span> to your files
+          Toolzzz: Making your daily tasks feel effortless.
         </p>
       </header>
       <p
@@ -30,7 +30,7 @@ export default function HomePage() {
       {TOOL_CATEGORIES.map((category, index) => (
         <section
           key={category.id}
-          className="mb-16 opacity-0 animate-fade-in-up"
+          className="mb-20 opacity-0 animate-fade-in-up"
           style={{ animationDelay: `${0.5 + index * 0.15}s` }}
         >
           <div className="flex items-center mb-10">
@@ -56,16 +56,7 @@ export default function HomePage() {
         </section>
       ))}
 
-      <section
-        className="my-20 opacity-0 animate-fade-in-up"
-        style={{ animationDelay: `${0.6 + TOOL_CATEGORIES.length * 0.15}s` }}
-      >
-        {/* Heading and description removed */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Cards were previously removed */}
-        </div>
-      </section>
+      {/* Removed Curated by Toolzzz section */}
     </div>
   );
 }
-
