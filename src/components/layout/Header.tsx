@@ -5,18 +5,17 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React, { useState, useEffect, useRef } from 'react';
 import { Logo } from '@/components/Logo';
-import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { cn } from '@/lib/utils';
-import { Search } from 'lucide-react'; // Removed Menu icon if no longer needed
-import { useSidebar } from '@/components/ui/sidebar';
+import { Search } from 'lucide-react';
+// Removed useSidebar and toggleSidebarPanel as sidebar toggle is removed from header
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { TOOLS, type Tool } from '@/config/tools';
 
 export function Header() {
   const pathname = usePathname();
-  const { toggleSidebarPanel } = useSidebar(); // Still needed for the Logo toggle
+  // Removed: const { toggleSidebarPanel } = useSidebar();
 
   const navLinks = [
     { href: '/', label: 'Home' },
@@ -69,38 +68,28 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/50 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center px-4 md:px-6">
-        {/* LEFT GROUP: Logo (also acts as sidebar toggle) */}
-        <div className="flex items-center gap-2 md:gap-4 shrink-0">
-          {/* Sidebar Toggle Button removed */}
-          <Button
-            variant="ghost"
-            onClick={toggleSidebarPanel}
-            className="p-0 h-auto hover:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0"
-            aria-label="Toggle Sidebar Panel"
-          >
-            <Logo />
-          </Button>
-        </div>
+      <div className="container flex h-16 items-center justify-between px-4 md:px-6">
+        {/* LEFT SIDE: Logo */}
+        {/* onClick for sidebar toggle removed from Logo wrapper/Logo itself */}
+        <Logo />
 
-        {/* CENTER GROUP: Navigation Links */}
-        <nav className="hidden md:flex grow items-center justify-center gap-4 lg:gap-6">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={cn(
-                "text-sm font-medium transition-colors hover:text-primary",
-                pathname === link.href ? "text-primary" : "text-muted-foreground"
-              )}
-            >
-              {link.label}
-            </Link>
-          ))}
-        </nav>
+        {/* RIGHT SIDE: Main Menu, Search Bar, Theme Toggle */}
+        <div className="flex items-center gap-x-3 sm:gap-x-4">
+          <nav className="hidden md:flex items-center gap-x-4 lg:gap-x-6">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={cn(
+                  "text-sm font-medium transition-colors hover:text-primary",
+                  pathname === link.href ? "text-primary" : "text-muted-foreground"
+                )}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
 
-        {/* RIGHT GROUP: Search + Theme Toggle */}
-        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           <div ref={searchRef} className="relative">
             <div className="relative flex items-center">
               <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground pointer-events-none" />
@@ -110,12 +99,12 @@ export function Header() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onFocus={() => setIsResultsVisible(searchQuery.length > 0 && searchResults.length > 0)}
-                className="h-9 w-32 rounded-md pl-8 pr-2 text-sm sm:w-36 md:w-40 lg:w-56" 
+                className="h-9 w-32 rounded-md pl-8 pr-2 text-sm sm:w-36 md:w-40 lg:w-48 xl:w-56" 
                 aria-label="Search tools"
               />
             </div>
             {isResultsVisible && searchResults.length > 0 && (
-              <div className="absolute top-full mt-1.5 w-full min-w-[240px] sm:min-w-[280px] md:min-w-[300px] max-w-md rounded-md border bg-popover text-popover-foreground shadow-lg z-[51] right-0 md:right-auto md:left-0">
+              <div className="absolute top-full mt-1.5 w-full min-w-[240px] sm:min-w-[280px] md:min-w-[300px] max-w-md rounded-md border bg-popover text-popover-foreground shadow-lg z-[51] right-0">
                 <ScrollArea className="h-auto max-h-[300px] rounded-md p-1">
                   {searchResults.map((tool) => (
                     <Link
