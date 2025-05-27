@@ -60,12 +60,9 @@ export default function HomePage() {
         className="my-20 opacity-0 animate-fade-in-up"
         style={{ animationDelay: `${0.6 + TOOL_CATEGORIES.length * 0.15}s` }}
       >
-        <div className="mb-10 text-center sm:text-left">
-          <h2 className="text-2xl font-semibold text-foreground tracking-tight">Curated by Toolzzz</h2>
-          <p className="text-muted-foreground mt-1">Explore these handpicked resources.</p>
-        </div>
+        {/* Heading and description removed */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Card removed */}
+          {/* Cards were previously removed */}
         </div>
       </section>
     </div>
