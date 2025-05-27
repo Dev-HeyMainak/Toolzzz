@@ -16,8 +16,8 @@ export default function HomePage() {
         <h1 className="text-5xl font-extrabold tracking-tighter text-foreground sm:text-6xl lg:text-7xl xl:text-8xl">
           Tool<span className="text-primary font-bold">zzz</span>
         </h1>
-        <p className="mt-6 text-lg text-muted-foreground sm:text-xl max-w-2xl mx-auto">
-          Smart tools for smoother days.
+        <p className="mt-6 text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
+          Seamless solutions for your digital day.
         </p>
       </header>
       <p
