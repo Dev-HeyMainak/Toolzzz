@@ -17,7 +17,7 @@ export default function HomePage() {
           Tool<span className="text-primary font-bold">zzz</span>
         </h1>
         <p className="mt-6 text-lg text-muted-foreground sm:text-xl max-w-2xl mx-auto">
-          Toolzzz: Making your daily tasks feel effortless.
+          Smart tools for smoother days.
         </p>
       </header>
       <p
