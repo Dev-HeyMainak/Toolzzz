@@ -20,8 +20,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+} from "@/components/ui/alert-dialog"; // AlertDialogTrigger was already here, no need to re-add specifically
 
 
 interface KanbanCardType {
@@ -35,7 +34,7 @@ interface KanbanListType {
   cards: KanbanCardType[];
 }
 
-const KANBAN_STORAGE_KEY = 'toolzzz-kanbanBoardData-v1'; // Ensure this key is unique if you copy this tool
+const KANBAN_STORAGE_KEY = 'toolzzz-kanbanBoardData-v1'; 
 
 export default function KanbanBoardPage() {
   const [lists, setLists] = useState<KanbanListType[]>([]);
@@ -44,11 +43,9 @@ export default function KanbanBoardPage() {
   const [isClient, setIsClient] = useState(false);
   const { toast } = useToast();
 
-  // Drag and Drop State
   const [draggedItem, setDraggedItem] = useState<{ cardId: string; sourceListId: string } | null>(null);
   const [dragOverListId, setDragOverListId] = useState<string | null>(null);
 
-  // Card Editing State
   const [editingCardId, setEditingCardId] = useState<string | null>(null);
   const [currentEditText, setCurrentEditText] = useState<string>("");
 
@@ -176,7 +173,6 @@ export default function KanbanBoardPage() {
   };
 
 
-  // Drag and Drop Handlers
   const handleDragStart = (e: DragEvent<HTMLDivElement>, cardId: string, sourceListId: string) => {
     e.dataTransfer.setData('text/plain', cardId); 
     setDraggedItem({ cardId, sourceListId });
@@ -227,7 +223,6 @@ export default function KanbanBoardPage() {
     if (cardToMove) {
       updatedLists = updatedLists.map(list => {
         if (list.id === targetListId) {
-          // Add to the end of the target list
           return { ...list, cards: [...list.cards, cardToMove!] };
         }
         return list;
@@ -243,18 +238,17 @@ export default function KanbanBoardPage() {
 
   if (!isClient) {
     return (
-      <div className="container mx-auto px-4 py-12 md:px-6 md:py-20">
-        <div className="flex items-center justify-center h-64">
-          <LayoutGrid className="h-12 w-12 text-primary animate-pulse" />
-          <p className="ml-4 text-xl text-muted-foreground">Loading GridPilot Board...</p>
-        </div>
+      <div className="flex items-center justify-center h-64">
+        <LayoutGrid className="h-12 w-12 text-primary animate-pulse" />
+        <p className="ml-4 text-xl text-muted-foreground">Loading GridPilot Board...</p>
       </div>
     );
   }
 
   return (
     <TooltipProvider>
-    <div className="container mx-auto px-4 py-12 md:px-6 md:py-20 h-full flex flex-col">
+    {/* Use flex-1 and min-h-0 to allow proper growth within flex parent from tools/layout.tsx */}
+    <div className="flex flex-col flex-1 min-h-0"> 
       <div className="flex items-center justify-between w-full mb-6">
         <div className="flex items-center flex-shrink-0 mr-4">
             <LayoutGrid className="h-8 w-8 text-primary mr-3" />
@@ -264,11 +258,11 @@ export default function KanbanBoardPage() {
           <AlertDialog>
               <Tooltip>
                   <TooltipTrigger asChild>
-                      <AlertDialogTrigger asChild>
+                      <AlertDialog.Trigger asChild>
                           <Button variant="destructive" size="sm">
                               <Trash2 className="mr-2 h-4 w-4" /> Clear Board
                           </Button>
-                      </AlertDialogTrigger>
+                      </AlertDialog.Trigger>
                   </TooltipTrigger>
                   <TooltipContent><p>Delete all lists and cards from the board.</p></TooltipContent>
               </Tooltip>
@@ -298,7 +292,7 @@ export default function KanbanBoardPage() {
       </div>
       <p className="text-muted-foreground mb-8">
         A Pro tool to visually organize your tasks and projects. Add lists, then add and drag cards to manage your workflow.
-        <span className="block text-xs mt-1">(Note: This is a client-side prototype; data is stored in your browser.)</span>
+        <span className="block text-xs mt-1">(Note: Data is stored in your browser&apos;s local storage.)</span>
       </p>
 
       <form onSubmit={handleAddList} className="flex gap-3 mb-8 items-center">
@@ -324,8 +318,8 @@ export default function KanbanBoardPage() {
         </Tooltip>
       </form>
 
-      <ScrollArea className="flex-grow pb-4 -mx-1"> {/* Negative margin to allow full bleed of scrollbar if needed with page padding */}
-        <div className="flex gap-4 items-start px-1"> {/* Counter padding for the items */}
+      <ScrollArea className="flex-grow pb-4"> {/* flex-grow should now work correctly */}
+        <div className="flex gap-4 items-start"> 
           {lists.map(list => (
             <Card 
               key={list.id} 
@@ -347,11 +341,11 @@ export default function KanbanBoardPage() {
                 <Tooltip>
                     <TooltipTrigger asChild>
                          <AlertDialog>
-                            <AlertDialogTrigger asChild>
+                            <AlertDialog.Trigger asChild>
                                 <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground hover:text-destructive">
                                     <XCircle className="h-4 w-4" />
                                 </Button>
-                            </AlertDialogTrigger>
+                            </AlertDialog.Trigger>
                             <AlertDialogContent>
                                 <AlertDialogHeader>
                                 <AlertDialogTitle>Delete List: "{list.title}"?</AlertDialogTitle>
