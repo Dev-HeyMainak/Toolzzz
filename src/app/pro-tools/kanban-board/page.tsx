@@ -80,6 +80,7 @@ export default function KanbanBoardPage() {
         localStorage.setItem(KANBAN_STORAGE_KEY, JSON.stringify(lists));
       } catch (error) {
         console.error("Error saving GridPilot board data to localStorage", error);
+        // Optionally, notify user about saving error if it's critical
       }
     }
   }, [lists, isClient]);
@@ -249,8 +250,8 @@ export default function KanbanBoardPage() {
   }
 
   return (
-    <TooltipProvider>
-      <div className="container mx-auto px-4 py-12 md:px-6 md:py-20 h-full flex flex-col">
+    <div className="container mx-auto px-4 py-12 md:px-6 md:py-20 flex flex-col flex-1 min-h-0">
+      <TooltipProvider>
         <div className="flex flex-col flex-1 min-h-0"> 
           {/* Page Header */}
           <div className="flex items-center justify-between w-full mb-6">
@@ -319,13 +320,13 @@ export default function KanbanBoardPage() {
           </form>
 
           {/* Kanban Lists Area */}
-          <ScrollArea className="flex-grow pb-4">
-            <div className="flex gap-4 items-start">
+          <ScrollArea className="flex-grow pb-4 -mx-1"> {/* Adjust mx for outer padding */}
+            <div className="flex gap-4 items-start px-1"> {/* Adjust px for outer padding */}
               {lists.map(list => (
                 <Card 
                   key={list.id} 
                   className={cn(
-                    "w-72 min-w-[280px] flex-shrink-0 bg-card/70 backdrop-blur-md transition-all duration-150 border-border/60 rounded-lg shadow-md", 
+                    "w-72 min-w-[280px] flex-shrink-0 bg-card/70 backdrop-blur-sm transition-all duration-150 border-border/60 rounded-lg shadow-md", 
                     dragOverListId === list.id && draggedItem && draggedItem.sourceListId !== list.id && "border-primary ring-2 ring-primary shadow-lg" 
                   )}
                   onDragOver={(e) => handleDragOver(e, list.id)}
@@ -473,12 +474,9 @@ export default function KanbanBoardPage() {
             </p>
           )}
         </div>
-      </div>
-    </TooltipProvider>
+      </TooltipProvider>
+    </div>
   );
 }
-    
-
-    
 
     
