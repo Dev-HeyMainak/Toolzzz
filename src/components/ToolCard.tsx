@@ -19,10 +19,10 @@ export function ToolCard({ name, description, href, icon: Icon, animationDelay }
     <Card
       className={cn(
         "group flex flex-col h-full",
-        "bg-muted/20", // Use semi-transparent muted color for the glass effect base
-        "backdrop-blur-md", // Apply blur
-        "border border-border/40", // Subtle border
-        "hover:border-primary hover:shadow-xl hover:shadow-primary/30", // Added primary shadow for glow
+        "bg-muted/20", 
+        "backdrop-blur-md", 
+        "border border-border/40", 
+        "hover:border-primary hover:shadow-lg hover:shadow-primary/15", 
         "transition-all duration-300 ease-in-out rounded-xl overflow-hidden",
         "transform hover:-translate-y-1",
         animationDelay && "opacity-0 animate-fade-in-up"
@@ -32,7 +32,7 @@ export function ToolCard({ name, description, href, icon: Icon, animationDelay }
       <CardHeader className="flex flex-row items-center gap-3 p-4">
         <div className={cn(
             "p-2 rounded-lg bg-primary/10 text-primary transition-colors duration-300 flex-shrink-0",
-            "group-hover:[&_svg]:animate-subtle-spin-hover"
+            "group-hover:[&_svg]:animate-subtle-spin-hover" 
           )}
         >
           <Icon className="h-6 w-6" />
