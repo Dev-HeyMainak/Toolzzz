@@ -35,7 +35,7 @@ interface KanbanListType {
   cards: KanbanCardType[];
 }
 
-const KANBAN_STORAGE_KEY = 'toolzzz-kanbanBoardData-v1';
+const KANBAN_STORAGE_KEY = 'toolzzz-kanbanBoardData-v1'; // Ensure this key is unique if you copy this tool
 
 export default function KanbanBoardPage() {
   const [lists, setLists] = useState<KanbanListType[]>([]);
@@ -62,13 +62,13 @@ export default function KanbanBoardPage() {
           setLists(JSON.parse(storedData));
         } else {
           setLists([
-            { id: 'list-todo', title: 'To Do', cards: [{id: `card-${Date.now()}-1`, text: 'Brainstorm new features'}] },
+            { id: 'list-todo', title: 'To Do', cards: [{id: `card-${Date.now()}-1`, text: 'Brainstorm new features for Toolzzz'}] },
             { id: 'list-inprogress', title: 'In Progress', cards: [] },
             { id: 'list-done', title: 'Done', cards: [] },
           ]);
         }
       } catch (error) {
-        console.error("Error loading Kanban board data from localStorage", error);
+        console.error("Error loading GridPilot board data from localStorage", error);
         toast({ title: "Error", description: "Could not load board data.", variant: "destructive" });
       }
     }
@@ -80,7 +80,7 @@ export default function KanbanBoardPage() {
       try {
         localStorage.setItem(KANBAN_STORAGE_KEY, JSON.stringify(lists));
       } catch (error) {
-        console.error("Error saving Kanban board data to localStorage", error);
+        console.error("Error saving GridPilot board data to localStorage", error);
       }
     }
   }, [lists, isClient]);
@@ -227,6 +227,7 @@ export default function KanbanBoardPage() {
     if (cardToMove) {
       updatedLists = updatedLists.map(list => {
         if (list.id === targetListId) {
+          // Add to the end of the target list
           return { ...list, cards: [...list.cards, cardToMove!] };
         }
         return list;
@@ -242,17 +243,19 @@ export default function KanbanBoardPage() {
 
   if (!isClient) {
     return (
-      <div className="flex items-center justify-center h-64 p-4 md:p-6">
-        <LayoutGrid className="h-12 w-12 text-primary animate-pulse" />
-        <p className="ml-4 text-xl text-muted-foreground">Loading GridPilot Board...</p>
+      <div className="container mx-auto px-4 py-12 md:px-6 md:py-20">
+        <div className="flex items-center justify-center h-64">
+          <LayoutGrid className="h-12 w-12 text-primary animate-pulse" />
+          <p className="ml-4 text-xl text-muted-foreground">Loading GridPilot Board...</p>
+        </div>
       </div>
     );
   }
 
   return (
     <TooltipProvider>
-    <div className="h-full flex flex-col p-4 md:p-6">
-      <div className="flex items-center justify-between mb-6 w-full">
+    <div className="container mx-auto px-4 py-12 md:px-6 md:py-20 h-full flex flex-col">
+      <div className="flex items-center justify-between w-full mb-6">
         <div className="flex items-center flex-shrink-0 mr-4">
             <LayoutGrid className="h-8 w-8 text-primary mr-3" />
             <h1 className="text-3xl font-semibold text-foreground truncate">GridPilot Board</h1>
@@ -298,7 +301,7 @@ export default function KanbanBoardPage() {
         <span className="block text-xs mt-1">(Note: This is a client-side prototype; data is stored in your browser.)</span>
       </p>
 
-      <form onSubmit={handleAddList} className="flex gap-3 mb-6 items-center">
+      <form onSubmit={handleAddList} className="flex gap-3 mb-8 items-center">
         <div className="flex-grow">
             <Label htmlFor="newListTitle" className="sr-only">New List Title</Label>
             <Input
@@ -321,13 +324,13 @@ export default function KanbanBoardPage() {
         </Tooltip>
       </form>
 
-      <ScrollArea className="flex-grow pb-4">
-        <div className="flex gap-4 items-start">
+      <ScrollArea className="flex-grow pb-4 -mx-1"> {/* Negative margin to allow full bleed of scrollbar if needed with page padding */}
+        <div className="flex gap-4 items-start px-1"> {/* Counter padding for the items */}
           {lists.map(list => (
             <Card 
               key={list.id} 
               className={cn(
-                "w-72 min-w-[280px] flex-shrink-0 bg-card/70 backdrop-blur-sm transition-all duration-150",
+                "w-72 min-w-[280px] flex-shrink-0 bg-card/70 backdrop-blur-sm transition-all duration-150 border-border/60",
                 dragOverListId === list.id && draggedItem && draggedItem.sourceListId !== list.id && "border-primary ring-2 ring-primary shadow-lg"
               )}
               onDragOver={(e) => handleDragOver(e, list.id)}
@@ -372,7 +375,7 @@ export default function KanbanBoardPage() {
                 {list.cards.map(card => (
                   <div 
                     key={card.id} 
-                    draggable={editingCardId !== card.id} // Prevent dragging while editing
+                    draggable={editingCardId !== card.id}
                     onDragStart={(e) => handleDragStart(e, card.id, list.id)}
                     onDragEnd={handleDragEnd}
                     className={cn(
@@ -442,7 +445,7 @@ export default function KanbanBoardPage() {
                     )}
                   </div>
                 ))}
-                {list.cards.length === 0 && <p className="text-xs text-muted-foreground text-center py-4">No cards in this list yet. Drag cards here or add new ones below!</p>}
+                {list.cards.length === 0 && <p className="text-xs text-muted-foreground text-center py-4">No cards in this list yet. Drag cards here or add new ones below.</p>}
               </CardContent>
               <CardFooter className="p-3 border-t">
                 <form onSubmit={(e) => {e.preventDefault(); handleAddCard(list.id);}} className="flex gap-2 w-full items-center">
