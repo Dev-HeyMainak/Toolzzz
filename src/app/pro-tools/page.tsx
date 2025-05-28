@@ -1,7 +1,12 @@
 
-import { Zap } from 'lucide-react'; // Or Sparkles, or another relevant icon
+import { Zap, LayoutGrid } from 'lucide-react'; 
+import { ToolCard } from '@/components/ToolCard';
+import { TOOLS } from '@/config/tools'; // Import TOOLS array
 
 export default function ProToolsPage() {
+  // Filter for tools marked as Pro
+  const proTools = TOOLS.filter(tool => tool.isPro);
+
   return (
     <div className="container mx-auto px-4 py-12 md:px-6 md:py-20">
       <header className="mb-12 text-center">
@@ -16,27 +21,30 @@ export default function ProToolsPage() {
         </p>
       </header>
 
-      <section className="max-w-2xl mx-auto bg-card p-8 rounded-xl shadow-lg">
-        <h2 className="text-2xl font-semibold text-foreground mb-6">Coming Soon!</h2>
-        <p className="text-muted-foreground mb-4">
-          We are actively developing a suite of exclusive tools designed for our Pro users. These tools will offer enhanced capabilities, deeper insights, and more powerful features to take your workflow to the next level.
-        </p>
-        <p className="text-muted-foreground mb-4">
-          Some of the areas we are exploring for Pro tools include:
-        </p>
-        <ul className="list-disc list-inside text-muted-foreground ml-4 space-y-1 mb-6">
-          <li>Advanced Data Analysis & Visualization</li>
-          <li>Batch Processing for Common Tasks</li>
-          <li>AI-Powered Content Generation & Optimization</li>
-          <li>Cloud Sync & Collaboration Features</li>
-          <li>And much more!</li>
-        </ul>
-        <p className="text-muted-foreground">
-          Stay tuned for updates, and thank you for your interest in Toolzzz Pro!
-        </p>
-      </section>
+      {proTools.length > 0 ? (
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-5xl mx-auto">
+          {proTools.map((tool, toolIndex) => (
+            <ToolCard
+              key={tool.id}
+              name={tool.name}
+              description={tool.description}
+              href={tool.href}
+              icon={tool.icon}
+              animationDelay={`${0.3 + toolIndex * 0.05}s`}
+            />
+          ))}
+        </div>
+      ) : (
+        <section className="max-w-2xl mx-auto bg-card p-8 rounded-xl shadow-lg">
+          <h2 className="text-2xl font-semibold text-foreground mb-6 text-center">More Pro Tools Coming Soon!</h2>
+          <p className="text-muted-foreground mb-4 text-center">
+            We are actively developing a suite of exclusive tools designed for our Pro users. These tools will offer enhanced capabilities, deeper insights, and more powerful features to take your workflow to the next level.
+          </p>
+          <p className="text-muted-foreground mt-6 text-center">
+            Stay tuned for updates, and thank you for your interest in Toolzzz Pro!
+          </p>
+        </section>
+      )}
     </div>
   );
 }
-
-    

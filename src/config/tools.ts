@@ -16,7 +16,7 @@ import {
   XCircle,
   Clock,
   Hourglass,
-  Watch, // Corrected from StopwatchIcon
+  Watch,
   StickyNote,
   ClipboardCopy,
   Keyboard,
@@ -38,13 +38,14 @@ import {
   Binary,
   Printer,
   SortAsc,
-  Zap, // For Morse Code
-  Link2, // For URL Encode/Decode
-  ListOrdered, // For Add Line Numbers
-  ListX, // For Remove Line Numbers
-  FileCode, // For HTML Encode/Decode
-  Hash, // For Hex Encode/Decode
-  Braces, // For JSON Stringify/Unstringify
+  Zap,
+  Link2,
+  ListOrdered,
+  ListX,
+  FileCode,
+  Hash,
+  Braces,
+  LayoutGrid, // Added for Kanban
 } from 'lucide-react';
 
 export interface Tool {
@@ -54,6 +55,7 @@ export interface Tool {
   href: string;
   icon: LucideIcon;
   categoryKey: ToolCategoryKey;
+  isPro?: boolean; // Optional Pro flag
 }
 
 export type ToolCategoryKey = 'text_content' | 'productivity_time' | 'digital_utilities';
@@ -301,7 +303,6 @@ export const TOOLS: Tool[] = [
     categoryKey: 'text_content',
   },
 
-
   // Category 2: Productivity & Time Management
   {
     id: 'todo-list',
@@ -457,5 +458,15 @@ export const TOOLS: Tool[] = [
     icon: Crop,
     categoryKey: 'digital_utilities',
   },
+  {
+    id: 'kanban-project-board',
+    name: 'Kanban Project Board',
+    description: 'Visually organize tasks and projects on a board.',
+    href: '/pro-tools/kanban-board', // Note: Link points to pro-tools
+    icon: LayoutGrid,
+    categoryKey: 'digital_utilities', // Can be adjusted if a 'Pro Tools' category is made visible
+    isPro: true,
+  },
 ];
 export { XCircle };
+
