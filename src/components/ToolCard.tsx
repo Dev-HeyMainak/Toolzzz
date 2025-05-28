@@ -19,8 +19,7 @@ export function ToolCard({ name, description, href, icon: Icon, animationDelay }
     <Card
       className={cn(
         "group flex flex-col h-full",
-        "bg-muted/20", 
-        "backdrop-blur-md", 
+        "bg-muted/20 backdrop-blur-md", 
         "border border-border/40", 
         "hover:border-primary hover:shadow-lg hover:shadow-primary/15", 
         "transition-all duration-300 ease-in-out rounded-xl overflow-hidden",
@@ -29,30 +28,30 @@ export function ToolCard({ name, description, href, icon: Icon, animationDelay }
       )}
       style={animationDelay ? { animationDelay } : {}}
     >
-      <CardHeader className="flex flex-row items-center gap-2 p-3"> {/* Reduced padding and gap */}
+      <CardHeader className="flex flex-row items-center gap-3 p-4"> {/* Increased padding and gap */}
         <div className={cn(
-            "p-2 rounded-lg bg-primary/10 text-primary transition-colors duration-300 flex-shrink-0", // Kept p-2 for icon wrapper, icon itself smaller
+            "p-3 rounded-lg bg-primary/10 text-primary transition-colors duration-300 flex-shrink-0", // Increased padding for icon wrapper
             "group-hover:[&_svg]:animate-subtle-spin-hover" 
           )}
         >
-          <Icon className="h-5 w-5" /> {/* Reduced icon size */}
+          <Icon className="h-6 w-6" /> {/* Increased icon size */}
         </div>
         <div>
-          <CardTitle className="text-base font-semibold group-hover:text-primary transition-colors">{name}</CardTitle> {/* Reduced font size */}
+          <CardTitle className="text-lg font-semibold group-hover:text-primary transition-colors">{name}</CardTitle> {/* Increased font size */}
         </div>
       </CardHeader>
-      <CardContent className="p-3 flex-grow pb-2"> {/* Reduced padding */}
-        <CardDescription className="text-xs text-muted-foreground mb-0 min-h-[30px] leading-relaxed">{description}</CardDescription> {/* Reduced font size and min-height */}
+      <CardContent className="p-4 flex-grow pb-3"> {/* Increased padding */}
+        <CardDescription className="text-sm text-muted-foreground mb-0 min-h-[36px] leading-relaxed">{description}</CardDescription> {/* Increased font size and min-height */}
       </CardContent>
-      <div className="p-3 pt-0 mt-auto"> {/* Reduced padding */}
+      <div className="p-4 pt-0 mt-auto"> {/* Increased padding */}
         <Button
           asChild
-          size="sm" // Kept size="sm", icon inside button also adjusted
+          size="default" // Changed from sm to default
           variant="outline"
           className="w-full group/button bg-transparent border-input hover:border-primary text-muted-foreground hover:text-primary hover:bg-primary/5 transition-all duration-200 ease-in-out active:scale-95"
         >
           <Link href={href}>
-            Open Tool <ArrowRight className="ml-1.5 h-3.5 w-3.5 group-hover/button:translate-x-0.5 transition-transform" /> {/* Adjusted icon margin and size */}
+            Open Tool <ArrowRight className="ml-2 h-4 w-4 group-hover/button:translate-x-0.5 transition-transform" /> {/* Adjusted icon margin */}
           </Link>
         </Button>
       </div>

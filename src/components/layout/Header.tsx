@@ -17,19 +17,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-
+import { ThemeToggle } from '@/components/ThemeToggle'; // Ensure ThemeToggle is imported
 
 export function Header() {
   const pathname = usePathname();
-
-  const navLinks = [
-    { href: '/', label: 'Home' },
-    { href: '/about', label: 'About' },
-    // { href: '/feedback', label: 'Feedback' }, // Removed
-    { href: '/pricing', label: 'Pricing' }, // Changed from Pro
-    { href: '/pro-tools', label: 'Pro Tools' }, // New Page
-    { href: '/contact', label: 'Contact' },
-  ];
 
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<Tool[]>([]);
@@ -77,9 +68,21 @@ export function Header() {
     setIsResultsVisible(false);
   };
 
+  const NavLink = ({ href, label }: { href: string; label: string }) => (
+    <Link
+      href={href}
+      className={cn(
+        "rounded-md px-3 py-1.5 text-sm font-medium transition-colors hover:bg-muted hover:text-primary",
+        pathname === href ? "text-primary bg-muted/50" : "text-muted-foreground"
+      )}
+    >
+      {label}
+    </Link>
+  );
+
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/60 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
+      <div className="container flex h-16 items-center justify-between px-4 md:px-6">
         {/* Left Section: Logo */}
         <div className="flex items-center">
           <Logo />
@@ -88,19 +91,9 @@ export function Header() {
         {/* Right Section: Navigation, Search, ThemeToggle */}
         <div className="flex items-center gap-x-2 md:gap-x-4">
           <nav className="hidden items-center gap-x-1 md:flex lg:gap-x-2">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={cn(
-                  "rounded-md px-3 py-1.5 text-sm font-medium transition-colors hover:bg-muted hover:text-primary",
-                  pathname === link.href ? "text-primary bg-muted/50" : "text-muted-foreground"
-                )}
-              >
-                {link.label}
-              </Link>
-            ))}
-             <DropdownMenu>
+            <NavLink href="/" label="Home" />
+            
+            <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button 
                   variant="ghost" 
@@ -122,6 +115,11 @@ export function Header() {
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
+
+            <NavLink href="/pro-tools" label="Pro Tools" />
+            <NavLink href="/contact" label="Contact" />
+            <NavLink href="/pricing" label="Pricing" />
+            <NavLink href="/about" label="About" />
           </nav>
           
           <div ref={searchRef} className="relative">
@@ -133,7 +131,7 @@ export function Header() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onFocus={() => setIsResultsVisible(searchQuery.length > 0 && searchResults.length > 0)}
-                className="h-9 w-full rounded-md pl-8 pr-2 text-sm sm:w-40 md:w-48 lg:w-56 bg-muted/50 border-input focus:border-primary"
+                className="h-9 w-full max-w-xs rounded-md pl-8 pr-2 text-sm sm:w-auto bg-background border-input focus:border-primary"
                 aria-label="Search tools"
               />
             </div>
@@ -155,10 +153,9 @@ export function Header() {
               </div>
             )}
           </div>
+          <ThemeToggle />
         </div>
       </div>
     </header>
   );
 }
-
-    
