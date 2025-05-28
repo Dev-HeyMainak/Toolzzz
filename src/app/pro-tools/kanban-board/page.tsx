@@ -177,9 +177,8 @@ export default function KanbanBoardPage() {
 
 
   const handleDragStart = (e: DragEvent<HTMLDivElement>, cardId: string, sourceListId: string) => {
-    e.dataTransfer.setData('text/plain', cardId); // Necessary for Firefox
+    e.dataTransfer.setData('text/plain', cardId); 
     setDraggedItem({ cardId, sourceListId });
-    // Add dragging style (e.g., opacity) after a short timeout to allow the browser to capture the drag image
     setTimeout(() => {
         if (e.target instanceof HTMLElement) {
             e.target.classList.add('opacity-50');
@@ -189,14 +188,14 @@ export default function KanbanBoardPage() {
 
   const handleDragEnd = (e: DragEvent<HTMLDivElement>) => {
     if (e.target instanceof HTMLElement) {
-        e.target.classList.remove('opacity-50'); // Clean up dragging style
+        e.target.classList.remove('opacity-50');
     }
     setDraggedItem(null);
     setDragOverListId(null);
   };
 
   const handleDragOver = (e: DragEvent<HTMLDivElement>, listId: string) => {
-    e.preventDefault(); // Allow drop
+    e.preventDefault(); 
     if (draggedItem && draggedItem.sourceListId !== listId) {
         setDragOverListId(listId);
     }
@@ -209,15 +208,14 @@ export default function KanbanBoardPage() {
   const handleDrop = (e: DragEvent<HTMLDivElement>, targetListId: string) => {
     e.preventDefault();
     if (!draggedItem || draggedItem.sourceListId === targetListId) {
-      setDragOverListId(null); // Reset visual cue
-      setDraggedItem(null); // Reset drag state
+      setDragOverListId(null); 
+      setDraggedItem(null); 
       return;
     }
 
     const { cardId, sourceListId } = draggedItem;
     let cardToMove: KanbanCardType | undefined;
 
-    // Remove card from source list
     let updatedLists = lists.map(list => {
       if (list.id === sourceListId) {
         cardToMove = list.cards.find(card => card.id === cardId);
@@ -226,11 +224,9 @@ export default function KanbanBoardPage() {
       return list;
     });
 
-    // Add card to target list
     if (cardToMove) {
       updatedLists = updatedLists.map(list => {
         if (list.id === targetListId) {
-          // Add to the end for simplicity in this basic implementation
           return { ...list, cards: [...list.cards, cardToMove!] };
         }
         return list;
@@ -255,14 +251,14 @@ export default function KanbanBoardPage() {
 
   return (
     <TooltipProvider>
-    <div className="flex flex-col flex-1 min-h-0"> {/* Ensured this takes full height available */}
+    <div className="flex flex-col flex-1 min-h-0"> 
       {/* Page Header */}
       <div className="flex items-center justify-between w-full mb-6">
-        <div className="flex items-center flex-shrink-0 mr-4"> {/* Added flex-shrink-0 */}
+        <div className="flex items-center flex-shrink-0 mr-4"> 
             <LayoutGrid className="h-8 w-8 text-primary mr-3" />
             <h1 className="text-3xl font-semibold text-foreground truncate">GridPilot Board</h1>
         </div>
-        <div className="flex-shrink-0"> {/* Added flex-shrink-0 */}
+        <div className="flex-shrink-0"> 
           <AlertDialog>
               <Tooltip>
                   <TooltipTrigger asChild>
@@ -304,7 +300,7 @@ export default function KanbanBoardPage() {
       </p>
 
       {/* Add New List Form */}
-      <form onSubmit={handleAddList} className="flex gap-3 mb-8 items-center">
+      <form onSubmit={handleAddList} className="flex gap-3 mb-8 items-center w-full">
         <div className="flex-grow">
             <Label htmlFor="newListTitle" className="sr-only">New List Title</Label>
             <Input
@@ -319,7 +315,7 @@ export default function KanbanBoardPage() {
         </div>
         <Tooltip>
             <TooltipTrigger asChild>
-                <Button type="submit" className="h-10 shrink-0"> {/* Added shrink-0 */}
+                <Button type="submit" className="h-10 shrink-0"> 
                     <PlusCircle className="mr-2 h-4 w-4" /> Add List
                 </Button>
             </TooltipTrigger>
@@ -328,22 +324,22 @@ export default function KanbanBoardPage() {
       </form>
 
       {/* Kanban Lists Area */}
-      <ScrollArea className="flex-grow pb-4 -mx-1"> {/* -mx-1 and inner px-1 help with scrollbar aesthetics */}
-        <div className="flex gap-4 items-start px-1"> {/* Added items-start for column alignment */}
+      <ScrollArea className="flex-grow pb-4"> 
+        <div className="flex gap-4 items-start"> 
           {lists.map(list => (
             <Card 
               key={list.id} 
               className={cn(
-                "w-72 min-w-[280px] flex-shrink-0 bg-card/70 backdrop-blur-md transition-all duration-150 border-border/60 rounded-lg shadow-md", // Glassmorphism base
-                dragOverListId === list.id && draggedItem && draggedItem.sourceListId !== list.id && "border-primary ring-2 ring-primary shadow-lg" // Drag over style
+                "w-72 min-w-[280px] flex-shrink-0 bg-card/70 backdrop-blur-md transition-all duration-150 border-border/60 rounded-lg shadow-md", 
+                dragOverListId === list.id && draggedItem && draggedItem.sourceListId !== list.id && "border-primary ring-2 ring-primary shadow-lg" 
               )}
               onDragOver={(e) => handleDragOver(e, list.id)}
               onDrop={(e) => handleDrop(e, list.id)}
               onDragLeave={handleDragLeave}
             >
               <CardHeader className="flex flex-row items-center justify-between p-3 border-b border-border/50">
-                <div className="flex items-center min-w-0"> {/* min-w-0 for truncation */}
-                    <GripVertical className="h-5 w-5 text-muted-foreground mr-1.5 cursor-not-allowed flex-shrink-0" aria-hidden="true" /> {/* Visual grip */}
+                <div className="flex items-center min-w-0"> 
+                    <GripVertical className="h-5 w-5 text-muted-foreground mr-1.5 cursor-not-allowed flex-shrink-0" aria-hidden="true" /> 
                     <CardTitle className="text-base font-medium truncate" title={list.title}>
                       {list.title} ({list.cards.length})
                     </CardTitle>
@@ -379,11 +375,11 @@ export default function KanbanBoardPage() {
                 {list.cards.map(card => (
                   <div 
                     key={card.id} 
-                    draggable={editingCardId !== card.id} // Only allow dragging if not editing
+                    draggable={editingCardId !== card.id} 
                     onDragStart={(e) => handleDragStart(e, card.id, list.id)}
                     onDragEnd={handleDragEnd}
                     className={cn(
-                        "p-2.5 bg-muted/20 backdrop-blur-sm rounded-md shadow border border-border/30 flex justify-between items-start group text-sm leading-normal", // Glassmorphism for cards
+                        "p-2.5 bg-muted/20 backdrop-blur-sm rounded-md shadow border border-border/30 flex justify-between items-start group text-sm leading-normal", 
                         editingCardId !== card.id && "cursor-grab active:cursor-grabbing",
                         draggedItem?.cardId === card.id && "opacity-50"
                     )}
@@ -463,7 +459,7 @@ export default function KanbanBoardPage() {
                   />
                    <Tooltip>
                         <TooltipTrigger asChild>
-                            <Button type="submit" size="sm" className="h-9 shrink-0"> {/* Added shrink-0 */}
+                            <Button type="submit" size="sm" className="h-9 shrink-0"> 
                                 <PlusCircle className="mr-1.5 h-4 w-4" /> Add
                             </Button>
                         </TooltipTrigger>
