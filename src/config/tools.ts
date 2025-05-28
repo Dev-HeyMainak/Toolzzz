@@ -459,12 +459,12 @@ export const TOOLS: Tool[] = [
     categoryKey: 'digital_utilities',
   },
   {
-    id: 'kanban-project-board',
+    id: 'gridpilot-board', // Updated ID
     name: 'GridPilot Board',
     description: 'Visually organize tasks and projects on a board.',
-    href: '/pro-tools/kanban-board', // Note: Link points to pro-tools
+    href: '/pro-tools/kanban-board',
     icon: LayoutGrid,
-    categoryKey: 'digital_utilities', // Can be adjusted if a 'Pro Tools' category is made visible
+    categoryKey: 'digital_utilities',
     isPro: true,
   },
 ];
