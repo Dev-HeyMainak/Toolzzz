@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, FormEvent, ChangeEvent, useEffect } from 'react';
+import { useState, FormEvent, ChangeEvent, useEffect, DragEvent } from 'react'; // Added DragEvent
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
@@ -10,7 +10,7 @@ import { PlusCircle, Trash2, LayoutGrid, GripVertical, XCircle } from 'lucide-re
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '@/components/ui/tooltip';
-import { Label } from '@/components/ui/label'; // Added Label import
+import { Label } from '@/components/ui/label';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -24,27 +24,31 @@ import {
 } from "@/components/ui/alert-dialog";
 
 
-interface KanbanCard {
+interface KanbanCardType { // Renamed to avoid conflict
   id: string;
   text: string;
 }
 
-interface KanbanList {
+interface KanbanListType { // Renamed to avoid conflict
   id: string;
   title: string;
-  cards: KanbanCard[];
+  cards: KanbanCardType[];
 }
 
 const KANBAN_STORAGE_KEY = 'toolzzz-kanbanBoardData-v1';
 
 export default function KanbanBoardPage() {
-  const [lists, setLists] = useState<KanbanList[]>([]);
+  const [lists, setLists] = useState<KanbanListType[]>([]);
   const [newListTitle, setNewListTitle] = useState('');
   const [newCardTexts, setNewCardTexts] = useState<{[listId: string]: string}>({});
   const [isClient, setIsClient] = useState(false);
   const { toast } = useToast();
 
-  // Load from localStorage on initial client mount
+  // Drag and Drop State
+  const [draggedItem, setDraggedItem] = useState<{ cardId: string; sourceListId: string } | null>(null);
+  const [dragOverListId, setDragOverListId] = useState<string | null>(null);
+
+
   useEffect(() => {
     setIsClient(true);
     if (typeof window !== 'undefined') {
@@ -53,9 +57,8 @@ export default function KanbanBoardPage() {
         if (storedData) {
           setLists(JSON.parse(storedData));
         } else {
-          // Initialize with some default lists if nothing is stored
           setLists([
-            { id: 'list-todo', title: 'To Do', cards: [{id: 'card-1', text: 'Brainstorm new features'}] },
+            { id: 'list-todo', title: 'To Do', cards: [{id: `card-${Date.now()}-1`, text: 'Brainstorm new features'}] },
             { id: 'list-inprogress', title: 'In Progress', cards: [] },
             { id: 'list-done', title: 'Done', cards: [] },
           ]);
@@ -68,14 +71,12 @@ export default function KanbanBoardPage() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Save to localStorage whenever lists change
   useEffect(() => {
     if (isClient && typeof window !== 'undefined') {
       try {
         localStorage.setItem(KANBAN_STORAGE_KEY, JSON.stringify(lists));
       } catch (error) {
         console.error("Error saving Kanban board data to localStorage", error);
-        // Optionally toast an error, but can be noisy
       }
     }
   }, [lists, isClient]);
@@ -86,7 +87,7 @@ export default function KanbanBoardPage() {
       toast({ title: "Info", description: "List title cannot be empty.", variant: "default" });
       return;
     }
-    const newList: KanbanList = {
+    const newList: KanbanListType = {
       id: `list-${Date.now()}`,
       title: newListTitle.trim(),
       cards: [],
@@ -102,8 +103,8 @@ export default function KanbanBoardPage() {
       toast({ title: "Info", description: "Card text cannot be empty.", variant: "default" });
       return;
     }
-    const newCard: KanbanCard = {
-      id: `card-${Date.now()}`,
+    const newCard: KanbanCardType = {
+      id: `card-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
       text: cardText,
     };
     setLists(
@@ -134,6 +135,70 @@ export default function KanbanBoardPage() {
     toast({ title: "Card Deleted", variant: "default" });
   };
 
+  // Drag and Drop Handlers
+  const handleDragStart = (e: DragEvent<HTMLDivElement>, cardId: string, sourceListId: string) => {
+    e.dataTransfer.setData('text/plain', cardId); // Necessary for Firefox
+    setDraggedItem({ cardId, sourceListId });
+    // Add a small delay to allow the browser to render the drag image before applying opacity
+    setTimeout(() => {
+        if (e.target instanceof HTMLElement) {
+            e.target.classList.add('opacity-50');
+        }
+    }, 0);
+  };
+
+  const handleDragEnd = (e: DragEvent<HTMLDivElement>) => {
+    if (e.target instanceof HTMLElement) {
+        e.target.classList.remove('opacity-50');
+    }
+    setDraggedItem(null);
+    setDragOverListId(null);
+  };
+
+  const handleDragOver = (e: DragEvent<HTMLDivElement>, listId: string) => {
+    e.preventDefault(); // Allow drop
+    if (draggedItem && draggedItem.sourceListId !== listId) {
+        setDragOverListId(listId);
+    }
+  };
+
+  const handleDragLeave = () => {
+    setDragOverListId(null);
+  };
+
+  const handleDrop = (e: DragEvent<HTMLDivElement>, targetListId: string) => {
+    e.preventDefault();
+    if (!draggedItem || draggedItem.sourceListId === targetListId) {
+      setDragOverListId(null);
+      setDraggedItem(null);
+      return;
+    }
+
+    const { cardId, sourceListId } = draggedItem;
+    let cardToMove: KanbanCardType | undefined;
+    let updatedLists = lists.map(list => {
+      if (list.id === sourceListId) {
+        cardToMove = list.cards.find(card => card.id === cardId);
+        return { ...list, cards: list.cards.filter(card => card.id !== cardId) };
+      }
+      return list;
+    });
+
+    if (cardToMove) {
+      updatedLists = updatedLists.map(list => {
+        if (list.id === targetListId) {
+          return { ...list, cards: [...list.cards, cardToMove!] };
+        }
+        return list;
+      });
+      setLists(updatedLists);
+      toast({ title: "Card Moved", description: `Moved card to "${updatedLists.find(l=>l.id === targetListId)?.title}".` });
+    }
+
+    setDraggedItem(null);
+    setDragOverListId(null);
+  };
+
 
   if (!isClient) {
     return (
@@ -146,13 +211,13 @@ export default function KanbanBoardPage() {
 
   return (
     <TooltipProvider>
-    <div className="h-full flex flex-col p-4 md:p-6"> {/* Added page padding */}
-      <div className="flex items-center justify-between mb-6 w-full"> {/* Ensure this header takes full width of its padded parent */}
-        <div className="flex items-center flex-shrink-0 mr-4"> {/* Prevent title from pushing button */}
+    <div className="h-full flex flex-col p-4 md:p-6">
+      <div className="flex items-center justify-between mb-6 w-full">
+        <div className="flex items-center flex-shrink-0 mr-4">
             <LayoutGrid className="h-8 w-8 text-primary mr-3" />
             <h1 className="text-3xl font-semibold text-foreground truncate">Kanban Project Board</h1>
         </div>
-        <div className="flex-shrink-0"> {/* Prevent button group from being squished */}
+        <div className="flex-shrink-0">
           <AlertDialog>
               <Tooltip>
                   <TooltipTrigger asChild>
@@ -189,25 +254,25 @@ export default function KanbanBoardPage() {
         </div>
       </div>
       <p className="text-muted-foreground mb-8">
-        A Pro tool to visually organize your tasks and projects. Add lists and cards to manage your workflow.
-        <span className="block text-xs mt-1">(Note: This is a client-side prototype; data is stored in your browser. Drag & drop coming soon!)</span>
+        A Pro tool to visually organize your tasks and projects. Add lists, then add and drag cards to manage your workflow.
+        <span className="block text-xs mt-1">(Note: This is a client-side prototype; data is stored in your browser.)</span>
       </p>
 
-      <form onSubmit={handleAddList} className="flex gap-3 mb-6 items-center"> {/* Changed items-end to items-center */}
+      <form onSubmit={handleAddList} className="flex gap-3 mb-6 items-center">
         <div className="flex-grow">
-            <Label htmlFor="newListTitle" className="sr-only">New List Title</Label> {/* Made label sr-only for cleaner look if placeholder is enough */}
+            <Label htmlFor="newListTitle" className="sr-only">New List Title</Label>
             <Input
             id="newListTitle"
             type="text"
             value={newListTitle}
             onChange={(e) => setNewListTitle(e.target.value)}
-            placeholder="Add new list..." // More concise placeholder
-            className="text-base h-10" // Ensured input has h-10 to match button
+            placeholder="Add new list..."
+            className="text-base h-10"
             />
         </div>
         <Tooltip>
             <TooltipTrigger asChild>
-                <Button type="submit" className="h-10 shrink-0"> {/* Added shrink-0 */}
+                <Button type="submit" className="h-10 shrink-0">
                     <PlusCircle className="mr-2 h-4 w-4" /> Add List
                 </Button>
             </TooltipTrigger>
@@ -215,13 +280,22 @@ export default function KanbanBoardPage() {
         </Tooltip>
       </form>
 
-      <ScrollArea className="flex-grow pb-4"> {/* Removed -mx-1 as page now has padding */}
-        <div className="flex gap-4 items-start"> {/* Removed px-1 */}
+      <ScrollArea className="flex-grow pb-4">
+        <div className="flex gap-4 items-start">
           {lists.map(list => (
-            <Card key={list.id} className="w-72 min-w-[280px] flex-shrink-0 bg-card/70 backdrop-blur-sm">
+            <Card 
+              key={list.id} 
+              className={cn(
+                "w-72 min-w-[280px] flex-shrink-0 bg-card/70 backdrop-blur-sm transition-all duration-150",
+                dragOverListId === list.id && draggedItem && draggedItem.sourceListId !== list.id && "border-primary ring-2 ring-primary shadow-lg"
+              )}
+              onDragOver={(e) => handleDragOver(e, list.id)}
+              onDrop={(e) => handleDrop(e, list.id)}
+              onDragLeave={handleDragLeave}
+            >
               <CardHeader className="flex flex-row items-center justify-between p-3 border-b">
                 <div className="flex items-center">
-                    <GripVertical className="h-5 w-5 text-muted-foreground mr-1 cursor-grab active:cursor-grabbing" aria-hidden="true" />
+                    <GripVertical className="h-5 w-5 text-muted-foreground mr-1 cursor-not-allowed" aria-hidden="true" /> {/* Dragging lists not implemented */}
                     <CardTitle className="text-lg font-medium truncate" title={list.title}>{list.title}</CardTitle>
                 </div>
                 <Tooltip>
@@ -253,7 +327,16 @@ export default function KanbanBoardPage() {
               </CardHeader>
               <CardContent className="p-3 space-y-2 min-h-[100px]">
                 {list.cards.map(card => (
-                  <div key={card.id} className="p-2.5 bg-background rounded-md shadow-sm border flex justify-between items-start group">
+                  <div 
+                    key={card.id} 
+                    draggable="true"
+                    onDragStart={(e) => handleDragStart(e, card.id, list.id)}
+                    onDragEnd={handleDragEnd}
+                    className={cn(
+                        "p-2.5 bg-background rounded-md shadow-sm border flex justify-between items-start group cursor-grab active:cursor-grabbing",
+                        draggedItem?.cardId === card.id && "opacity-50"
+                    )}
+                  >
                     <p className="text-sm text-foreground break-words flex-grow">{card.text}</p>
                     <Tooltip>
                         <TooltipTrigger asChild>
@@ -268,21 +351,21 @@ export default function KanbanBoardPage() {
                     </Tooltip>
                   </div>
                 ))}
-                {list.cards.length === 0 && <p className="text-xs text-muted-foreground text-center py-4">No cards in this list yet.</p>}
+                {list.cards.length === 0 && <p className="text-xs text-muted-foreground text-center py-4">No cards in this list yet. Drag cards here!</p>}
               </CardContent>
               <CardFooter className="p-3 border-t">
-                <form onSubmit={(e) => {e.preventDefault(); handleAddCard(list.id);}} className="flex gap-2 w-full items-center"> {/* items-center for card add */}
+                <form onSubmit={(e) => {e.preventDefault(); handleAddCard(list.id);}} className="flex gap-2 w-full items-center">
                   <Input
                     type="text"
                     placeholder="New card text..."
                     value={newCardTexts[list.id] || ''}
                     onChange={(e) => handleNewCardTextChange(list.id, e.target.value)}
-                    className="text-sm h-9 flex-grow" // h-9 is fine here as button is also size="sm"
+                    className="text-sm h-9 flex-grow"
                     aria-label={`New card for list ${list.title}`}
                   />
                    <Tooltip>
                         <TooltipTrigger asChild>
-                            <Button type="submit" size="sm" className="h-9 shrink-0"> {/* shrink-0 */}
+                            <Button type="submit" size="sm" className="h-9 shrink-0">
                                 <PlusCircle className="mr-1.5 h-4 w-4" /> Add
                             </Button>
                         </TooltipTrigger>
