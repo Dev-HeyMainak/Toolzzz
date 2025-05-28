@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, FormEvent, ChangeEvent, useEffect } from 'react';
-import { Button, buttonVariants } from '@/components/ui/button'; // Added buttonVariants
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
@@ -10,6 +10,7 @@ import { PlusCircle, Trash2, LayoutGrid, GripVertical, XCircle } from 'lucide-re
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '@/components/ui/tooltip';
+import { Label } from '@/components/ui/label'; // Added Label import
 import {
   AlertDialog,
   AlertDialogAction,
@@ -136,7 +137,7 @@ export default function KanbanBoardPage() {
 
   if (!isClient) {
     return (
-      <div className="flex items-center justify-center h-64">
+      <div className="flex items-center justify-center h-64 p-4 md:p-6">
         <LayoutGrid className="h-12 w-12 text-primary animate-pulse" />
         <p className="ml-4 text-xl text-muted-foreground">Loading Kanban Board...</p>
       </div>
@@ -145,66 +146,68 @@ export default function KanbanBoardPage() {
 
   return (
     <TooltipProvider>
-    <div className="h-full flex flex-col">
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center">
+    <div className="h-full flex flex-col p-4 md:p-6"> {/* Added page padding */}
+      <div className="flex items-center justify-between mb-6 w-full"> {/* Ensure this header takes full width of its padded parent */}
+        <div className="flex items-center flex-shrink-0 mr-4"> {/* Prevent title from pushing button */}
             <LayoutGrid className="h-8 w-8 text-primary mr-3" />
-            <h1 className="text-3xl font-semibold text-foreground">Kanban Project Board</h1>
+            <h1 className="text-3xl font-semibold text-foreground truncate">Kanban Project Board</h1>
         </div>
-         <AlertDialog>
-            <Tooltip>
-                <TooltipTrigger asChild>
-                    <AlertDialogTrigger asChild>
-                        <Button variant="destructive" size="sm">
-                            <Trash2 className="mr-2 h-4 w-4" /> Clear Board
-                        </Button>
-                    </AlertDialogTrigger>
-                </TooltipTrigger>
-                <TooltipContent><p>Delete all lists and cards from the board.</p></TooltipContent>
-            </Tooltip>
-            <AlertDialogContent>
-                <AlertDialogHeader>
-                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                <AlertDialogDescription>
-                    This action cannot be undone. This will permanently delete all lists and cards from your Kanban board.
-                </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction
-                    onClick={() => {
-                        setLists([]);
-                        setNewCardTexts({});
-                        toast({ title: "Board Cleared", description: "All lists and cards have been removed." });
-                    }}
-                    className={buttonVariants({variant: "destructive"})}
-                >
-                    Yes, Clear Board
-                </AlertDialogAction>
-                </AlertDialogFooter>
-            </AlertDialogContent>
-        </AlertDialog>
+        <div className="flex-shrink-0"> {/* Prevent button group from being squished */}
+          <AlertDialog>
+              <Tooltip>
+                  <TooltipTrigger asChild>
+                      <AlertDialogTrigger asChild>
+                          <Button variant="destructive" size="sm">
+                              <Trash2 className="mr-2 h-4 w-4" /> Clear Board
+                          </Button>
+                      </AlertDialogTrigger>
+                  </TooltipTrigger>
+                  <TooltipContent><p>Delete all lists and cards from the board.</p></TooltipContent>
+              </Tooltip>
+              <AlertDialogContent>
+                  <AlertDialogHeader>
+                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                      This action cannot be undone. This will permanently delete all lists and cards from your Kanban board.
+                  </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction
+                      onClick={() => {
+                          setLists([]);
+                          setNewCardTexts({});
+                          toast({ title: "Board Cleared", description: "All lists and cards have been removed." });
+                      }}
+                      className={buttonVariants({variant: "destructive"})}
+                  >
+                      Yes, Clear Board
+                  </AlertDialogAction>
+                  </AlertDialogFooter>
+              </AlertDialogContent>
+          </AlertDialog>
+        </div>
       </div>
       <p className="text-muted-foreground mb-8">
         A Pro tool to visually organize your tasks and projects. Add lists and cards to manage your workflow.
-        <span className="block text-xs mt-1">(Note: This is a client-side prototype; data is stored in your browser and will be lost if cleared or on a different browser/device. No drag & drop yet!)</span>
+        <span className="block text-xs mt-1">(Note: This is a client-side prototype; data is stored in your browser. Drag & drop coming soon!)</span>
       </p>
 
-      <form onSubmit={handleAddList} className="flex gap-2 mb-6 items-end">
+      <form onSubmit={handleAddList} className="flex gap-3 mb-6 items-center"> {/* Changed items-end to items-center */}
         <div className="flex-grow">
-            <label htmlFor="newListTitle" className="text-sm font-medium text-muted-foreground">New List Title</label>
+            <Label htmlFor="newListTitle" className="sr-only">New List Title</Label> {/* Made label sr-only for cleaner look if placeholder is enough */}
             <Input
             id="newListTitle"
             type="text"
             value={newListTitle}
             onChange={(e) => setNewListTitle(e.target.value)}
-            placeholder="e.g., 'Backlog', 'Urgent Tasks'"
-            className="mt-1 text-base"
+            placeholder="Add new list..." // More concise placeholder
+            className="text-base h-10" // Ensured input has h-10 to match button
             />
         </div>
         <Tooltip>
             <TooltipTrigger asChild>
-                <Button type="submit" className="h-10">
+                <Button type="submit" className="h-10 shrink-0"> {/* Added shrink-0 */}
                     <PlusCircle className="mr-2 h-4 w-4" /> Add List
                 </Button>
             </TooltipTrigger>
@@ -212,8 +215,8 @@ export default function KanbanBoardPage() {
         </Tooltip>
       </form>
 
-      <ScrollArea className="flex-grow pb-4 -mx-1">
-        <div className="flex gap-4 items-start px-1">
+      <ScrollArea className="flex-grow pb-4"> {/* Removed -mx-1 as page now has padding */}
+        <div className="flex gap-4 items-start"> {/* Removed px-1 */}
           {lists.map(list => (
             <Card key={list.id} className="w-72 min-w-[280px] flex-shrink-0 bg-card/70 backdrop-blur-sm">
               <CardHeader className="flex flex-row items-center justify-between p-3 border-b">
@@ -268,18 +271,18 @@ export default function KanbanBoardPage() {
                 {list.cards.length === 0 && <p className="text-xs text-muted-foreground text-center py-4">No cards in this list yet.</p>}
               </CardContent>
               <CardFooter className="p-3 border-t">
-                <form onSubmit={(e) => {e.preventDefault(); handleAddCard(list.id);}} className="flex gap-2 w-full">
+                <form onSubmit={(e) => {e.preventDefault(); handleAddCard(list.id);}} className="flex gap-2 w-full items-center"> {/* items-center for card add */}
                   <Input
                     type="text"
                     placeholder="New card text..."
                     value={newCardTexts[list.id] || ''}
                     onChange={(e) => handleNewCardTextChange(list.id, e.target.value)}
-                    className="text-sm h-9 flex-grow"
+                    className="text-sm h-9 flex-grow" // h-9 is fine here as button is also size="sm"
                     aria-label={`New card for list ${list.title}`}
                   />
                    <Tooltip>
                         <TooltipTrigger asChild>
-                            <Button type="submit" size="sm" className="h-9">
+                            <Button type="submit" size="sm" className="h-9 shrink-0"> {/* shrink-0 */}
                                 <PlusCircle className="mr-1.5 h-4 w-4" /> Add
                             </Button>
                         </TooltipTrigger>
@@ -301,3 +304,5 @@ export default function KanbanBoardPage() {
     </TooltipProvider>
   );
 }
+
+    
