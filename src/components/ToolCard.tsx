@@ -18,7 +18,7 @@ export function ToolCard({ name, description, href, icon: Icon, animationDelay }
   return (
     <Card 
       className={cn(
-        "group flex flex-col h-full bg-card border border-border/60 hover:border-primary/50 hover:shadow-lg transition-all duration-300 ease-in-out rounded-xl overflow-hidden transform hover:-translate-y-1",
+        "group flex flex-col h-full bg-card/90 backdrop-blur-lg supports-[backdrop-filter]:bg-card/70 border border-border/40 hover:border-primary hover:shadow-xl transition-all duration-300 ease-in-out rounded-xl overflow-hidden transform hover:-translate-y-1",
         animationDelay && "opacity-0 animate-fade-in-up"
       )}
       style={animationDelay ? { animationDelay } : {}}
