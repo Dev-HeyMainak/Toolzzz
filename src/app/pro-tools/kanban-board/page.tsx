@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, FormEvent, ChangeEvent, useEffect, DragEvent, KeyboardEvent } from 'react';
+import { useState, FormEvent, useEffect, DragEvent, KeyboardEvent } from 'react';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
@@ -20,7 +20,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger, // Added missing import
+  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
 
@@ -224,6 +224,7 @@ export default function KanbanBoardPage() {
     if (cardToMove) {
       updatedLists = updatedLists.map(list => {
         if (list.id === targetListId) {
+          // Add to the end for simplicity in this basic implementation
           return { ...list, cards: [...list.cards, cardToMove!] };
         }
         return list;
@@ -318,23 +319,23 @@ export default function KanbanBoardPage() {
         </Tooltip>
       </form>
 
-      <ScrollArea className="flex-grow pb-4"> 
-        <div className="flex gap-4 items-start"> 
+      <ScrollArea className="flex-grow pb-4 -mx-1"> 
+        <div className="flex gap-4 items-start px-1"> 
           {lists.map(list => (
             <Card 
               key={list.id} 
               className={cn(
-                "w-72 min-w-[280px] flex-shrink-0 bg-card/70 backdrop-blur-sm transition-all duration-150 border-border/60",
+                "w-72 min-w-[280px] flex-shrink-0 bg-card/70 backdrop-blur-md transition-all duration-150 border-border/60 rounded-lg shadow-md",
                 dragOverListId === list.id && draggedItem && draggedItem.sourceListId !== list.id && "border-primary ring-2 ring-primary shadow-lg"
               )}
               onDragOver={(e) => handleDragOver(e, list.id)}
               onDrop={(e) => handleDrop(e, list.id)}
               onDragLeave={handleDragLeave}
             >
-              <CardHeader className="flex flex-row items-center justify-between p-3 border-b">
-                <div className="flex items-center">
-                    <GripVertical className="h-5 w-5 text-muted-foreground mr-1 cursor-not-allowed" aria-hidden="true" /> 
-                    <CardTitle className="text-lg font-medium truncate" title={list.title}>
+              <CardHeader className="flex flex-row items-center justify-between p-3 border-b border-border/50">
+                <div className="flex items-center min-w-0"> 
+                    <GripVertical className="h-5 w-5 text-muted-foreground mr-1.5 cursor-not-allowed flex-shrink-0" aria-hidden="true" /> 
+                    <CardTitle className="text-base font-medium truncate" title={list.title}>
                       {list.title} ({list.cards.length})
                     </CardTitle>
                 </div>
@@ -342,7 +343,7 @@ export default function KanbanBoardPage() {
                     <TooltipTrigger asChild>
                          <AlertDialog>
                             <AlertDialogTrigger asChild>
-                                <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground hover:text-destructive">
+                                <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground hover:text-destructive flex-shrink-0">
                                     <XCircle className="h-4 w-4" />
                                 </Button>
                             </AlertDialogTrigger>
@@ -373,7 +374,7 @@ export default function KanbanBoardPage() {
                     onDragStart={(e) => handleDragStart(e, card.id, list.id)}
                     onDragEnd={handleDragEnd}
                     className={cn(
-                        "p-2.5 bg-background rounded-md shadow-sm border flex justify-between items-start group",
+                        "p-2.5 bg-muted/20 backdrop-blur-sm rounded-md shadow border border-border/30 flex justify-between items-start group text-sm",
                         editingCardId !== card.id && "cursor-grab active:cursor-grabbing",
                         draggedItem?.cardId === card.id && "opacity-50"
                     )}
@@ -410,7 +411,7 @@ export default function KanbanBoardPage() {
                       </div>
                     ) : (
                       <>
-                        <p className="text-sm text-foreground break-words flex-grow mr-1">{card.text}</p>
+                        <p className="text-foreground break-words flex-grow mr-1 leading-normal">{card.text}</p>
                         <div className="flex-shrink-0 flex opacity-0 group-hover:opacity-100 transition-opacity">
                           <Tooltip>
                               <TooltipTrigger asChild>
@@ -439,13 +440,13 @@ export default function KanbanBoardPage() {
                     )}
                   </div>
                 ))}
-                {list.cards.length === 0 && <p className="text-xs text-muted-foreground text-center py-4">No cards in this list yet. Drag cards here or add new ones below.</p>}
+                {list.cards.length === 0 && <p className="text-xs text-muted-foreground text-center py-4 italic">No cards yet. Drag cards here or add new ones.</p>}
               </CardContent>
-              <CardFooter className="p-3 border-t">
+              <CardFooter className="p-3 border-t border-border/50">
                 <form onSubmit={(e) => {e.preventDefault(); handleAddCard(list.id);}} className="flex gap-2 w-full items-center">
                   <Input
                     type="text"
-                    placeholder="New card text..."
+                    placeholder="New card..."
                     value={newCardTexts[list.id] || ''}
                     onChange={(e) => handleNewCardTextChange(list.id, e.target.value)}
                     className="text-sm h-9 flex-grow"
@@ -467,15 +468,14 @@ export default function KanbanBoardPage() {
         <ScrollBar orientation="horizontal" />
       </ScrollArea>
        {lists.length === 0 && (
-        <p className="text-muted-foreground text-center py-10">
-          Your board is empty. Add a list to get started!
+        <p className="text-muted-foreground text-center py-10 italic">
+          Your GridPilot Board is empty. Add a list to get started!
         </p>
       )}
     </div>
     </TooltipProvider>
   );
 }
-
     
 
     
