@@ -1,12 +1,12 @@
 
 "use client";
 
-import { useState, FormEvent, ChangeEvent, useEffect, DragEvent } from 'react'; // Added DragEvent
+import { useState, FormEvent, ChangeEvent, useEffect, DragEvent, KeyboardEvent } from 'react';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
-import { PlusCircle, Trash2, LayoutGrid, GripVertical, XCircle } from 'lucide-react';
+import { PlusCircle, Trash2, LayoutGrid, GripVertical, XCircle, Edit3, Save, X } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '@/components/ui/tooltip';
@@ -20,16 +20,15 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
 
-interface KanbanCardType { // Renamed to avoid conflict
+interface KanbanCardType {
   id: string;
   text: string;
 }
 
-interface KanbanListType { // Renamed to avoid conflict
+interface KanbanListType {
   id: string;
   title: string;
   cards: KanbanCardType[];
@@ -47,6 +46,10 @@ export default function KanbanBoardPage() {
   // Drag and Drop State
   const [draggedItem, setDraggedItem] = useState<{ cardId: string; sourceListId: string } | null>(null);
   const [dragOverListId, setDragOverListId] = useState<string | null>(null);
+
+  // Card Editing State
+  const [editingCardId, setEditingCardId] = useState<string | null>(null);
+  const [currentEditText, setCurrentEditText] = useState<string>("");
 
 
   useEffect(() => {
@@ -135,11 +138,47 @@ export default function KanbanBoardPage() {
     toast({ title: "Card Deleted", variant: "default" });
   };
 
+  const handleEditCardClick = (card: KanbanCardType) => {
+    setEditingCardId(card.id);
+    setCurrentEditText(card.text);
+  };
+
+  const handleSaveCardEdit = () => {
+    if (!editingCardId || !currentEditText.trim()) {
+      toast({ title: "Info", description: "Card text cannot be empty.", variant: "default" });
+      return;
+    }
+    setLists(prevLists => 
+      prevLists.map(list => ({
+        ...list,
+        cards: list.cards.map(card => 
+          card.id === editingCardId ? { ...card, text: currentEditText.trim() } : card
+        )
+      }))
+    );
+    setEditingCardId(null);
+    setCurrentEditText("");
+    toast({ title: "Card Updated", description: "Card text saved." });
+  };
+
+  const handleCancelCardEdit = () => {
+    setEditingCardId(null);
+    setCurrentEditText("");
+  };
+
+  const handleEditInputKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      handleSaveCardEdit();
+    } else if (event.key === 'Escape') {
+      handleCancelCardEdit();
+    }
+  };
+
+
   // Drag and Drop Handlers
   const handleDragStart = (e: DragEvent<HTMLDivElement>, cardId: string, sourceListId: string) => {
-    e.dataTransfer.setData('text/plain', cardId); // Necessary for Firefox
+    e.dataTransfer.setData('text/plain', cardId); 
     setDraggedItem({ cardId, sourceListId });
-    // Add a small delay to allow the browser to render the drag image before applying opacity
     setTimeout(() => {
         if (e.target instanceof HTMLElement) {
             e.target.classList.add('opacity-50');
@@ -156,7 +195,7 @@ export default function KanbanBoardPage() {
   };
 
   const handleDragOver = (e: DragEvent<HTMLDivElement>, listId: string) => {
-    e.preventDefault(); // Allow drop
+    e.preventDefault(); 
     if (draggedItem && draggedItem.sourceListId !== listId) {
         setDragOverListId(listId);
     }
@@ -295,8 +334,10 @@ export default function KanbanBoardPage() {
             >
               <CardHeader className="flex flex-row items-center justify-between p-3 border-b">
                 <div className="flex items-center">
-                    <GripVertical className="h-5 w-5 text-muted-foreground mr-1 cursor-not-allowed" aria-hidden="true" /> {/* Dragging lists not implemented */}
-                    <CardTitle className="text-lg font-medium truncate" title={list.title}>{list.title}</CardTitle>
+                    <GripVertical className="h-5 w-5 text-muted-foreground mr-1 cursor-not-allowed" aria-hidden="true" /> 
+                    <CardTitle className="text-lg font-medium truncate" title={list.title}>
+                      {list.title} ({list.cards.length})
+                    </CardTitle>
                 </div>
                 <Tooltip>
                     <TooltipTrigger asChild>
@@ -329,29 +370,76 @@ export default function KanbanBoardPage() {
                 {list.cards.map(card => (
                   <div 
                     key={card.id} 
-                    draggable="true"
+                    draggable={editingCardId !== card.id} // Prevent dragging while editing
                     onDragStart={(e) => handleDragStart(e, card.id, list.id)}
                     onDragEnd={handleDragEnd}
                     className={cn(
-                        "p-2.5 bg-background rounded-md shadow-sm border flex justify-between items-start group cursor-grab active:cursor-grabbing",
+                        "p-2.5 bg-background rounded-md shadow-sm border flex justify-between items-start group",
+                        editingCardId !== card.id && "cursor-grab active:cursor-grabbing",
                         draggedItem?.cardId === card.id && "opacity-50"
                     )}
                   >
-                    <p className="text-sm text-foreground break-words flex-grow">{card.text}</p>
-                    <Tooltip>
-                        <TooltipTrigger asChild>
-                             <Button variant="ghost" size="icon" 
-                                    onClick={() => handleDeleteCard(list.id, card.id)}
-                                    className="h-6 w-6 text-muted-foreground hover:text-destructive opacity-0 group-hover:opacity-100 transition-opacity ml-2"
-                                    aria-label={`Delete card: ${card.text.substring(0,20)}...`}>
-                                <Trash2 className="h-3.5 w-3.5"/>
-                            </Button>
-                        </TooltipTrigger>
-                        <TooltipContent><p>Delete card</p></TooltipContent>
-                    </Tooltip>
+                    {editingCardId === card.id ? (
+                      <div className="flex-grow space-y-2">
+                        <Input
+                          type="text"
+                          value={currentEditText}
+                          onChange={(e) => setCurrentEditText(e.target.value)}
+                          onKeyDown={handleEditInputKeyDown}
+                          autoFocus
+                          className="text-sm h-8"
+                        />
+                        <div className="flex justify-end gap-2">
+                           <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button variant="ghost" size="icon" onClick={handleCancelCardEdit} className="h-7 w-7">
+                                <X className="h-4 w-4" />
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent><p>Cancel edit (Esc)</p></TooltipContent>
+                          </Tooltip>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button variant="outline" size="icon" onClick={handleSaveCardEdit} className="h-7 w-7">
+                                <Save className="h-4 w-4 text-primary" />
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent><p>Save changes (Enter)</p></TooltipContent>
+                          </Tooltip>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <p className="text-sm text-foreground break-words flex-grow mr-1">{card.text}</p>
+                        <div className="flex-shrink-0 flex opacity-0 group-hover:opacity-100 transition-opacity">
+                          <Tooltip>
+                              <TooltipTrigger asChild>
+                                  <Button variant="ghost" size="icon" 
+                                          onClick={() => handleEditCardClick(card)}
+                                          className="h-6 w-6 text-muted-foreground hover:text-primary"
+                                          aria-label={`Edit card: ${card.text.substring(0,20)}...`}>
+                                      <Edit3 className="h-3.5 w-3.5"/>
+                                  </Button>
+                              </TooltipTrigger>
+                              <TooltipContent><p>Edit card</p></TooltipContent>
+                          </Tooltip>
+                          <Tooltip>
+                              <TooltipTrigger asChild>
+                                  <Button variant="ghost" size="icon" 
+                                          onClick={() => handleDeleteCard(list.id, card.id)}
+                                          className="h-6 w-6 text-muted-foreground hover:text-destructive"
+                                          aria-label={`Delete card: ${card.text.substring(0,20)}...`}>
+                                      <Trash2 className="h-3.5 w-3.5"/>
+                                  </Button>
+                              </TooltipTrigger>
+                              <TooltipContent><p>Delete card</p></TooltipContent>
+                          </Tooltip>
+                        </div>
+                      </>
+                    )}
                   </div>
                 ))}
-                {list.cards.length === 0 && <p className="text-xs text-muted-foreground text-center py-4">No cards in this list yet. Drag cards here!</p>}
+                {list.cards.length === 0 && <p className="text-xs text-muted-foreground text-center py-4">No cards in this list yet. Drag cards here or add new ones below!</p>}
               </CardContent>
               <CardFooter className="p-3 border-t">
                 <form onSubmit={(e) => {e.preventDefault(); handleAddCard(list.id);}} className="flex gap-2 w-full items-center">
