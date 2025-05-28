@@ -16,17 +16,23 @@ interface ToolCardProps {
 
 export function ToolCard({ name, description, href, icon: Icon, animationDelay }: ToolCardProps) {
   return (
-    <Card 
+    <Card
       className={cn(
-        "group flex flex-col h-full bg-card/90 backdrop-blur-lg supports-[backdrop-filter]:bg-card/70 border border-border/40 hover:border-primary hover:shadow-xl transition-all duration-300 ease-in-out rounded-xl overflow-hidden transform hover:-translate-y-1",
+        "group flex flex-col h-full",
+        "bg-muted/20", // Use semi-transparent muted color for the glass effect base
+        "backdrop-blur-md", // Apply blur
+        "border border-border/40", // Subtle border
+        "hover:border-primary hover:shadow-lg", // Refined hover, more neutral shadow
+        "transition-all duration-300 ease-in-out rounded-xl overflow-hidden",
+        "transform hover:-translate-y-1",
         animationDelay && "opacity-0 animate-fade-in-up"
       )}
       style={animationDelay ? { animationDelay } : {}}
     >
       <CardHeader className="flex flex-row items-center gap-3 p-4">
         <div className={cn(
-            "p-2 rounded-lg bg-primary/10 text-primary transition-colors duration-300 flex-shrink-0", 
-            "group-hover:[&_svg]:animate-subtle-spin-hover"
+            "p-2 rounded-lg bg-primary/10 text-primary transition-colors duration-300 flex-shrink-0",
+            "group-hover:[&_svg]:animate-subtle-spin-hover" // Icon still animates
           )}
         >
           <Icon className="h-6 w-6" />
