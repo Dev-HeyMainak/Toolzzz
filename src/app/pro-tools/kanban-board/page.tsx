@@ -20,7 +20,8 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"; // AlertDialogTrigger was already here, no need to re-add specifically
+  AlertDialogTrigger, // Added missing import
+} from "@/components/ui/alert-dialog";
 
 
 interface KanbanCardType {
@@ -247,7 +248,6 @@ export default function KanbanBoardPage() {
 
   return (
     <TooltipProvider>
-    {/* Use flex-1 and min-h-0 to allow proper growth within flex parent from tools/layout.tsx */}
     <div className="flex flex-col flex-1 min-h-0"> 
       <div className="flex items-center justify-between w-full mb-6">
         <div className="flex items-center flex-shrink-0 mr-4">
@@ -258,11 +258,11 @@ export default function KanbanBoardPage() {
           <AlertDialog>
               <Tooltip>
                   <TooltipTrigger asChild>
-                      <AlertDialog.Trigger asChild>
+                      <AlertDialogTrigger asChild>
                           <Button variant="destructive" size="sm">
                               <Trash2 className="mr-2 h-4 w-4" /> Clear Board
                           </Button>
-                      </AlertDialog.Trigger>
+                      </AlertDialogTrigger>
                   </TooltipTrigger>
                   <TooltipContent><p>Delete all lists and cards from the board.</p></TooltipContent>
               </Tooltip>
@@ -318,7 +318,7 @@ export default function KanbanBoardPage() {
         </Tooltip>
       </form>
 
-      <ScrollArea className="flex-grow pb-4"> {/* flex-grow should now work correctly */}
+      <ScrollArea className="flex-grow pb-4"> 
         <div className="flex gap-4 items-start"> 
           {lists.map(list => (
             <Card 
@@ -341,11 +341,11 @@ export default function KanbanBoardPage() {
                 <Tooltip>
                     <TooltipTrigger asChild>
                          <AlertDialog>
-                            <AlertDialog.Trigger asChild>
+                            <AlertDialogTrigger asChild>
                                 <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground hover:text-destructive">
                                     <XCircle className="h-4 w-4" />
                                 </Button>
-                            </AlertDialog.Trigger>
+                            </AlertDialogTrigger>
                             <AlertDialogContent>
                                 <AlertDialogHeader>
                                 <AlertDialogTitle>Delete List: "{list.title}"?</AlertDialogTitle>
@@ -475,5 +475,7 @@ export default function KanbanBoardPage() {
     </TooltipProvider>
   );
 }
+
+    
 
     
