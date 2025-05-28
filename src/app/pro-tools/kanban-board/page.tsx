@@ -20,6 +20,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
+  AlertDialogTrigger, // Added AlertDialogTrigger here
 } from "@/components/ui/alert-dialog";
 
 
@@ -307,6 +308,7 @@ export default function KanbanBoardPage() {
             onChange={(e) => setNewListTitle(e.target.value)}
             placeholder="Add new list..."
             className="text-base h-10"
+            aria-label="New List Title Input"
             />
         </div>
         <Tooltip>
@@ -388,6 +390,7 @@ export default function KanbanBoardPage() {
                           onKeyDown={handleEditInputKeyDown}
                           autoFocus
                           className="text-sm h-8"
+                          aria-label="Edit card text input"
                         />
                         <div className="flex justify-end gap-2">
                            <Tooltip>
