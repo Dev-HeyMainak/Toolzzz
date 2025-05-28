@@ -108,14 +108,14 @@ export function Header() {
                 {TOOL_CATEGORIES.map((category) => (
                   <Link key={category.id} href={`/#${category.id}`} passHref legacyBehavior>
                     <DropdownMenuItem asChild className="cursor-pointer">
-                       <a><category.icon className="mr-2 h-4 w-4 text-muted-foreground"/>{category.name}</a>
+                      <a><category.icon className="mr-2 h-4 w-4 text-muted-foreground" />{category.name}</a>
                     </DropdownMenuItem>
                   </Link>
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <NavLink href="/pro-tools" label="Pro Tools" />
+            <NavLink href="/office-suite" label="Office Suite+" />
             <NavLink href="/pricing" label="Pricing" />
             <NavLink href="/about" label="About" />
           </nav>

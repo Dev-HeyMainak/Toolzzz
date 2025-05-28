@@ -80,6 +80,7 @@ export default function KanbanBoardPage() {
         localStorage.setItem(KANBAN_STORAGE_KEY, JSON.stringify(lists));
       } catch (error) {
         console.error("Error saving GridPilot board data to localStorage", error);
+        // Optionally, notify user about saving error if it's critical
       }
     }
   }, [lists, isClient]);
@@ -249,8 +250,8 @@ export default function KanbanBoardPage() {
   }
 
   return (
-    <TooltipProvider>
-      <div className="container mx-auto px-4 py-12 md:px-6 md:py-20 h-full flex flex-col">
+    <div className="container mx-auto px-4 py-12 md:px-6 md:py-20 flex flex-col flex-1 min-h-0">
+      <TooltipProvider>
         <div className="flex flex-col flex-1 min-h-0"> 
           {/* Page Header */}
           <div className="flex items-center justify-between w-full mb-6">
@@ -260,11 +261,16 @@ export default function KanbanBoardPage() {
             </div>
             <div className="flex-shrink-0"> 
               <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                      <Button variant="destructive" size="sm">
-                          <Trash2 className="mr-2 h-4 w-4" /> Clear Board
-                      </Button>
-                  </AlertDialogTrigger>
+                  <Tooltip>
+                      <TooltipTrigger asChild>
+                          <AlertDialogTrigger asChild>
+                              <Button variant="destructive" size="sm">
+                                  <Trash2 className="mr-2 h-4 w-4" /> Clear Board
+                              </Button>
+                          </AlertDialogTrigger>
+                      </TooltipTrigger>
+                      <TooltipContent><p>Delete all lists and cards from the board.</p></TooltipContent>
+                  </Tooltip>
                   <AlertDialogContent>
                       <AlertDialogHeader>
                       <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
@@ -319,8 +325,8 @@ export default function KanbanBoardPage() {
           </form>
 
           {/* Kanban Lists Area */}
-          <ScrollArea className="flex-grow pb-4">
-            <div className="flex gap-4 items-start">
+          <ScrollArea className="flex-grow pb-4 -mx-1"> {/* Adjust mx for outer padding */}
+            <div className="flex gap-4 items-start px-1"> {/* Adjust px for outer padding */}
               {lists.map(list => (
                 <Card 
                   key={list.id} 
@@ -339,32 +345,32 @@ export default function KanbanBoardPage() {
                           {list.title} ({list.cards.length})
                         </CardTitle>
                     </div>
-                    <AlertDialog>
-                      <Tooltip>
+                    <Tooltip>
                         <TooltipTrigger asChild>
-                          <AlertDialogTrigger asChild>
-                              <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground hover:text-destructive flex-shrink-0">
-                                  <XCircle className="h-4 w-4" />
-                              </Button>
-                          </AlertDialogTrigger>
+                            <AlertDialog>
+                                <AlertDialogTrigger asChild>
+                                    <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground hover:text-destructive flex-shrink-0">
+                                        <XCircle className="h-4 w-4" />
+                                    </Button>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent>
+                                    <AlertDialogHeader>
+                                    <AlertDialogTitle>Delete List: "{list.title}"?</AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                        This will delete the list and all its cards. This action cannot be undone.
+                                    </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                    <AlertDialogAction onClick={() => handleDeleteList(list.id)} className={buttonVariants({variant: "destructive"})}>
+                                        Delete List
+                                    </AlertDialogAction>
+                                    </AlertDialogFooter>
+                                </AlertDialogContent>
+                            </AlertDialog>
                         </TooltipTrigger>
                         <TooltipContent><p>Delete list "{list.title}"</p></TooltipContent>
-                      </Tooltip>
-                      <AlertDialogContent>
-                          <AlertDialogHeader>
-                          <AlertDialogTitle>Delete List: "{list.title}"?</AlertDialogTitle>
-                          <AlertDialogDescription>
-                              This will delete the list and all its cards. This action cannot be undone.
-                          </AlertDialogDescription>
-                          </AlertDialogHeader>
-                          <AlertDialogFooter>
-                          <AlertDialogCancel>Cancel</AlertDialogCancel>
-                          <AlertDialogAction onClick={() => handleDeleteList(list.id)} className={buttonVariants({variant: "destructive"})}>
-                              Delete List
-                          </AlertDialogAction>
-                          </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
+                    </Tooltip>
                   </CardHeader>
                   <CardContent className="p-3 space-y-2 min-h-[100px]">
                     {list.cards.map(card => (
@@ -473,12 +479,10 @@ export default function KanbanBoardPage() {
             </p>
           )}
         </div>
-      </div>
-    </TooltipProvider>
+      </TooltipProvider>
+    </div>
   );
 }
-    
-
     
 
     

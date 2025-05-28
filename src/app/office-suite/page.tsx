@@ -3,7 +3,7 @@ import { Zap, LayoutGrid } from 'lucide-react';
 import { ToolCard } from '@/components/ToolCard';
 import { TOOLS } from '@/config/tools'; // Import TOOLS array
 
-export default function ProToolsPage() {
+export default function OfficeSuitePage() {
   // Filter for tools marked as Pro
   const proTools = TOOLS.filter(tool => tool.isPro);
 
@@ -13,7 +13,7 @@ export default function ProToolsPage() {
         <div className="inline-flex flex-col items-center">
           <Zap className="h-10 w-10 md:h-12 md:w-12 text-primary mb-4" />
           <h1 className="text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
-            Exclusive Pro Tools
+            Exclusive Office Suite+
           </h1>
         </div>
         <p className="mt-4 text-lg text-muted-foreground max-w-xl mx-auto">

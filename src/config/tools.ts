@@ -1,4 +1,3 @@
-
 import type { LucideIcon } from 'lucide-react';
 import {
   ScanText,
@@ -46,6 +45,7 @@ import {
   Hash,
   Braces,
   LayoutGrid,
+  Star,
 } from 'lucide-react';
 
 export interface Tool {
@@ -58,7 +58,7 @@ export interface Tool {
   isPro?: boolean; // Optional Pro flag
 }
 
-export type ToolCategoryKey = 'text_content' | 'productivity_time' | 'digital_utilities';
+export type ToolCategoryKey = 'editors_choice' | 'text_content' | 'productivity_time' | 'digital_utilities';
 
 export interface ToolCategory {
   id: ToolCategoryKey;
@@ -67,6 +67,11 @@ export interface ToolCategory {
 }
 
 export const TOOL_CATEGORIES: ToolCategory[] = [
+  {
+    id: 'editors_choice',
+    name: 'Editor\'s Choice',
+    icon: Star,
+  },
   {
     id: 'text_content',
     name: 'Text & Content Tools',
@@ -84,7 +89,7 @@ export const TOOL_CATEGORIES: ToolCategory[] = [
   }
 ];
 
-export const TOOLS: Tool[] = [
+const TOOLS_REST: Tool[] = [
   // Category 1: Text & Content Tools
   {
     id: 'word-counter',
@@ -460,12 +465,24 @@ export const TOOLS: Tool[] = [
   },
   {
     id: 'gridpilot-board', // Updated ID
-    name: 'GridPilot Board',
+    name: 'Office Suite+ Board',
     description: 'Visually organize tasks and projects on a board.',
-    href: '/pro-tools/kanban-board',
+    href: '/office-suite/kanban-board',
     icon: LayoutGrid,
     categoryKey: 'digital_utilities',
     isPro: true,
   },
+];
+
+export const TOOLS: Tool[] = [
+  {
+    id: 'circle-image-cropper',
+    name: 'Circle Image Cropper',
+    description: 'Crop your images into perfect circles.',
+    href: '/tools/circle-image-cropper',
+    icon: Crop,
+    categoryKey: 'editors_choice',
+  },
+  ...TOOLS_REST
 ];
 export { XCircle };
