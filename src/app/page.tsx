@@ -5,7 +5,7 @@ import { Separator } from '@/components/ui/separator';
 
 export default function HomePage() {
   return (
-    <div className="container mx-auto px-4 py-12 md:px-6 md:py-20"> {/* Reverted to container mx-auto */}
+    <div className="container mx-auto px-4 py-12 md:px-6 md:py-20">
       <header
         className="mb-12 text-center opacity-0 animate-fade-in-up"
         style={{ animationDelay: '0.1s' }}
@@ -27,6 +27,7 @@ export default function HomePage() {
       {TOOL_CATEGORIES.map((category, index) => (
         <section
           key={category.id}
+          id={category.id} // Added ID for anchor linking
           className="mb-16 opacity-0 animate-fade-in-up"
           style={{ animationDelay: `${0.5 + index * 0.15}s` }}
         >
@@ -52,3 +53,5 @@ export default function HomePage() {
     </div>
   );
 }
+
+    
