@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils';
 import { Search, ChevronDown } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { TOOLS, TOOL_CATEGORIES, type Tool, type ToolCategory } from '@/config/tools';
+import { TOOLS, TOOL_CATEGORIES, type Tool } from '@/config/tools';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,11 +17,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { ThemeToggle } from '@/components/ThemeToggle'; // Ensure ThemeToggle is imported
 
 export function Header() {
   const pathname = usePathname();
-
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<Tool[]>([]);
   const [isResultsVisible, setIsResultsVisible] = useState(false);
@@ -82,13 +80,13 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/60 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center justify-between px-4 md:px-6">
+      <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
         {/* Left Section: Logo */}
         <div className="flex items-center">
           <Logo />
         </div>
 
-        {/* Right Section: Navigation, Search, ThemeToggle */}
+        {/* Right Section: Navigation & Search */}
         <div className="flex items-center gap-x-2 md:gap-x-4">
           <nav className="hidden items-center gap-x-1 md:flex lg:gap-x-2">
             <NavLink href="/" label="Home" />
@@ -131,7 +129,7 @@ export function Header() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onFocus={() => setIsResultsVisible(searchQuery.length > 0 && searchResults.length > 0)}
-                className="h-9 w-full max-w-xs rounded-md pl-8 pr-2 text-sm sm:w-auto bg-background border-input focus:border-primary"
+                className="h-9 w-full rounded-md pl-8 pr-2 text-sm sm:w-40 md:w-48 lg:w-56 bg-background border-input focus:border-primary"
                 aria-label="Search tools"
               />
             </div>
@@ -153,7 +151,7 @@ export function Header() {
               </div>
             )}
           </div>
-          <ThemeToggle />
+          {/* ThemeToggle is intentionally removed */}
         </div>
       </div>
     </header>
