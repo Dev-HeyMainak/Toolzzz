@@ -20,7 +20,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger, // Added AlertDialogTrigger here
+  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
 
@@ -244,7 +244,7 @@ export default function KanbanBoardPage() {
     return (
       <div className="flex items-center justify-center h-64 p-4 md:p-6">
         <LayoutGrid className="h-12 w-12 text-primary animate-pulse" />
-        <p className="ml-4 text-xl text-muted-foreground">Loading Kanban Board...</p>
+        <p className="ml-4 text-xl text-muted-foreground">Loading GridPilot Board...</p>
       </div>
     );
   }
@@ -255,7 +255,7 @@ export default function KanbanBoardPage() {
       <div className="flex items-center justify-between mb-6 w-full">
         <div className="flex items-center flex-shrink-0 mr-4">
             <LayoutGrid className="h-8 w-8 text-primary mr-3" />
-            <h1 className="text-3xl font-semibold text-foreground truncate">Kanban Project Board</h1>
+            <h1 className="text-3xl font-semibold text-foreground truncate">GridPilot Board</h1>
         </div>
         <div className="flex-shrink-0">
           <AlertDialog>
@@ -273,7 +273,7 @@ export default function KanbanBoardPage() {
                   <AlertDialogHeader>
                   <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                   <AlertDialogDescription>
-                      This action cannot be undone. This will permanently delete all lists and cards from your Kanban board.
+                      This action cannot be undone. This will permanently delete all lists and cards from your GridPilot board.
                   </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>

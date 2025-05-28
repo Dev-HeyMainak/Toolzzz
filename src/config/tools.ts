@@ -45,7 +45,7 @@ import {
   FileCode,
   Hash,
   Braces,
-  LayoutGrid, // Added for Kanban
+  LayoutGrid,
 } from 'lucide-react';
 
 export interface Tool {
@@ -460,7 +460,7 @@ export const TOOLS: Tool[] = [
   },
   {
     id: 'kanban-project-board',
-    name: 'Kanban Project Board',
+    name: 'GridPilot Board',
     description: 'Visually organize tasks and projects on a board.',
     href: '/pro-tools/kanban-board', // Note: Link points to pro-tools
     icon: LayoutGrid,
@@ -469,4 +469,3 @@ export const TOOLS: Tool[] = [
   },
 ];
 export { XCircle };
-
