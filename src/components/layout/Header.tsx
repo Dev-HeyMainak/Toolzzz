@@ -90,6 +90,7 @@ export function Header() {
         <div className="flex items-center gap-x-2 md:gap-x-4">
           <nav className="hidden items-center gap-x-1 md:flex lg:gap-x-2">
             <NavLink href="/" label="Home" />
+            <NavLink href="/contact" label="Contact" />
             
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -115,7 +116,6 @@ export function Header() {
             </DropdownMenu>
 
             <NavLink href="/pro-tools" label="Pro Tools" />
-            <NavLink href="/contact" label="Contact" />
             <NavLink href="/pricing" label="Pricing" />
             <NavLink href="/about" label="About" />
           </nav>
@@ -129,7 +129,7 @@ export function Header() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onFocus={() => setIsResultsVisible(searchQuery.length > 0 && searchResults.length > 0)}
-                className="h-9 w-full rounded-md pl-8 pr-2 text-sm sm:w-40 md:w-48 lg:w-56 bg-background border-input focus:border-primary"
+                className="h-9 w-full rounded-md pl-8 pr-2 text-sm sm:w-32 md:w-40 lg:w-48 bg-background border-input focus:border-primary"
                 aria-label="Search tools"
               />
             </div>
@@ -151,7 +151,7 @@ export function Header() {
               </div>
             )}
           </div>
-          {/* ThemeToggle is intentionally removed */}
+          {/* ThemeToggle removed as per previous request */}
         </div>
       </div>
     </header>
