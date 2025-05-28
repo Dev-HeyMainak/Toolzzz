@@ -6,7 +6,7 @@ import { Button, buttonVariants } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
-import { PlusCircle, Trash2, LayoutGrid, GripVertical, XCircle, Edit3, Save, X } from 'lucide-react';
+import { PlusCircle, Trash2, LayoutGrid, GripVertical, XCircle, Edit3, Save, X, Trash } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '@/components/ui/tooltip';
@@ -374,7 +374,7 @@ export default function KanbanBoardPage() {
                     onDragStart={(e) => handleDragStart(e, card.id, list.id)}
                     onDragEnd={handleDragEnd}
                     className={cn(
-                        "p-2.5 bg-muted/20 backdrop-blur-sm rounded-md shadow border border-border/30 flex justify-between items-start group text-sm",
+                        "p-2.5 bg-muted/20 backdrop-blur-sm rounded-md shadow border border-border/30 flex justify-between items-start group text-sm leading-normal",
                         editingCardId !== card.id && "cursor-grab active:cursor-grabbing",
                         draggedItem?.cardId === card.id && "opacity-50"
                     )}
