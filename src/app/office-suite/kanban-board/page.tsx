@@ -242,7 +242,7 @@ export default function KanbanBoardPage() {
 
   if (!isClient) {
     return (
-      <div className="container mx-auto px-4 py-12 md:px-6 md:py-20 flex items-center justify-center h-full">
+      <div className="container mx-auto flex h-full flex-col items-center justify-center px-4 py-12 md:px-6 md:py-20">
         <LayoutGrid className="h-12 w-12 text-primary animate-pulse" />
         <p className="ml-4 text-xl text-muted-foreground">Loading GridPilot Board...</p>
       </div>
@@ -250,48 +250,48 @@ export default function KanbanBoardPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-12 md:px-6 md:py-20 flex flex-col flex-1 min-h-0">
+    <div className="container mx-auto flex h-full flex-col px-4 py-12 md:px-6 md:py-20">
       <TooltipProvider>
-        <div className="flex flex-col flex-1 min-h-0"> 
+        <div className="flex flex-1 flex-col min-h-0"> 
           {/* Page Header */}
-          <div className="flex items-center justify-between w-full mb-6">
-            <div className="flex items-center flex-shrink-0 mr-4"> 
+          <div className="mb-6 flex w-full items-center justify-between">
+            <div className="mr-4 flex flex-shrink-0 items-center"> 
                 <LayoutGrid className="h-8 w-8 text-primary mr-3" />
-                <h1 className="text-3xl font-semibold text-foreground truncate">GridPilot Board</h1>
+                <h1 className="truncate text-3xl font-semibold text-foreground">GridPilot Board</h1>
             </div>
             <div className="flex-shrink-0"> 
               <AlertDialog>
-                  <Tooltip>
-                      <TooltipTrigger asChild>
-                          <AlertDialogTrigger asChild>
-                              <Button variant="destructive" size="sm">
-                                  <Trash2 className="mr-2 h-4 w-4" /> Clear Board
-                              </Button>
-                          </AlertDialogTrigger>
-                      </TooltipTrigger>
-                      <TooltipContent><p>Delete all lists and cards from the board.</p></TooltipContent>
-                  </Tooltip>
-                  <AlertDialogContent>
-                      <AlertDialogHeader>
-                      <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                      <AlertDialogDescription>
-                          This action cannot be undone. This will permanently delete all lists and cards from your GridPilot board.
-                      </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction
-                          onClick={() => {
-                              setLists([]);
-                              setNewCardTexts({});
-                              toast({ title: "Board Cleared", description: "All lists and cards have been removed." });
-                          }}
-                          className={buttonVariants({variant: "destructive"})}
-                      >
-                          Yes, Clear Board
-                      </AlertDialogAction>
-                      </AlertDialogFooter>
-                  </AlertDialogContent>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <AlertDialogTrigger asChild>
+                        <Button variant="destructive" size="sm">
+                            <Trash2 className="mr-2 h-4 w-4" /> Clear Board
+                        </Button>
+                    </AlertDialogTrigger>
+                  </TooltipTrigger>
+                  <TooltipContent><p>Delete all lists and cards from the board.</p></TooltipContent>
+                </Tooltip>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                        This action cannot be undone. This will permanently delete all lists and cards from your GridPilot board.
+                    </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction
+                        onClick={() => {
+                            setLists([]);
+                            setNewCardTexts({});
+                            toast({ title: "Board Cleared", description: "All lists and cards have been removed." });
+                        }}
+                        className={buttonVariants({variant: "destructive"})}
+                    >
+                        Yes, Clear Board
+                    </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
               </AlertDialog>
             </div>
           </div>
@@ -301,7 +301,7 @@ export default function KanbanBoardPage() {
           </p>
 
           {/* Add New List Form */}
-          <form onSubmit={handleAddList} className="flex gap-3 mb-8 items-center w-full">
+          <form onSubmit={handleAddList} className="mb-8 flex w-full items-center gap-3">
             <div className="flex-grow">
                 <Label htmlFor="newListTitle" className="sr-only">New List Title</Label>
                 <Input
@@ -325,54 +325,54 @@ export default function KanbanBoardPage() {
           </form>
 
           {/* Kanban Lists Area */}
-          <ScrollArea className="flex-grow pb-4 -mx-1"> {/* Adjust mx for outer padding */}
-            <div className="flex gap-4 items-start px-1"> {/* Adjust px for outer padding */}
+          <ScrollArea className="flex-grow pb-4"> 
+            <div className="flex items-start gap-4"> 
               {lists.map(list => (
                 <Card 
                   key={list.id} 
                   className={cn(
-                    "w-72 min-w-[280px] flex-shrink-0 bg-card/70 backdrop-blur-md transition-all duration-150 border-border/60 rounded-lg shadow-md", 
+                    "w-72 min-w-[280px] flex-shrink-0 rounded-lg border-border/60 bg-card/70 shadow-md backdrop-blur-md transition-all duration-150", 
                     dragOverListId === list.id && draggedItem && draggedItem.sourceListId !== list.id && "border-primary ring-2 ring-primary shadow-lg" 
                   )}
                   onDragOver={(e) => handleDragOver(e, list.id)}
                   onDrop={(e) => handleDrop(e, list.id)}
                   onDragLeave={handleDragLeave}
                 >
-                  <CardHeader className="flex flex-row items-center justify-between p-3 border-b border-border/50">
-                    <div className="flex items-center min-w-0"> 
-                        <GripVertical className="h-5 w-5 text-muted-foreground mr-1.5 cursor-not-allowed flex-shrink-0" aria-hidden="true" /> 
-                        <CardTitle className="text-base font-medium truncate" title={list.title}>
+                  <CardHeader className="flex flex-row items-center justify-between border-b border-border/50 p-3">
+                    <div className="flex min-w-0 items-center"> 
+                        <GripVertical className="mr-1.5 h-5 w-5 flex-shrink-0 cursor-not-allowed text-muted-foreground" aria-hidden="true" /> 
+                        <CardTitle className="truncate text-base font-medium" title={list.title}>
                           {list.title} ({list.cards.length})
                         </CardTitle>
                     </div>
-                    <Tooltip>
-                        <TooltipTrigger asChild>
-                            <AlertDialog>
+                    <AlertDialog>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
                                 <AlertDialogTrigger asChild>
-                                    <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground hover:text-destructive flex-shrink-0">
+                                    <Button variant="ghost" size="icon" className="h-7 w-7 flex-shrink-0 text-muted-foreground hover:text-destructive">
                                         <XCircle className="h-4 w-4" />
                                     </Button>
                                 </AlertDialogTrigger>
-                                <AlertDialogContent>
-                                    <AlertDialogHeader>
-                                    <AlertDialogTitle>Delete List: "{list.title}"?</AlertDialogTitle>
-                                    <AlertDialogDescription>
-                                        This will delete the list and all its cards. This action cannot be undone.
-                                    </AlertDialogDescription>
-                                    </AlertDialogHeader>
-                                    <AlertDialogFooter>
-                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                    <AlertDialogAction onClick={() => handleDeleteList(list.id)} className={buttonVariants({variant: "destructive"})}>
-                                        Delete List
-                                    </AlertDialogAction>
-                                    </AlertDialogFooter>
-                                </AlertDialogContent>
-                            </AlertDialog>
-                        </TooltipTrigger>
-                        <TooltipContent><p>Delete list "{list.title}"</p></TooltipContent>
-                    </Tooltip>
+                            </TooltipTrigger>
+                            <TooltipContent><p>Delete list "{list.title}"</p></TooltipContent>
+                        </Tooltip>
+                        <AlertDialogContent>
+                            <AlertDialogHeader>
+                            <AlertDialogTitle>Delete List: "{list.title}"?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                                This will delete the list and all its cards. This action cannot be undone.
+                            </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction onClick={() => handleDeleteList(list.id)} className={buttonVariants({variant: "destructive"})}>
+                                Delete List
+                            </AlertDialogAction>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialog>
                   </CardHeader>
-                  <CardContent className="p-3 space-y-2 min-h-[100px]">
+                  <CardContent className="space-y-2 p-3 min-h-[100px]">
                     {list.cards.map(card => (
                       <div 
                         key={card.id} 
@@ -380,7 +380,7 @@ export default function KanbanBoardPage() {
                         onDragStart={(e) => handleDragStart(e, card.id, list.id)}
                         onDragEnd={handleDragEnd}
                         className={cn(
-                            "p-2.5 bg-muted/20 backdrop-blur-sm rounded-md shadow border border-border/30 flex justify-between items-start group text-sm leading-normal", 
+                            "group flex items-start justify-between rounded-md border border-border/30 bg-muted/20 p-2.5 text-sm leading-normal shadow backdrop-blur-sm", 
                             editingCardId !== card.id && "cursor-grab active:cursor-grabbing",
                             draggedItem?.cardId === card.id && "opacity-50"
                         )}
@@ -417,8 +417,8 @@ export default function KanbanBoardPage() {
                           </div>
                         ) : (
                           <>
-                            <p className="text-foreground break-words flex-grow mr-1 leading-normal">{card.text}</p>
-                            <div className="flex-shrink-0 flex opacity-0 group-hover:opacity-100 transition-opacity">
+                            <p className="mr-1 flex-grow break-words leading-normal text-foreground">{card.text}</p>
+                            <div className="flex flex-shrink-0 opacity-0 transition-opacity group-hover:opacity-100">
                               <Tooltip>
                                   <TooltipTrigger asChild>
                                       <Button variant="ghost" size="icon" 
@@ -446,10 +446,10 @@ export default function KanbanBoardPage() {
                         )}
                       </div>
                     ))}
-                    {list.cards.length === 0 && <p className="text-xs text-muted-foreground text-center py-4 italic">No cards yet. Drag cards here or add new ones.</p>}
+                    {list.cards.length === 0 && <p className="py-4 text-center text-xs italic text-muted-foreground">No cards yet. Drag cards here or add new ones.</p>}
                   </CardContent>
-                  <CardFooter className="p-3 border-t border-border/50">
-                    <form onSubmit={(e) => {e.preventDefault(); handleAddCard(list.id);}} className="flex gap-2 w-full items-center">
+                  <CardFooter className="border-t border-border/50 p-3">
+                    <form onSubmit={(e) => {e.preventDefault(); handleAddCard(list.id);}} className="flex w-full items-center gap-2">
                       <Input
                         type="text"
                         placeholder="New card..."
@@ -474,7 +474,7 @@ export default function KanbanBoardPage() {
             <ScrollBar orientation="horizontal" />
           </ScrollArea>
           {lists.length === 0 && (
-            <p className="text-muted-foreground text-center py-10 italic">
+            <p className="py-10 text-center italic text-muted-foreground">
               Your GridPilot Board is empty. Add a list to get started!
             </p>
           )}
