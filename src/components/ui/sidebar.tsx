@@ -3,16 +3,13 @@
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
-import { Menu } from "lucide-react"; // Retained for potential internal use, though SidebarTrigger was removed
 import { cn } from "@/lib/utils";
-// Button import removed as SidebarTrigger was removed.
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
 
-// SidebarContext definition
 type SidebarContext = {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -29,7 +26,6 @@ export function useSidebar() {
   return context;
 }
 
-// SidebarProvider
 export const SidebarProvider = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<"div"> & {
@@ -40,10 +36,8 @@ export const SidebarProvider = React.forwardRef<
 
   const toggleSidebarPanel = React.useCallback(() => {
     setIsOpen((prev) => !prev);
-  }, []); // setIsOpen is stable, so [] is correct.
+  }, []);
 
-  // This contextValue is re-created if isOpen changes, or if toggleSidebarPanel changes (it doesn't).
-  // This is fine as consumers will re-render if isOpen changes.
   const contextValue: SidebarContext = {
     isOpen,
     setIsOpen,
@@ -65,9 +59,8 @@ export const SidebarProvider = React.forwardRef<
 });
 SidebarProvider.displayName = "SidebarProvider";
 
-// Sidebar (Sheet wrapper)
 export const Sidebar = React.forwardRef<
-  React.ElementRef<typeof Sheet>, // Ref is for the Sheet component
+  React.ElementRef<typeof Sheet>,
   Omit<React.ComponentProps<typeof Sheet>, "open" | "onOpenChange"> & {
     side?: "left" | "right" | "top" | "bottom";
   }
@@ -75,17 +68,16 @@ export const Sidebar = React.forwardRef<
   const { isOpen, setIsOpen } = useSidebar();
 
   return (
-    <Sheet ref={ref} open={isOpen} onOpenChange={setIsOpen} {...props}> {/* Pass ref and props to Sheet */}
+    <Sheet ref={ref} open={isOpen} onOpenChange={setIsOpen} {...props}>
       <SheetContent
         side={side}
-        // The ref for SheetContent is internal to Sheet; the forwarded ref is for the Sheet itself.
         className={cn(
           "w-[var(--sidebar-width-mobile)] sm:w-[var(--sidebar-width)] p-0 flex flex-col",
           "bg-sidebar text-sidebar-foreground border-sidebar-border",
           className
         )}
         style={{
-          "--sidebar-width": "280px", // Example width
+          "--sidebar-width": "280px",
           "--sidebar-width-mobile": "260px",
         } as React.CSSProperties}
       >
@@ -96,10 +88,6 @@ export const Sidebar = React.forwardRef<
 });
 Sidebar.displayName = "Sidebar";
 
-
-// --- Other Sidebar components (Header, Content, Footer, Menu etc.) ---
-// These are for structuring content *inside* the sidebar panel (SheetContent)
-
 export const SidebarHeader = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
@@ -108,7 +96,7 @@ export const SidebarHeader = React.forwardRef<
     <div
       ref={ref}
       data-sidebar="header"
-      className={cn("flex flex-col gap-2 p-4 border-b border-sidebar-border", className)} // Added padding and border
+      className={cn("flex flex-col gap-2 p-4 border-b border-sidebar-border", className)}
       {...props}
     />
   );
@@ -125,7 +113,7 @@ export const SidebarContent = React.forwardRef<
       ref={ref}
       data-sidebar="content"
       className={cn(
-        "flex min-h-0 flex-1 flex-col", // Removed gap-2 from here, ScrollArea will handle scrolling
+        "flex min-h-0 flex-1 flex-col",
         className
       )}
       {...props}
@@ -133,7 +121,6 @@ export const SidebarContent = React.forwardRef<
   );
 });
 SidebarContent.displayName = "SidebarContent";
-
 
 export const SidebarFooter = React.forwardRef<
   HTMLDivElement,
@@ -143,7 +130,7 @@ export const SidebarFooter = React.forwardRef<
     <div
       ref={ref}
       data-sidebar="footer"
-      className={cn("flex flex-col gap-2 p-4 border-t border-sidebar-border mt-auto", className)} // Added padding and border
+      className={cn("flex flex-col gap-2 p-4 border-t border-sidebar-border mt-auto", className)}
       {...props}
     />
   );
@@ -179,7 +166,7 @@ export const SidebarMenu = React.forwardRef<
   <ul
     ref={ref}
     data-sidebar="menu"
-    className={cn("flex w-full min-w-0 flex-col gap-0.5", className)} // Reduced gap for tighter menu
+    className={cn("flex w-full min-w-0 flex-col gap-0.5", className)}
     {...props}
   />
 ));
@@ -198,10 +185,9 @@ export const SidebarMenuItem = React.forwardRef<
 ));
 SidebarMenuItem.displayName = "SidebarMenuItem";
 
-
 export const SidebarMenuButton = React.forwardRef<
-  HTMLButtonElement, // Changed from HTMLAnchorElement because asChild might not always be true
-  React.ComponentProps<typeof Button> & { // Use ButtonProps
+  HTMLButtonElement,
+  React.ComponentProps<typeof Button> & {
     isActive?: boolean;
     tooltip?: string | Omit<React.ComponentProps<typeof TooltipContent>, "children">;
   } & VariantProps<typeof sidebarMenuButtonVariants>
@@ -210,23 +196,23 @@ export const SidebarMenuButton = React.forwardRef<
     {
       asChild = false,
       isActive = false,
-      variant = "default", // Use the variant from cva
-      size = "default",    // Use the size from cva
+      variant = "default",
+      size = "default",
       tooltip,
       className,
-      children, // Ensure children is passed
+      children,
       ...props
     },
     ref
   ) => {
     const buttonContent = (
-      <Button // Use the actual Button component
+      <Button
         ref={ref}
         asChild={asChild}
         data-sidebar="menu-button"
         data-size={size}
         data-active={isActive}
-        variant="ghost" // Sidebar buttons usually look best as ghost or custom styled
+        variant="ghost"
         className={cn(sidebarMenuButtonVariants({ variant, size }), className)}
         {...props}
       >
@@ -241,7 +227,6 @@ export const SidebarMenuButton = React.forwardRef<
     const tooltipProps: Omit<React.ComponentProps<typeof TooltipContent>, "children"> =
       typeof tooltip === "string" ? {} : tooltip;
     const tooltipChildren = typeof tooltip === "string" ? <p>{tooltip}</p> : tooltip.children;
-
 
     return (
       <Tooltip>

@@ -20,14 +20,13 @@ export const metadata: Metadata = {
   description: 'A collection of free utilities for everyday tasks: text tools, productivity aids, digital converters, and more.',
 };
 
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en\" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <body 
         className={`${jetBrainsMono.variable} font-sans antialiased bg-background`}
         suppressHydrationWarning
