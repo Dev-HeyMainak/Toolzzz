@@ -89,7 +89,51 @@ export const TOOL_CATEGORIES: ToolCategory[] = [
   }
 ];
 
-const TOOLS_REST: Tool[] = [
+export const TOOLS: Tool[] = [
+  // Editor's Choice (Example, can be moved or duplicated in actual categories)
+  // {
+  //   id: 'circle-image-cropper',
+  //   name: 'Circle Image Cropper',
+  //   description: 'Crop your images into perfect circles.',
+  //   href: '/tools/circle-image-cropper',
+  //   icon: Crop, // Or a more specific icon if available
+  //   categoryKey: 'editors_choice',
+  // },
+  {
+    id: 'password-generator',
+    name: 'Password Generator',
+    description: 'Create strong, secure passwords.',
+    href: '/tools/password-generator',
+    icon: LockKeyhole,
+    categoryKey: 'editors_choice',
+  },
+  {
+    id: 'todo-list',
+    name: 'To-Do List',
+    description: 'Organize your tasks with due dates and priorities.',
+    href: '/tools/todo-list',
+    icon: ListChecks,
+    categoryKey: 'editors_choice',
+  },
+  {
+    id: 'unit-converter',
+    name: 'Unit Converter',
+    description: 'Convert between various units of measurement.',
+    href: '/tools/unit-converter',
+    icon: Scale,
+    categoryKey: 'editors_choice',
+  },
+  {
+    id: 'gridpilot-board',
+    name: 'GridPilot Board',
+    description: 'Visually organize tasks and projects on a board.',
+    href: '/office-suite/kanban-board',
+    icon: LayoutGrid,
+    categoryKey: 'editors_choice',
+    isPro: true,
+  },
+
+
   // Category 1: Text & Content Tools
   {
     id: 'word-counter',
@@ -224,7 +268,7 @@ const TOOLS_REST: Tool[] = [
     name: 'Binary to Text Converter',
     description: 'Convert binary code back into readable text.',
     href: '/tools/binary-to-text',
-    icon: Binary,
+    icon: Binary, // Could use Pilcrow if distinct needed
     categoryKey: 'text_content',
   },
   {
@@ -240,7 +284,7 @@ const TOOLS_REST: Tool[] = [
     name: 'HTML-decode Text',
     description: 'Convert HTML entities back to characters.',
     href: '/tools/html-decode-text',
-    icon: FileCode,
+    icon: FileCode, // Could use different variant if available
     categoryKey: 'text_content',
   },
   {
@@ -256,7 +300,7 @@ const TOOLS_REST: Tool[] = [
     name: 'Hex to Text Converter',
     description: 'Convert hexadecimal values back to text.',
     href: '/tools/hex-to-text',
-    icon: Hash,
+    icon: Hash, // Could use Pilcrow if distinct needed
     categoryKey: 'text_content',
   },
   {
@@ -272,7 +316,7 @@ const TOOLS_REST: Tool[] = [
     name: 'JSON Unstringify Text',
     description: 'Parse a JSON string back to plain text.',
     href: '/tools/json-unstringify-text',
-    icon: Braces,
+    icon: Braces, // Could use Pilcrow if distinct needed
     categoryKey: 'text_content',
   },
    {
@@ -288,7 +332,7 @@ const TOOLS_REST: Tool[] = [
     name: 'Morse Code to Text',
     description: 'Decode Morse code signals back into text.',
     href: '/tools/morse-code-to-text',
-    icon: Zap,
+    icon: Zap, // Could use Pilcrow if distinct needed
     categoryKey: 'text_content',
   },
   {
@@ -304,19 +348,11 @@ const TOOLS_REST: Tool[] = [
     name: 'URL-decode Text',
     description: 'Decode URL-encoded text (percent-encoding).',
     href: '/tools/url-decode-text',
-    icon: Link2,
+    icon: Link2, // Could use different variant if available
     categoryKey: 'text_content',
   },
 
   // Category 2: Productivity & Time Management
-  {
-    id: 'todo-list',
-    name: 'To-Do List',
-    description: 'Organize your tasks with features like due dates and priorities.',
-    href: '/tools/todo-list',
-    icon: ListChecks,
-    categoryKey: 'productivity_time',
-  },
   {
     id: 'quick-scratchpad',
     name: 'Quick Scratchpad',
@@ -384,22 +420,6 @@ const TOOLS_REST: Tool[] = [
 
   // Category 3: Digital Utilities
   {
-    id: 'password-generator',
-    name: 'Password Generator',
-    description: 'Create strong, secure passwords.',
-    href: '/tools/password-generator',
-    icon: LockKeyhole,
-    categoryKey: 'digital_utilities',
-  },
-  {
-    id: 'unit-converter',
-    name: 'Unit Converter',
-    description: 'Convert between various units of measurement.',
-    href: '/tools/unit-converter',
-    icon: Scale,
-    categoryKey: 'digital_utilities',
-  },
-  {
     id: 'color-picker',
     name: 'Color Picker Tool',
     description: 'Select colors and get their HEX, RGB, and HSL values.',
@@ -463,26 +483,6 @@ const TOOLS_REST: Tool[] = [
     icon: Crop,
     categoryKey: 'digital_utilities',
   },
-  {
-    id: 'gridpilot-board', // Updated ID
-    name: 'Office Suite+ Board',
-    description: 'Visually organize tasks and projects on a board.',
-    href: '/office-suite/kanban-board',
-    icon: LayoutGrid,
-    categoryKey: 'digital_utilities',
-    isPro: true,
-  },
 ];
 
-export const TOOLS: Tool[] = [
-  {
-    id: 'circle-image-cropper',
-    name: 'Circle Image Cropper',
-    description: 'Crop your images into perfect circles.',
-    href: '/tools/circle-image-cropper',
-    icon: Crop,
-    categoryKey: 'editors_choice',
-  },
-  ...TOOLS_REST
-];
 export { XCircle };
