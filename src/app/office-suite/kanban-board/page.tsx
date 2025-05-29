@@ -254,7 +254,7 @@ export default function KanbanBoardPage() {
       <TooltipProvider>
         <div className="flex flex-1 flex-col min-h-0"> 
           {/* Page Header */}
-          <div className="mb-6 flex w-full items-center justify-between">
+          <div className="pt-4 mb-6 flex w-full items-center justify-between">
             <div className="mr-4 flex flex-shrink-0 items-center"> 
                 <LayoutGrid className="h-8 w-8 text-primary mr-3" />
                 <h1 className="truncate text-3xl font-semibold text-foreground">GridPilot Board</h1>
@@ -326,7 +326,7 @@ export default function KanbanBoardPage() {
 
           {/* Kanban Lists Area */}
           <ScrollArea className="flex-grow pb-4"> 
-            <div className="flex items-start gap-4"> 
+            <div className="flex items-start gap-4 px-1"> 
               {lists.map(list => (
                 <Card 
                   key={list.id} 
