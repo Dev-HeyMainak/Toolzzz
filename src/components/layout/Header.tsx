@@ -151,7 +151,6 @@ export function Header() {
               </div>
             )}
           </div>
-          {/* ThemeToggle removed as per previous request */}
         </div>
       </div>
     </header>
