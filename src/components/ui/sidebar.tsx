@@ -1,4 +1,3 @@
-
 "use client";
 
 import * as React from "react";
@@ -53,16 +52,14 @@ export const SidebarProvider = React.forwardRef<
 
   return (
     <SidebarContext.Provider value={contextValue}>
-      <TooltipProvider delayDuration={0}>
-        <div
-          ref={ref}
-          className={cn("group/sidebar-wrapper flex min-h-svh w-full", className)}
-          style={style}
-          {...props}
-        >
-          {children}
-        </div>
-      </TooltipProvider>
+      <div
+        ref={ref}
+        className={cn("group/sidebar-wrapper flex min-h-svh w-full", className)}
+        style={style}
+        {...props}
+      >
+        {children}
+      </div>
     </SidebarContext.Provider>
   );
 });
@@ -257,5 +254,3 @@ export const SidebarMenuButton = React.forwardRef<
   }
 );
 SidebarMenuButton.displayName = "SidebarMenuButton";
-
-    

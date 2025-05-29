@@ -32,12 +32,11 @@ export default function RootLayout({
         className={`${jetBrainsMono.variable} font-sans antialiased bg-background`}
         suppressHydrationWarning
       >
-        <TooltipProvider>
+        <TooltipProvider delayDuration={0}>
           <SidebarProvider defaultOpen={false}>
             <Sidebar side="left">
               <AppSidebar />
             </Sidebar>
-            {/* Removed overflow-hidden from this div to allow natural body scrolling */}
             <div className="flex flex-col min-h-screen w-full">
               <Header />
               <MainLayoutClientBoundary>
