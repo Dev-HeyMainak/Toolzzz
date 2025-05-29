@@ -22,7 +22,7 @@ export default function OfficeSuitePage() {
       </header>
 
       {proTools.length > 0 ? (
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"> {/* Removed max-w-5xl mx-auto */}
           {proTools.map((tool, toolIndex) => (
             <ToolCard
               key={tool.id}
